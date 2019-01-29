@@ -24,7 +24,7 @@ class Writer
     /**
      * @var string
      */
-    protected $tmpPath;
+    protected $tempPath;
 
     /**
      * @var \Box\Spout\Writer\WriterInterface
@@ -46,7 +46,7 @@ class Writer
      */
     public function __construct(string $tempPath, int $chunkSize, array $csvSettings = [])
     {
-        $this->tmpPath = $tempPath;
+        $this->tempPath = $tempPath;
         $this->chunkSize = $chunkSize;
         $this->applyCsvSettings($csvSettings);
     }
@@ -132,7 +132,7 @@ class Writer
      */
     public function tempFile(): string
     {
-        return $this->tmpPath . DIRECTORY_SEPARATOR . 'laravel-simplesheet-' . Str::random(16);
+        return $this->tempPath . DIRECTORY_SEPARATOR . 'laravel-simplesheet-' . Str::random(16);
     }
 
     /**

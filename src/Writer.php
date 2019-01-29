@@ -22,11 +22,6 @@ class Writer
     use HasEventBus, MapsCsvSettings;
 
     /**
-     * @var object
-     */
-    private $exportable;
-
-    /**
      * @var string
      */
     protected $tmpPath;
@@ -64,35 +59,72 @@ class Writer
      */
     public function export($export, string $writerType, string $tempFile = null): string
     {
+        $this->open($export, $writerType);
+
+        $fileName = $tempFile ?? $this->tempFile();
+
+        $this->write($export, $fileName);
+
+        $this->cleanUp();
+
+        return $fileName;
+    }
+
+    /**
+     * @param  object  $export
+     * @param  string  $writerType
+     * @return void
+     */
+    private function open($export, $writerType)
+    {
         if ($export instanceof WithEvents) {
             $this->registerListeners($export->registerEvents());
         }
 
-        $this->exportable = $export;
-        $fileName = $tempFile ?? $this->tempFile();
-
-        $this->raise(new BeforeExport($this, $this->exportable));
+        $this->raise(new BeforeExport($this, $export));
 
         $this->spoutWriter = WriterFactory::create($writerType);
+    }
 
-        $this->raise(new BeforeWriting($this, $this->exportable));
+    /**
+     * @param  object  $export
+     * @param  string  $fileName
+     * @return void
+     */
+    private function write($export, $fileName)
+    {
+        $this->throwExceptionIfWriterIsNotSet();
+
+        $this->raise(new BeforeWriting($this, $export));
 
         $this->configureCsvWriter();
         $this->spoutWriter->openToFile($fileName);
 
-        $sheetExports = [$export];
-        if ($export instanceof WithMultipleSheets) {
-            $sheetExports = $export->sheets();
-        }
-
-        foreach ($sheetExports as $sheetIndex => $sheetExport) {
+        foreach ($this->getSheetExports($export) as $sheetIndex => $sheetExport) {
             $this->addNewSheet($sheetIndex)->export($sheetExport);
         }
+    }
 
+    /**
+     * @param  \Nikazooz\Simplesheet\Concerns\WithMultipleSheets|object  $export
+     * @return array
+     */
+    private function getSheetExports($export)
+    {
+        if ($export instanceof WithMultipleSheets) {
+            return $export->sheets();
+        }
+
+        return [$export];
+    }
+
+    /**
+     * @return void
+     */
+    private function cleanUp()
+    {
         $this->spoutWriter->close();
         unset($this->spoutWriter);
-
-        return $fileName;
     }
 
     /**
@@ -126,11 +158,19 @@ class Writer
      */
     public function addNewSheet(int $sheetIndex = null)
     {
+        $this->throwExceptionIfWriterIsNotSet();
+
+        return new Sheet($this->spoutWriter, $sheetIndex, $this->chunkSize);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function throwExceptionIfWriterIsNotSet()
+    {
         if (! $this->spoutWriter) {
             throw new \Exception('Writer must be opened first!');
         }
-
-        return new Sheet($this->spoutWriter, $sheetIndex, $this->chunkSize);
     }
 
     /**

@@ -48,11 +48,12 @@ class SimplesheetServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('simplesheet', function () {
-            return new Simplesheet(
+            return (new Simplesheet(
                 $this->app->make(Writer::class),
                 $this->app->make(QueuedWriter::class),
                 $this->app->make(FilesystemFactory::class),
-                $this->app->make(ResponseFactory::class),
+                $this->app->make(ResponseFactory::class)
+            ))->setExtensionsMap(
                 $this->app['config']->get('simplesheet.extension_detector', [])
             );
         });

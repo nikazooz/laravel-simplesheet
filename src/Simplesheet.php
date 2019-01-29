@@ -52,14 +52,12 @@ class Simplesheet implements Exporter
         Writer $writer,
         QueuedWriter $queuedWriter,
         FilesystemFactory $filesystem,
-        ResponseFactory $responseFactory,
-        array $extensions = []
+        ResponseFactory $responseFactory
     ) {
         $this->writer = $writer;
         $this->queuedWriter = $queuedWriter;
         $this->filesystem = $filesystem;
         $this->responseFactory = $responseFactory;
-        $this->extensions = $extensions;
     }
 
     /**
@@ -132,5 +130,16 @@ class Simplesheet implements Exporter
         }
 
         return $this->extensions[$extension];
+    }
+
+    /**
+     * @param  array  $extensions
+     * @return $this
+     */
+    public function setExtensionsMap(array $extensions = [])
+    {
+        $this->extensions = $extensions;
+
+        return $this;
     }
 }

@@ -9,6 +9,8 @@ use Nikazooz\Simplesheet\Concerns\WithBatchInserts;
 
 class ModelImporter
 {
+    use ProcessesRows;
+
     /**
      * @var \Nikazooz\Simplesheet\Imports\ModelManager
      */
@@ -30,32 +32,13 @@ class ModelImporter
      */
     public function import(SheetInterface $sheet, ToModel $import, int $startRow = 1)
     {
-        $headingRow = HeadingRowExtractor::extract($sheet, $import);
         $batchSize = $import instanceof WithBatchInserts ? $import->batchSize() : 1;
-        $endRow = EndRowFinder::find($import, $startRow);
 
         $i = 0;
-        foreach ($sheet->getRowIterator() as $rowNumber => $spreadSheetRow) {
-            if ($rowNumber < $startRow) {
-                continue;
-            }
-
-            if (null !== $endRow && $rowNumber > $endRow) {
-                break;
-            }
-
+        foreach ($this->iterateMappedImportRows($import, $sheet, $startRow) as $rowNumber => $row) {
             $i++;
 
-            $rowArray = $this->mapRow($spreadSheetRow, $headingRow);
-
-            if ($import instanceof WithMapping) {
-                $rowArray = $import->map($rowArray);
-            }
-
-            $this->manager->add(
-                $rowNumber,
-                $rowArray
-            );
+            $this->manager->add($rowNumber, $row);
 
             // Flush each batch.
             if (($i % $batchSize) === 0) {
@@ -66,25 +49,5 @@ class ModelImporter
 
         // Flush left-overs.
         $this->manager->flush($import, $batchSize > 1);
-    }
-
-    /**
-     * @param  array  $row
-     * @param  array  $headingRow
-     * @return array
-     */
-    protected function mapRow($row, $headingRow)
-    {
-        $cells = [];
-
-        foreach ($row as $i => $value) {
-            if (isset($headingRow[$i])) {
-                $cells[$headingRow[$i]] = $value;
-            } else {
-                $cells[] = $value;
-            }
-        }
-
-        return $cells;
     }
 }

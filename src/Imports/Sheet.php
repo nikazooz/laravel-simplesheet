@@ -18,7 +18,7 @@ use Nikazooz\Simplesheet\Concerns\WithHeadingRow;
 
 class Sheet
 {
-    use HasEventBus;
+    use HasEventBus, ProcessesRows;
 
     /**
      * @var \Box\Spout\Reader\SheetInterface
@@ -104,15 +104,10 @@ class Sheet
         }
 
         if ($import instanceof OnEachRow) {
-            $headingRow = HeadingRowExtractor::extract($this->sheet, $import);
             $startRow = $startRow ?? 1;
 
-            foreach ($this->sheet->getRowIterator() as $rowNumber => $row) {
-                if ($rowNumber < $startRow) {
-                    continue;
-                }
-
-                $import->onRow($this->mapRow($row, $headingRow));
+            foreach ($this->iterateMappedImportRows($import, $this->sheet, $startRow) as $row) {
+                $import->onRow($row);
             }
         }
 
@@ -126,50 +121,15 @@ class Sheet
      */
     public function toArray($import, int $startRow = null)
     {
-        $headingRow = HeadingRowExtractor::extract($this->sheet, $import);
         $startRow = $startRow ?? $this->getStartRow($import);
-        $endRow = EndRowFinder::find($import, $startRow);
 
+        // We need rows with 0 based index and not row number as key
         $rows = [];
-        foreach ($this->sheet->getRowIterator() as $rowNumber => $row) {
-            if ($rowNumber < $startRow) {
-                continue;
-            }
-
-            if (null !== $endRow && $rowNumber > $endRow) {
-                break;
-            }
-
-            $row = $this->mapRow($row, $headingRow);
-
-            if ($import instanceof WithMapping) {
-                $row = $import->map($row);
-            }
-
+        foreach ($this->iterateMappedImportRows($import, $this->sheet, $startRow) as $row) {
             $rows[] = $row;
         }
 
         return $rows;
-    }
-
-    /**
-     * @param  array  $row
-     * @param  array  $headingRow
-     * @return array
-     */
-    protected function mapRow($row, $headingRow)
-    {
-        $cells = [];
-
-        foreach ($row as $i => $value) {
-            if (isset($headingRow[$i])) {
-                $cells[$headingRow[$i]] = $value;
-            } else {
-                $cells[] = $value;
-            }
-        }
-
-        return $cells;
     }
 
     /**

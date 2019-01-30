@@ -1,2 +1,4 @@
 *
 !.gitignore
+!import.xlsx
+!import-titles.tsv

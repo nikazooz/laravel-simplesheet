@@ -4,6 +4,6 @@ namespace Nikazooz\Simplesheet\Exceptions;
 
 use Exception;
 
-class NoTypeDetected extends Exception
+class NoTypeDetectedException extends Exception
 {
 }

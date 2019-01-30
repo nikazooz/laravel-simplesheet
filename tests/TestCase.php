@@ -62,6 +62,24 @@ class TestCase extends OrchestraTestCase
         };
     }
 
+     /**
+     * @param  string  $filePath
+     * @param  string|null  $filename
+     * @return \Illuminate\Http\Testing\File
+     */
+    public function givenUploadedFile(string $filePath, string $filename = null): File
+    {
+        $filename = $filename ?? basename($filePath);
+
+        // Create temporary file.
+        $newFilePath = tempnam(sys_get_temp_dir(), 'import-');
+
+        // Copy the existing file to a temporary file.
+        copy($filePath, $newFilePath);
+
+        return new File($filename, fopen($newFilePath, 'r'));
+    }
+
     /**
      * @param  \Illuminate\Foundation\Application  $app
      * @return array

@@ -1,6 +1,6 @@
 {
-  "name": "nikazooz/laravel-spreadsheet",
-  "description": "Easy and powerful spreadsheet exports and imports in Laravel",
+  "name": "nikazooz/laravel-simplesheet",
+  "description": "Simple, powerful and memory-efficient spreadsheet exports and imports in Laravel",
   "license": "MIT",
   "keywords": [
     "laravel",

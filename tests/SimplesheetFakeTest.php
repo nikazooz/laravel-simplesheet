@@ -4,6 +4,7 @@ namespace Nikazooz\Simplesheet\Tests;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Nikazooz\Simplesheet\Concerns\ToModel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Nikazooz\Simplesheet\Fakes\SimplesheetFake;
@@ -96,6 +97,38 @@ class SimplesheetFakeTest extends TestCase
     /**
      * @test
      */
+    public function can_assert_against_a_fake_import()
+    {
+        SimplesheetFacade::fake();
+
+        SimplesheetFacade::import($this->givenImport(), 'stored-filename.csv', 's3');
+
+        SimplesheetFacade::assertImported('stored-filename.csv', 's3');
+        SimplesheetFacade::assertImported('stored-filename.csv', 's3', function (ToModel $import) {
+            return $import->model([]) instanceof User;
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function can_assert_against_a_fake_queued_import()
+    {
+        SimplesheetFacade::fake();
+
+        $response = SimplesheetFacade::queueImport($this->givenImport(), 'queued-filename.csv', 's3');
+
+        $this->assertInstanceOf(PendingDispatch::class, $response);
+
+        SimplesheetFacade::assertQueued('queued-filename.csv', 's3');
+        SimplesheetFacade::assertQueued('queued-filename.csv', 's3', function (ToModel $import) {
+            return $import->model([]) instanceof User;
+        });
+    }
+
+    /**
+     * @test
+     */
     public function a_callback_can_be_passed_as_the_second_argument_when_asserting_against_a_faked_queued_export()
     {
         SimplesheetFacade::fake();
@@ -122,6 +155,24 @@ class SimplesheetFakeTest extends TestCase
             public function collection()
             {
                 return collect(['foo', 'bar']);
+            }
+        };
+    }
+
+    /**
+     * @return object
+     */
+    private function givenImport()
+    {
+        return new class implements ToModel, ShouldQueue {
+            /**
+             * @param array $row
+             *
+             * @return Model|null
+             */
+            public function model(array $row)
+            {
+                return new User([]);
             }
         };
     }

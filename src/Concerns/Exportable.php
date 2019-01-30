@@ -3,8 +3,8 @@
 namespace Nikazooz\Simplesheet\Concerns;
 
 use Nikazooz\Simplesheet\Exporter;
-use Nikazooz\Simplesheet\Exceptions\NoFilenameGiven;
-use Nikazooz\Simplesheet\Exceptions\NoFilePathGiven;
+use Nikazooz\Simplesheet\Exceptions\NoFilenameGivenException;
+use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
 
 trait Exportable
 {
@@ -13,14 +13,14 @@ trait Exportable
      * @param  string|null  $writerType
      * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      *
-     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilenameGiven
+     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilenameGivenException
      */
     public function download(string $fileName = null, string $writerType = null)
     {
         $fileName = $fileName ?? $this->fileName ?? null;
 
         if (null === $fileName) {
-            throw new NoFilenameGiven();
+            throw new NoFilenameGivenException();
         }
 
         return $this->getExporter()->download($this, $fileName, $writerType ?? $this->writerType ?? null);
@@ -32,14 +32,14 @@ trait Exportable
      * @param  string|null  $writerType
      * @return bool
      *
-     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGiven
+     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
      */
     public function store(string $filePath = null, string $disk = null, string $writerType = null)
     {
         $filePath = $filePath ?? $this->filePath ?? null;
 
         if (null === $filePath) {
-            throw new NoFilePathGiven();
+            throw new NoFilePathGivenException();
         }
 
         return $this->getExporter()->store(
@@ -56,14 +56,14 @@ trait Exportable
      * @param  string|null  $writerType
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      *
-     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGiven
+     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
      */
     public function queue(string $filePath = null, string $disk = null, string $writerType = null)
     {
         $filePath = $filePath ?? $this->filePath ?? null;
 
         if (null === $filePath) {
-            throw new NoFilePathGiven();
+            throw new NoFilePathGivenException();
         }
 
         return $this->getExporter()->queue(
@@ -80,7 +80,7 @@ trait Exportable
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      *
-     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilenameGiven
+     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilenameGivenException
      */
     public function toResponse($request)
     {

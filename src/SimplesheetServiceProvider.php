@@ -47,10 +47,19 @@ class SimplesheetServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->bind(Reader::class, function () {
+            return new Reader(
+                $this->app->make(FilesystemFactory::class),
+                $this->app['config']->get('simplesheet.exports.temp_path', sys_get_temp_dir()),
+                $this->app['config']->get('simplesheet.exports.csv', [])
+            );
+        });
+
         $this->app->bind('simplesheet', function () {
             return (new Simplesheet(
                 $this->app->make(Writer::class),
                 $this->app->make(QueuedWriter::class),
+                $this->app->make(Reader::class),
                 $this->app->make(FilesystemFactory::class),
                 $this->app->make(ResponseFactory::class)
             ))->setExtensionsMap(
@@ -60,6 +69,7 @@ class SimplesheetServiceProvider extends ServiceProvider
 
         $this->app->alias('simplesheet', Simplesheet::class);
         $this->app->alias('simplesheet', Exporter::class);
+        $this->app->alias('simplesheet', Importer::class);
     }
 
     /**

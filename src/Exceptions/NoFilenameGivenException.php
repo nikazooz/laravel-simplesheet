@@ -5,7 +5,7 @@ namespace Nikazooz\Simplesheet\Exceptions;
 use Throwable;
 use InvalidArgumentException;
 
-class NoFilenameGiven extends InvalidArgumentException implements Throwable
+class NoFilenameGivenException extends InvalidArgumentException implements Throwable
 {
     /**
      * @param  string  $message

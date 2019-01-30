@@ -2,12 +2,10 @@
 
 namespace Nikazooz\Simplesheet\Events;
 
-use Nikazooz\Simplesheet\Sheet;
-
 class BeforeSheet extends Event
 {
     /**
-     * @var \Nikazooz\Simplesheet\Sheet
+     * @var \Nikazooz\Simplesheet\Sheet|\Nikazooz\Simplesheet\Imports\Sheet
      */
     public $sheet;
 
@@ -17,19 +15,19 @@ class BeforeSheet extends Event
     private $exportable;
 
     /**
-     * @param  \Nikazooz\Simplesheet\Sheet  $sheet
+     * @param  \Nikazooz\Simplesheet\Sheet|\Nikazooz\Simplesheet\Imports\Sheet  $sheet
      * @param  object  $exportable
      */
-    public function __construct(Sheet $sheet, $exportable)
+    public function __construct($sheet, $exportable)
     {
         $this->sheet = $sheet;
         $this->exportable = $exportable;
     }
 
     /**
-     * @return \Nikazooz\Simplesheet\Sheet
+     * @return \Nikazooz\Simplesheet\Sheet|\Nikazooz\Simplesheet\Imports\Sheet
      */
-    public function getSheet(): Sheet
+    public function getSheet()
     {
         return $this->sheet;
     }
@@ -40,13 +38,5 @@ class BeforeSheet extends Event
     public function getConcernable()
     {
         return $this->exportable;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDelegate()
-    {
-        return $this->sheet;
     }
 }

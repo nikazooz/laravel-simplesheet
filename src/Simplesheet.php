@@ -5,15 +5,19 @@ namespace Nikazooz\Simplesheet;
 use Box\Spout\Common\Type;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Nikazooz\Simplesheet\Exceptions\NoTypeDetected;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 
-class Simplesheet implements Exporter
+class Simplesheet implements Exporter, Importer
 {
     const CSV = Type::CSV;
+    const TSV = 'tsv';
     const ODS = Type::ODS;
     const XLSX = Type::XLSX;
 
@@ -26,6 +30,11 @@ class Simplesheet implements Exporter
      * @var \Nikazooz\Simplesheet\QueuedWriter
      */
     protected $queuedWriter;
+
+     /**
+     * @var \Nikazooz\Simplesheet\Reader
+     */
+    protected $reader;
 
     /**
      * @var \Illuminate\Contracts\Filesystem\Factory
@@ -51,11 +60,13 @@ class Simplesheet implements Exporter
     public function __construct(
         Writer $writer,
         QueuedWriter $queuedWriter,
+        Reader $reader,
         FilesystemFactory $filesystem,
         ResponseFactory $responseFactory
     ) {
         $this->writer = $writer;
         $this->queuedWriter = $queuedWriter;
+        $this->reader = $reader;
         $this->filesystem = $filesystem;
         $this->responseFactory = $responseFactory;
     }
@@ -90,7 +101,7 @@ class Simplesheet implements Exporter
      * @param  string|null  $writerType
      * @return string
      *
-     * @throws \Nikazooz\Simplesheet\NoTypeDetected
+     * @throws \Nikazooz\Simplesheet\NoTypeDetectedException
      */
     protected function export($export, string $fileName, string $writerType = null)
     {
@@ -110,26 +121,40 @@ class Simplesheet implements Exporter
     }
 
     /**
-     * @param  string  $fileName
+     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $fileName
      * @param  string|null  $type
      * @return string
      *
-     * @throws \Nikazooz\Simplesheet\NoTypeDetected
+     * @throws \Nikazooz\Simplesheet\NoTypeDetectedException
      */
-    protected function findTypeByExtension($fileName, string $type = null)
+    public function findTypeByExtension($fileName, string $type = null)
     {
         if (null !== $type) {
             return $type;
         }
 
-        $pathInfo  = pathinfo($fileName);
-        $extension = strtolower(trim($pathInfo['extension'] ?? ''));
+        $extension = strtolower(trim($this->getRawExtension($fileName)));
 
         if ($extension === '' || ! array_key_exists($extension, $this->extensions)) {
-            throw new NoTypeDetected();
+            throw new NoTypeDetectedException();
         }
 
         return $this->extensions[$extension];
+    }
+
+    /**
+     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $fileName
+     * @return string
+     */
+    protected function getRawExtension($fileName)
+    {
+        if ($fileName instanceof UploadedFile) {
+            return $fileName->getClientOriginalExtension();
+        }
+
+        $pathInfo  = pathinfo($fileName);
+
+        return $pathInfo['extension'] ?? '';
     }
 
     /**
@@ -141,5 +166,49 @@ class Simplesheet implements Exporter
         $this->extensions = $extensions;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function import($import, $filePath, string $disk = null, string $readerType = null)
+    {
+        $readerType = $this->findTypeByExtension($filePath, $readerType);
+
+        $response = $this->reader->read($import, $filePath, $readerType, $disk);
+
+        if ($response instanceof PendingDispatch) {
+            return $response;
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray($import, $filePath, string $disk = null, string $readerType = null): array
+    {
+        $readerType = $this->findTypeByExtension($filePath, $readerType);
+
+        return $this->reader->toArray($import, $filePath, $readerType, $disk);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toCollection($import, $filePath, string $disk = null, string $readerType = null): Collection
+    {
+        $readerType = $this->findTypeByExtension($filePath, $readerType);
+
+        return $this->reader->toCollection($import, $filePath, $readerType, $disk);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function queueImport(ShouldQueue $import, $filePath, string $disk = null, string $readerType = null)
+    {
+        return $this->import($import, $filePath, $disk, $readerType);
     }
 }

@@ -2,11 +2,18 @@
 
 namespace Nikazooz\Simplesheet\Tests;
 
+use PHPUnit\Framework\Assert;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
+use Nikazooz\Simplesheet\Importer;
 use Nikazooz\Simplesheet\Simplesheet;
+use Nikazooz\Simplesheet\Concerns\ToArray;
+use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\EmptyExport;
+use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Nikazooz\Simplesheet\Concerns\RegistersEventListeners;
 use Nikazooz\Simplesheet\Facades\Simplesheet as SimplesheetFacade;
@@ -56,7 +63,7 @@ class SimplesheetTest extends TestCase
      */
     public function can_store_an_export_object_on_default_disk()
     {
-        $export = new EmptyExport;
+        $export = new EmptyExport();
 
         $response = $this->SUT->store($export, 'filename.xlsx');
 
@@ -69,7 +76,7 @@ class SimplesheetTest extends TestCase
      */
     public function can_store_an_export_object_on_another_disk()
     {
-        $export = new EmptyExport;
+        $export = new EmptyExport();
 
         $response = $this->SUT->store($export, 'filename.xlsx', 'test');
 
@@ -82,12 +89,25 @@ class SimplesheetTest extends TestCase
      */
     public function can_store_csv_export_with_default_settings()
     {
-        $export = new EmptyExport;
+        $export = new EmptyExport();
 
         $response = $this->SUT->store($export, 'filename.csv');
 
         $this->assertTrue($response);
         $this->assertFileExists(__DIR__ . '/Data/Disks/Local/filename.csv');
+    }
+
+    /**
+     * @test
+     */
+    public function can_store_tsv_export_with_default_settings()
+    {
+        $export = new EmptyExport();
+
+        $response = $this->SUT->store($export, 'filename.tsv');
+
+        $this->assertTrue($response);
+        $this->assertFileExists(__DIR__ . '/Data/Disks/Local/filename.tsv');
     }
 
     /**
@@ -129,5 +149,209 @@ class SimplesheetTest extends TestCase
         $this->assertContains('sep=;', $contents);
         $this->assertContains('A1;B1', $contents);
         $this->assertContains('A2;B2', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function can_import_a_simple_xlsx_file_to_array()
+    {
+        $import = new class {
+            use Importable;
+        };
+
+        $this->assertEquals([
+            [
+                ['test', 'test'],
+                ['test', 'test'],
+            ],
+        ], $import->toArray('import.xlsx'));
+    }
+
+    /**
+     * @test
+     */
+    public function can_import_a_simple_xlsx_file_to_collection()
+    {
+        $import = new class {
+            use Importable;
+        };
+
+        $this->assertEquals(new Collection([
+            new Collection([
+                new Collection(['test', 'test']),
+                new Collection(['test', 'test']),
+            ]),
+        ]), $import->toCollection('import.xlsx'));
+    }
+
+    /**
+     * @test
+     */
+    public function can_import_a_simple_xlsx_file()
+    {
+        $import = new class implements ToArray {
+            /**
+             * @param array $array
+             */
+            public function array(array $array)
+            {
+                Assert::assertEquals([
+                    ['test', 'test'],
+                    ['test', 'test'],
+                ], $array);
+            }
+        };
+
+        $imported = $this->SUT->import($import, 'import.xlsx');
+
+        $this->assertInstanceOf(Importer::class, $imported);
+    }
+
+    /**
+     * @test
+     */
+    public function can_import_a_tsv_file()
+    {
+        $import = new class implements ToArray, WithCustomCsvSettings {
+            /**
+             * @param array $array
+             */
+            public function array(array $array)
+            {
+                Assert::assertEquals([
+                    'tconst',
+                    'titleType',
+                    'primaryTitle',
+                    'originalTitle',
+                    'isAdult',
+                    'startYear',
+                    'endYear',
+                    'runtimeMinutes',
+                    'genres',
+                ], $array[0]);
+            }
+
+            /**
+             * @return array
+             */
+            public function getCsvSettings(): array
+            {
+                return [
+                    'delimiter' => "\t",
+                ];
+            }
+        };
+
+        $imported = $this->SUT->import($import, 'import-titles.tsv');
+
+        $this->assertInstanceOf(Importer::class, $imported);
+    }
+
+    /**
+     * @test
+     */
+    public function can_chain_imports()
+    {
+        $import1 = new class implements ToArray {
+            /**
+             * @param array $array
+             */
+            public function array(array $array)
+            {
+                Assert::assertEquals([
+                    ['test', 'test'],
+                    ['test', 'test'],
+                ], $array);
+            }
+        };
+
+        $import2 = new class implements ToArray {
+            /**
+             * @param array $array
+             */
+            public function array(array $array)
+            {
+                Assert::assertEquals([
+                    ['test', 'test'],
+                    ['test', 'test'],
+                ], $array);
+            }
+        };
+
+        $imported = $this->SUT
+            ->import($import1, 'import.xlsx')
+            ->import($import2, 'import.xlsx');
+
+        $this->assertInstanceOf(Importer::class, $imported);
+    }
+
+    /**
+     * @test
+     */
+    public function can_import_a_simple_xlsx_file_from_uploaded_file()
+    {
+        $import = new class implements ToArray {
+            /**
+             * @param array $array
+             */
+            public function array(array $array)
+            {
+                Assert::assertEquals([
+                    ['test', 'test'],
+                    ['test', 'test'],
+                ], $array);
+            }
+        };
+
+        $this->SUT->import($import, $this->givenUploadedFile(__DIR__ . '/Data/Disks/Local/import.xlsx'), null, 'xlsx');
+    }
+
+    /**
+     * @test
+     * @expectedException \Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException
+     */
+    public function import_will_throw_error_when_no_reader_type_could_be_detected()
+    {
+        $import = new class implements ToArray {
+            /**
+             * @param array $array
+             */
+            public function array(array $array)
+            {
+                Assert::assertEquals([
+                    ['test', 'test'],
+                    ['test', 'test'],
+                ], $array);
+            }
+        };
+
+        $this->SUT->import($import, UploadedFile::fake()->create('import'));
+    }
+
+    /**
+     * @test
+     */
+    public function can_import_without_extension_with_explicit_reader_type()
+    {
+        $import = new class implements ToArray {
+            /**
+             * @param array $array
+             */
+            public function array(array $array)
+            {
+                Assert::assertEquals([
+                    ['test', 'test'],
+                    ['test', 'test'],
+                ], $array);
+            }
+        };
+
+        $this->SUT->import(
+            $import,
+            $this->givenUploadedFile(__DIR__ . '/Data/Disks/Local/import.xlsx', 'import'),
+            null,
+            Simplesheet::XLSX
+        );
     }
 }

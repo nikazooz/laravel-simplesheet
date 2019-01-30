@@ -42,12 +42,4 @@ class BeforeExport extends Event
     {
         return $this->exportable;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getDelegate()
-    {
-        return $this->writer;
-    }
 }

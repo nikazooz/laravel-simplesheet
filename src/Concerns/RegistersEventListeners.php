@@ -3,8 +3,10 @@
 namespace Nikazooz\Simplesheet\Concerns;
 
 use Nikazooz\Simplesheet\Events\AfterSheet;
+use Nikazooz\Simplesheet\Events\AfterImport;
 use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Events\BeforeExport;
+use Nikazooz\Simplesheet\Events\BeforeImport;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
 
 trait RegistersEventListeners
@@ -22,6 +24,14 @@ trait RegistersEventListeners
 
         if (method_exists($this, 'beforeWriting')) {
             $listeners[BeforeWriting::class] = [static::class, 'beforeWriting'];
+        }
+
+        if (method_exists($this, 'beforeImport')) {
+            $listeners[BeforeImport::class] = [static::class, 'beforeImport'];
+        }
+
+        if (method_exists($this, 'afterImport')) {
+            $listeners[AfterImport::class] = [static::class, 'afterImport'];
         }
 
         if (method_exists($this, 'beforeSheet')) {

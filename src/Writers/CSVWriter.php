@@ -5,7 +5,7 @@ namespace Nikazooz\Simplesheet\Writers;
 use Box\Spout\Writer\CSV\Writer;
 use Box\Spout\Common\Exception\IOException;
 
-class CSVWriter extends Writer
+class CsvWriter extends Writer
 {
     /**
      * @var bool

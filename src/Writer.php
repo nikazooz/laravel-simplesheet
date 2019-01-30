@@ -5,7 +5,7 @@ namespace Nikazooz\Simplesheet;
 use Illuminate\Support\Str;
 use Box\Spout\Writer\WriterInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Nikazooz\Simplesheet\Writers\CSVWriter;
+use Nikazooz\Simplesheet\Writers\CsvWriter;
 use Nikazooz\Simplesheet\Concerns\FromArray;
 use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
@@ -13,9 +13,9 @@ use Nikazooz\Simplesheet\Events\BeforeExport;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
 use Nikazooz\Simplesheet\Concerns\FromIterator;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Factories\WriterFactory;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
-use Nikazooz\Simplesheet\Writers\Factory as WriterFactory;
 
 class Writer
 {
@@ -140,7 +140,7 @@ class Writer
      */
     protected function configureCsvWriter()
     {
-        if ($this->spoutWriter instanceof CSVWriter) {
+        if ($this->spoutWriter instanceof CsvWriter) {
             $this->spoutWriter->setFieldDelimiter($this->delimiter);
             $this->spoutWriter->setFieldEnclosure($this->enclosure);
             $this->spoutWriter->setLineEnding($this->lineEnding);

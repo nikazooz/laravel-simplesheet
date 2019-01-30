@@ -45,6 +45,25 @@ return [
         ],
     ],
 
+    'imports' => [
+
+        'read_only' => true,
+
+        'heading_row' => [
+
+            /*
+            |--------------------------------------------------------------------------
+            | Heading Row Formatter
+            |--------------------------------------------------------------------------
+            |
+            | Configure the heading row formatter.
+            | Available options: none|slug|custom
+            |
+            */
+            'formatter' => 'slug',
+        ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Extension detector
@@ -63,5 +82,6 @@ return [
         'ods' => Simplesheet::ODS,
         'ots' => Simplesheet::ODS,
         'csv' => Simplesheet::CSV,
+        'tsv' => Simplesheet::TSV,
     ],
 ];

@@ -2,6 +2,7 @@
 
 namespace Nikazooz\Simplesheet;
 
+use Box\Spout\Reader\ReaderInterface;
 use Box\Spout\Writer\WriterInterface;
 use Nikazooz\Simplesheet\HasEventBus;
 use Illuminate\Contracts\Support\Arrayable;
@@ -52,7 +53,7 @@ class Sheet
         $this->chunkSize = $chunkSize;
     }
 
-     /**
+    /**
      * @param  object  $sheetExport
      */
     public function export($sheetExport)
@@ -197,6 +198,17 @@ class Sheet
         }
 
         return $this->chunkSize;
+    }
+
+     /**
+     * @param  int  $chunkSize
+     * @return \Nikazooz\Simplesheet\Sheet
+     */
+    public function chunkSize(int $chunkSize)
+    {
+        $this->chunkSize = $chunkSize;
+
+        return $this;
     }
 
     /**

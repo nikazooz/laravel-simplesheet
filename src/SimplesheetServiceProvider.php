@@ -42,8 +42,7 @@ class SimplesheetServiceProvider extends ServiceProvider
 
         $this->app->bind(QueuedWriter::class, function () {
             return new QueuedWriter(
-                $this->app->make(Writer::class),
-                $this->app['config']->get('simplesheet.exports.chunk_size', 100)
+                $this->app->make(Writer::class)
             );
         });
 

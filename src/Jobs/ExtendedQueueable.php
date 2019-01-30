@@ -11,8 +11,7 @@ trait ExtendedQueueable
     }
 
     /**
-     * @param $chain
-     *
+     * @param  mixed  $chain
      * @return $this
      */
     public function chain($chain)

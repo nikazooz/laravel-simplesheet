@@ -18,18 +18,12 @@ class QueuedWriter
     protected $writer;
 
     /**
-     * @var int
-     */
-    protected $chunkSize = 100;
-
-    /**
      * @param  \Nikazooz\Simplesheet\Writer  $writer
      * @return void
      */
-    public function __construct(Writer $writer, $chunkSize)
+    public function __construct(Writer $writer)
     {
         $this->writer = $writer;
-        $this->chunkSize = $chunkSize;
     }
 
     /**

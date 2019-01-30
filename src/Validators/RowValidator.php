@@ -5,6 +5,7 @@ namespace Nikazooz\Simplesheet\Validators;
 use Illuminate\Contracts\Validation\Factory;
 use Nikazooz\Simplesheet\Concerns\SkipsOnFailure;
 use Nikazooz\Simplesheet\Concerns\WithValidation;
+use Nikazooz\Simplesheet\Exceptions\RowSkippedException;
 use Illuminate\Validation\ValidationException as IlluminateValidationException;
 
 class RowValidator
@@ -23,15 +24,15 @@ class RowValidator
     }
 
     /**
-     * @param array          $rows
-     * @param WithValidation $import
+     * @param  array  $rows
+     * @param  \Nikazooz\Simplesheet\Concerns\WithValidation  $import
      *
-     * @throws ValidationException
+     * @throws \Nikazooz\Simplesheet\Validators\ValidationException
      */
     public function validate(array $rows, WithValidation $import)
     {
-        $rules      = $this->rules($import);
-        $messages   = $this->messages($import);
+        $rules = $this->rules($import);
+        $messages = $this->messages($import);
         $attributes = $this->attributes($import);
 
         try {
@@ -39,7 +40,7 @@ class RowValidator
         } catch (IlluminateValidationException $e) {
             $failures = [];
             foreach ($e->errors() as $attribute => $messages) {
-                $row           = strtok($attribute, '.');
+                $row = strtok($attribute, '.');
                 $attributeName = strtok('');
                 $attributeName = $attributes['*.' . $attributeName] ?? $attributeName;
 
@@ -52,6 +53,7 @@ class RowValidator
 
             if ($import instanceof SkipsOnFailure) {
                 $import->onFailure(...$failures);
+                throw new RowSkippedException(...$failures);
             } else {
                 throw new ValidationException(
                     $e,

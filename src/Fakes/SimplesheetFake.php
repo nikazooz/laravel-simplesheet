@@ -9,6 +9,7 @@ use Nikazooz\Simplesheet\Exporter;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\PendingDispatch;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class SimplesheetFake implements Exporter
@@ -48,6 +49,10 @@ class SimplesheetFake implements Exporter
      */
     public function store($export, string $filePath, string $disk = null, string $writerType = null)
     {
+        if ($export instanceof ShouldQueue) {
+            return $this->queue($export, $filePath, $disk, $writerType);
+        }
+
         $this->stored[$disk ?? 'default'][$filePath] = $export;
 
         return true;
@@ -60,6 +65,7 @@ class SimplesheetFake implements Exporter
     {
         Queue::fake();
 
+        $this->stored[$disk ?? 'default'][$filePath] = $export;
         $this->queued[$disk ?? 'default'][$filePath] = $export;
 
         return new PendingDispatch(new class {
@@ -75,8 +81,14 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function import($import, $filePath, string $disk = null, string $readerType = null)
+    public function import($import, $file, string $disk = null, string $readerType = null)
     {
+        if ($import instanceof ShouldQueue) {
+            return $this->queueImport($import, $file, $disk, $readerType);
+        }
+
+        $filePath = ($file instanceof UploadedFile) ? $file->getClientOriginalName() : $file;
+
         $this->imported[$disk ?? 'default'][$filePath] = $import;
 
         return $this;
@@ -85,8 +97,10 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function toArray($import, $filePath, string $disk = null, string $readerType = null): array
+    public function toArray($import, $file, string $disk = null, string $readerType = null): array
     {
+        $filePath = ($file instanceof UploadedFile) ? $file->getFilename() : $file;
+
         $this->imported[$disk ?? 'default'][$filePath] = $import;
 
         return [];
@@ -95,8 +109,10 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function toCollection($import, $filePath, string $disk = null, string $readerType = null): Collection
+    public function toCollection($import, $file, string $disk = null, string $readerType = null): Collection
     {
+        $filePath = ($file instanceof UploadedFile) ? $file->getFilename() : $file;
+
         $this->imported[$disk ?? 'default'][$filePath] = $import;
 
         return new Collection();
@@ -105,11 +121,14 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function queueImport(ShouldQueue $import, $filePath, string $disk = null, string $readerType = null)
+    public function queueImport(ShouldQueue $import, $file, string $disk = null, string $readerType = null)
     {
         Queue::fake();
 
-        $this->queued[$disk ?? 'default'][$filePath] = $import;
+        $filePath = ($file instanceof UploadedFile) ? $file->getFilename() : $file;
+
+        $this->queued[$disk ?? 'default'][$filePath]   = $import;
+        $this->imported[$disk ?? 'default'][$filePath] = $import;
 
         return new PendingDispatch(new class {
             use Queueable;

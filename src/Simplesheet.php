@@ -125,7 +125,7 @@ class Simplesheet implements Exporter, Importer
      * @param  string|null  $type
      * @return string
      *
-     * @throws \Nikazooz\Simplesheet\NoTypeDetectedException
+     * @throws \Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException
      */
     public function findTypeByExtension($fileName, string $type = null)
     {

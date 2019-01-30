@@ -97,6 +97,24 @@ class SimplesheetFakeTest extends TestCase
     /**
      * @test
      */
+    public function can_assert_against_a_fake_implicitly_queued_export()
+    {
+        SimplesheetFacade::fake();
+
+        $response = SimplesheetFacade::store($this->givenQueuedExport(), 'queued-filename.csv', 's3');
+
+        $this->assertInstanceOf(PendingDispatch::class, $response);
+
+        SimplesheetFacade::assertStored('queued-filename.csv', 's3');
+        SimplesheetFacade::assertQueued('queued-filename.csv', 's3');
+        SimplesheetFacade::assertQueued('queued-filename.csv', 's3', function (FromCollection $export) {
+            return $export->collection()->contains('foo');
+        });
+    }
+
+    /**
+     * @test
+     */
     public function can_assert_against_a_fake_import()
     {
         SimplesheetFacade::fake();
@@ -112,14 +130,48 @@ class SimplesheetFakeTest extends TestCase
     /**
      * @test
      */
+    public function can_assert_against_a_fake_import_with_uploaded_file()
+    {
+        SimplesheetFacade::fake();
+
+        SimplesheetFacade::import($this->givenImport(), $this->givenUploadedFile(__DIR__ . '/Data/Disks/Local/import.xlsx'));
+
+        SimplesheetFacade::assertImported('import.xlsx');
+        SimplesheetFacade::assertImported('import.xlsx', function (ToModel $import) {
+            return $import->model([]) instanceof User;
+        });
+    }
+
+    /**
+     * @test
+     */
     public function can_assert_against_a_fake_queued_import()
     {
         SimplesheetFacade::fake();
 
-        $response = SimplesheetFacade::queueImport($this->givenImport(), 'queued-filename.csv', 's3');
+        $response = SimplesheetFacade::queueImport($this->givenQueuedImport(), 'queued-filename.csv', 's3');
 
         $this->assertInstanceOf(PendingDispatch::class, $response);
 
+        SimplesheetFacade::assertImported('queued-filename.csv', 's3');
+        SimplesheetFacade::assertQueued('queued-filename.csv', 's3');
+        SimplesheetFacade::assertQueued('queued-filename.csv', 's3', function (ToModel $import) {
+            return $import->model([]) instanceof User;
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function can_assert_against_a_fake_implicitly_queued_import()
+    {
+        SimplesheetFacade::fake();
+
+        $response = SimplesheetFacade::import($this->givenQueuedImport(), 'queued-filename.csv', 's3');
+
+        $this->assertInstanceOf(PendingDispatch::class, $response);
+
+        SimplesheetFacade::assertImported('queued-filename.csv', 's3');
         SimplesheetFacade::assertQueued('queued-filename.csv', 's3');
         SimplesheetFacade::assertQueued('queued-filename.csv', 's3', function (ToModel $import) {
             return $import->model([]) instanceof User;
@@ -144,13 +196,29 @@ class SimplesheetFakeTest extends TestCase
     }
 
     /**
-     * @return FromCollection
+     * @return \Nikazooz\Simplesheet\Concerns\FromCollection
      */
     private function givenExport()
     {
         return new class implements FromCollection {
             /**
-             * @return Collection
+             * @return \Illuminate\Support\Collection
+             */
+            public function collection()
+            {
+                return collect(['foo', 'bar']);
+            }
+        };
+    }
+
+    /**
+     * @return \Nikazooz\Simplesheet\Concerns\FromCollection
+     */
+    private function givenQueuedExport()
+    {
+        return new class implements FromCollection, ShouldQueue {
+            /**
+             * @return \Illuminate\Support\Collection
              */
             public function collection()
             {
@@ -164,11 +232,27 @@ class SimplesheetFakeTest extends TestCase
      */
     private function givenImport()
     {
+        return new class implements ToModel {
+            /**
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
+             */
+            public function model(array $row)
+            {
+                return new User([]);
+            }
+        };
+    }
+
+    /**
+     * @return object
+     */
+    private function givenQueuedImport()
+    {
         return new class implements ToModel, ShouldQueue {
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {

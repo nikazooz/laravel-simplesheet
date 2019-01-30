@@ -15,6 +15,7 @@ use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Nikazooz\Simplesheet\Concerns\ToCollection;
 use Nikazooz\Simplesheet\Concerns\WithHeadingRow;
+use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
 
 class Sheet
 {
@@ -52,23 +53,27 @@ class Sheet
     /**
      * @param  \Box\Spout\Reader\ReaderInterface  $reader
      * @param  int  $index
-     *
      * @return \Nikazooz\Simplesheet\Imports\Sheet
+     *
+     * @throws \Nikazooz\Simplesheet\Exceptions\SheetNotFoundException
      */
     public static function byIndex(ReaderInterface $reader, int $index)
     {
-        foreach ($reader->getSheetIterator() as $sheet) {
+        foreach ($reader->getSheetIterator() as $sheetNumber => $sheet) {
             if ($sheet->getIndex() === $index) {
                 return new static($sheet);
             }
         }
+
+        throw SheetNotFoundException::byIndex($index, $sheetNumber);
     }
 
     /**
      * @param  \Box\Spout\Reader\ReaderInterface  $reader
      * @param  string  $name
-     *
      * @return \Nikazooz\Simplesheet\Imports\Sheet
+     *
+     * @throws \Nikazooz\Simplesheet\Exceptions\SheetNotFoundException
      */
     public static function byName(ReaderInterface $reader, string $name)
     {
@@ -77,6 +82,8 @@ class Sheet
                 return new static($sheet);
             }
         }
+
+        throw SheetNotFoundException::byName($name);
     }
 
     /**

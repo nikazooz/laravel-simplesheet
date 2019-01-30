@@ -16,8 +16,10 @@ use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\BeforeImport;
 use Nikazooz\Simplesheet\Factories\ReaderFactory;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
+use Nikazooz\Simplesheet\Concerns\SkipsUnknownSheets;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 
 class Reader
@@ -80,10 +82,11 @@ class Reader
 
         $this->beforeReading($import, $reader);
 
-        DB::transaction(function () use ($reader) {
+        DB::transaction(function () use ($reader, $import) {
             foreach ($this->sheetImports as $index => $sheetImport) {
-                $sheet = Sheet::make($reader, $index);
-                $sheet->import($sheetImport, $sheet->getStartRow($sheetImport));
+                if ($sheet = $this->getSheet($reader, $import, $sheetImport, $index)) {
+                    $sheet->import($sheetImport, $sheet->getStartRow($sheetImport));
+                }
             }
         });
 
@@ -113,8 +116,9 @@ class Reader
 
         $sheets = [];
         foreach ($this->sheetImports as $index => $sheetImport) {
-            $sheet = Sheet::make($reader, $index);
-            $sheets[$index] = $sheet->toArray($sheetImport);
+            if ($sheet = $this->getSheet($reader, $import, $sheetImport, $index)) {
+                $sheets[$index] = $sheet->toArray($sheetImport);
+            }
         }
 
         $this->afterReading($import);
@@ -142,8 +146,9 @@ class Reader
 
         $sheets = new Collection();
         foreach ($this->sheetImports as $index => $sheetImport) {
-            $sheet = Sheet::make($reader, $index);
-            $sheets->put($index, $sheet->toCollection($sheetImport));
+            if ($sheet = $this->getSheet($reader, $import, $sheetImport, $index)) {
+                $sheets->put($index, $sheet->toCollection($sheetImport));
+            }
         }
 
         $this->afterReading($import);
@@ -184,6 +189,36 @@ class Reader
     protected function getTempFile(): string
     {
         return $this->tempPath . DIRECTORY_SEPARATOR . str_random(16);
+    }
+
+    /**
+     * @param  \Box\Spout\Reader\ReaderInterface  $reader
+     * @param  object  $import
+     * @param  object  $sheetImport
+     * @param  string|int  $index
+     * @return \Nikazooz\Simplesheet\Imports\Sheet|null
+     *
+     * @throws \Nikazooz\Simplesheet\Exceptions\SheetNotFoundException
+     */
+    protected function getSheet(ReaderInterface $reader, $import, $sheetImport, $index)
+    {
+        try {
+            return Sheet::make($reader, $index);
+        } catch (SheetNotFoundException $e) {
+            if ($import instanceof SkipsUnknownSheets) {
+                $import->onUnknownSheet($index);
+
+                return null;
+            }
+
+            if ($sheetImport instanceof SkipsUnknownSheets) {
+                $sheetImport->onUnknownSheet($index);
+
+                return null;
+            }
+
+            throw $e;
+        }
     }
 
     /**

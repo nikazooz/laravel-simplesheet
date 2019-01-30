@@ -11,9 +11,8 @@ use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Concerns\ToModel;
 use Nikazooz\Simplesheet\Validators\Failure;
 use Nikazooz\Simplesheet\Concerns\Importable;
+use Nikazooz\Simplesheet\Concerns\SkipsErrors;
 use Nikazooz\Simplesheet\Concerns\SkipsOnError;
-use Nikazooz\Simplesheet\Concerns\SkipsFailures;
-use Nikazooz\Simplesheet\Concerns\SkipsOnFailure;
 use Nikazooz\Simplesheet\Concerns\WithValidation;
 use Nikazooz\Simplesheet\Concerns\WithBatchInserts;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
@@ -83,12 +82,10 @@ class SkipsOnErrorTest extends TestCase
      /**
      * @test
      */
-    public function skips_only_failed_rows_in_batch()
+    public function can_skip_errors_and_collect_all_errors_at_the_end()
     {
-        $import = new class implements ToModel, WithValidation, WithBatchInserts, SkipsOnFailure {
-            use Importable;
-
-            public $failures = 0;
+        $import = new class implements ToModel, SkipsOnError {
+            use Importable, SkipsErrors;
 
             /**
              * @param array $row
@@ -103,98 +100,17 @@ class SkipsOnErrorTest extends TestCase
                     'password' => 'secret',
                 ]);
             }
-
-            /**
-             * @return array
-             */
-            public function rules(): array
-            {
-                return [
-                    '1' => Rule::in(['patrick@maatwebsite.nl']),
-                ];
-            }
-
-            /**
-             * @param  \Nikazooz\Simplesheet\Validators\Failure[]  $failures
-             */
-            public function onFailure(Failure ...$failures)
-            {
-                $failure = $failures[0];
-
-                Assert::assertEquals(2, $failure->row());
-                Assert::assertEquals('1', $failure->attribute());
-                Assert::assertEquals(['The selected 1 is invalid.'], $failure->errors());
-
-                $this->failures += \count($failures);
-            }
-
-            /**
-             * @return int
-             */
-            public function batchSize(): int
-            {
-                return 100;
-            }
         };
 
-        $import->import('import-users.xlsx');
+        $import->import('import-users-with-duplicates.xlsx');
 
-        $this->assertEquals(1, $import->failures);
+        $this->assertCount(1, $import->errors());
 
-        // Shouldn't have rollbacked/skipped the rest of the batch.
-        $this->assertDatabaseHas('users', [
-            'email' => 'patrick@maatwebsite.nl',
-        ]);
+        /** @var Throwable $e */
+        $e = $import->errors()->first();
 
-        // Should have skipped inserting
-        $this->assertDatabaseMissing('users', [
-            'email' => 'taylor@laravel.com',
-        ]);
-    }
-
-    /**
-     * @test
-     */
-    public function can_skip_failures_and_collect_all_failures_at_the_end()
-    {
-        $import = new class implements ToModel, WithValidation, SkipsOnFailure {
-            use Importable, SkipsFailures;
-
-            /**
-             * @param array $row
-             *
-             * @return Model|null
-             */
-            public function model(array $row)
-            {
-                return new User([
-                    'name' => $row[0],
-                    'email' => $row[1],
-                    'password' => 'secret',
-                ]);
-            }
-
-            /**
-             * @return array
-             */
-            public function rules(): array
-            {
-                return [
-                    '1' => Rule::in(['patrick@maatwebsite.nl']),
-                ];
-            }
-        };
-
-        $import->import('import-users.xlsx');
-
-        $this->assertCount(1, $import->failures());
-
-        /** @var Failure $failure */
-        $failure = $import->failures()->first();
-
-        $this->assertEquals(2, $failure->row());
-        $this->assertEquals('1', $failure->attribute());
-        $this->assertEquals(['The selected 1 is invalid.'], $failure->errors());
+        $this->assertInstanceOf(QueryException::class, $e);
+        $this->stringContains($e->getMessage(), 'patrick@maatwebsite.nl');
 
         // Shouldn't have rollbacked other imported rows.
         $this->assertDatabaseHas('users', [

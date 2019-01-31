@@ -19,4 +19,12 @@ class NoFilePathGivenException extends InvalidArgumentException implements Throw
     ) {
         parent::__construct($message, $code, $previous);
     }
+
+    /**
+     * @return \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
+     */
+    public static function import()
+    {
+        return new static('A filepath needs to be passed in order to perform the import.');
+    }
 }

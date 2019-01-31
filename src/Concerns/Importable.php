@@ -17,17 +17,15 @@ trait Importable
      * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string|null  $filePath
      * @param  string|null  $disk
      * @param  string|null  $readerType
+     * @return \Nikazooz\Simplesheet\Importer|\Illuminate\Foundation\Bus\PendingDispatch
      *
-     * @throws NoFilePathGivenExceptionException
-     * @return Importer|PendingDispatch
+     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
      */
     public function import($filePath = null, string $disk = null, string $readerType = null)
     {
-        $filePath = $this->getFilePath($filePath);
-
         return $this->getImporter()->import(
             $this,
-            $filePath,
+            $this->getFilePath($filePath),
             $disk ?? $this->disk ?? null,
             $readerType ?? $this->readerType ?? null
         );
@@ -43,11 +41,9 @@ trait Importable
      */
     public function toArray($filePath = null, string $disk = null, string $readerType = null): array
     {
-        $filePath = $this->getFilePath($filePath);
-
         return $this->getImporter()->toArray(
             $this,
-            $filePath,
+            $this->getFilePath($filePath),
             $disk ?? $this->disk ?? null,
             $readerType ?? $this->readerType ?? null
         );
@@ -63,11 +59,9 @@ trait Importable
      */
     public function toCollection($filePath = null, string $disk = null, string $readerType = null): Collection
     {
-        $filePath = $this->getFilePath($filePath);
-
         return $this->getImporter()->toCollection(
             $this,
-            $filePath,
+            $this->getFilePath($filePath),
             $disk ?? $this->disk ?? null,
             $readerType ?? $this->readerType ?? null
         );
@@ -79,8 +73,8 @@ trait Importable
      * @param  string|null  $readerType
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      *
-     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
      * @throws \InvalidArgumentException
+     * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
      */
     public function queue($filePath = null, string $disk = null, string $readerType = null)
     {
@@ -102,7 +96,7 @@ trait Importable
         $filePath = $filePath ?? $this->filePath ?? null;
 
         if (null === $filePath) {
-            throw new NoFilePathGivenException('A filepath needs to be passed in order to perform the import.');
+            throw NoFilePathGivenException::import();
         }
 
         return $filePath;

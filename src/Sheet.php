@@ -75,8 +75,9 @@ class Sheet
             $this->setSheetTitle($sheetExport);
         }
 
-        if ($sheetExport instanceof WithHeadings) {
-            $this->appendRow($sheetExport->headings());
+        // Empty headings array meens we should skip adding headings
+        if ($sheetExport instanceof WithHeadings && ($headings = $sheetExport->headings())) {
+            $this->appendRow($headings);
         }
 
         if ($sheetExport instanceof FromQuery) {

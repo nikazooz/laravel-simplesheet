@@ -83,9 +83,26 @@ class CsvWriter extends Writer
      */
     protected function addRowToWriter(array $dataRow, $style)
     {
+        if (PHP_EOL !== $this->lineEnding) {
+            return $this->customAddRowToWriter($dataRow);
+        }
+
+        parent::addRowToWriter($dataRow, $style);
+    }
+
+   /**
+     * Adds data to the currently opened writer.
+     *
+     * @param  array $dataRow Array containing data to be written.
+     *          Example $dataRow = ['data1', 1234, null, '', 'data5'];
+     * @return void
+     * @throws \Box\Spout\Common\Exception\IOException If unable to write data
+     */
+    protected function customAddRowToWriter($dataRow)
+    {
         $wasWriteSuccessful = $this->globalFunctionsHelper->fputs(
             $this->filePointer,
-            implode($this->fieldDelimiter, $dataRow) . $this->lineEnding
+            $this->prepareRowForWriting($dataRow)
         );
 
         if ($wasWriteSuccessful === false) {
@@ -96,5 +113,33 @@ class CsvWriter extends Writer
         if ($this->lastWrittenRowIndex % self::FLUSH_THRESHOLD === 0) {
             $this->globalFunctionsHelper->fflush($this->filePointer);
         }
+    }
+
+    /**
+     * @param  array  $row
+     * @return string
+     */
+    protected function prepareRowForWriting($row)
+    {
+        return implode($this->fieldDelimiter, array_map(function ($cell) {
+            return $this->encloseString($cell);
+        }, $dataRow)) . $this->lineEnding;
+    }
+
+    /**
+     * @param  string  $str
+     * @return string
+     */
+    protected function encloseString($str)
+    {
+        if (! preg_match('/\s+/', $str)) {
+            return $str;
+        }
+
+        return sprintf('%s%s%s', [
+            $this->fieldEnclosure,
+            addslashes($str),
+            $this->fieldEnclosure,
+        ]);
     }
 }

@@ -52,7 +52,7 @@ class Reader
 
     /**
      * @param  object  $import
-     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $filePath
+     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $file
      * @param  string  $readerType
      * @param  string|null  $disk
      * @return \Illuminate\Foundation\Bus\PendingDispatch|\Nikazooz\Simplesheet\Reader
@@ -60,25 +60,26 @@ class Reader
      * @throws \InvalidArgumentException
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function read($import, $filePath, string $readerType, string $disk = null)
+    public function read($import, $file, string $readerType, string $disk = null)
     {
+        $filePath = $this->copyToFileSystem($file, $disk);
+
         if ($import instanceof ShouldQueue) {
-            return QueueImport::dispatch($import, $filePath, $readerType, $disk);
+            return QueueImport::dispatch($import, $filePath, $readerType);
         }
 
-        return $this->readNow($import, $filePath, $readerType, $disk);
+        return $this->readNow($import, $filePath, $readerType);
     }
 
     /**
      * @param  object  $import
      * @param  string  $filePath
      * @param  string  $readerType
-     * @param  string|null  $disk
      * @return \Nikazooz\Simplesheet\Reader
      */
-    public function readNow($import, $filePath, string $readerType, string $disk = null)
+    public function readNow($import, $filePath, string $readerType)
     {
-        $reader = $this->getReader($import, $filePath, $readerType, $disk);
+        $reader = $this->getReader($import, $filePath, $readerType);
 
         $this->beforeReading($import, $reader);
 
@@ -99,7 +100,7 @@ class Reader
 
     /**
      * @param  object  $import
-     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $filePath
+     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $file
      * @param  string  $readerType
      * @param  string|null  $disk
      *
@@ -109,9 +110,9 @@ class Reader
      * @throws \Box\Spout\Reader\Exception\ReaderException
      * @return array
      */
-    public function toArray($import, $filePath, string $readerType, string $disk = null): array
+    public function toArray($import, $file, string $readerType, string $disk = null): array
     {
-        $reader = $this->getReader($import, $filePath, $readerType, $disk);
+        $reader = $this->getReader($import, $this->copyToFileSystem($file, $disk), $readerType);
         $this->beforeReading($import, $reader);
 
         $sheets = [];
@@ -130,7 +131,7 @@ class Reader
 
     /**
      * @param  object  $import
-     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $filePath
+     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $file
      * @param  string  $readerType
      * @param  string|null  $disk
      *
@@ -139,9 +140,9 @@ class Reader
      * @throws \Box\Spout\Reader\Exception\ReaderException
      * @return \Illuminate\Support\Collection
      */
-    public function toCollection($import, $filePath, string $readerType, string $disk = null): Collection
+    public function toCollection($import, $file, string $readerType, string $disk = null): Collection
     {
-        $reader = $this->getReader($import, $filePath, $readerType, $disk);
+        $reader = $this->getReader($import, $this->copyToFileSystem($file, $disk), $readerType);
         $this->beforeReading($import, $reader);
 
         $sheets = new Collection();
@@ -159,25 +160,25 @@ class Reader
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $filePath
+     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $file
      * @param  string|null  $disk
      * @return string
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    protected function copyToFileSystem($filePath, string $disk = null)
+    protected function copyToFileSystem($file, string $disk = null)
     {
         $tempFilePath = $this->getTempFile();
 
-        if ($filePath instanceof UploadedFile) {
-            return $filePath->move($tempFilePath)->getRealPath();
+        if ($file instanceof UploadedFile) {
+            return $file->move($tempFilePath)->getRealPath();
         }
 
         $tmpStream = fopen($tempFilePath, 'w+');
 
-        $file = $this->filesystem->disk($disk)->readStream($filePath);
+        $readStream = $this->filesystem->disk($disk)->readStream($file);
 
-        stream_copy_to_stream($file, $tmpStream);
+        stream_copy_to_stream($readStream, $tmpStream);
         fclose($tmpStream);
 
         return $tempFilePath;
@@ -228,9 +229,6 @@ class Reader
     {
         // Force garbage collecting
         unset($this->sheetImports);
-
-        // Remove the temporary file.
-        unlink($this->currentFile);
     }
 
     /**
@@ -260,9 +258,8 @@ class Reader
 
     /**
      * @param  object  $import
-     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $filePath
+     * @param  string  $filePath
      * @param  string  $readerType
-     * @param  string  $disk
      * @return \Box\Spout\Reader\ReaderInterface
      *
      * @throws \Box\Spout\Common\Exception\IOException
@@ -270,7 +267,7 @@ class Reader
      * @throws \InvalidArgumentException
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function getReader($import, $filePath, string $readerType, string $disk = null): ReaderInterface
+    public function getReader($import, $filePath, string $readerType): ReaderInterface
     {
         if ($import instanceof WithEvents) {
             $this->registerListeners($import->registerEvents());
@@ -284,8 +281,6 @@ class Reader
             $this->applyCsvSettings($import->getCsvSettings());
         }
 
-        $this->currentFile = $this->copyToFileSystem($filePath, $disk);
-
         $reader = ReaderFactory::create($readerType);
 
         if ($reader instanceof CsvReader) {
@@ -294,7 +289,7 @@ class Reader
             $reader->setEncoding($this->inputEncoding);
         }
 
-        $reader->open($this->currentFile);
+        $reader->open($filePath);
 
         return $reader;
     }

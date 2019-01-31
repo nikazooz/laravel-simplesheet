@@ -26,17 +26,11 @@ class QueueImport implements ShouldQueue
      */
     public $readerType;
 
-    /**
-     * @var string|null
-     */
-    public $disk;
-
-    public function __construct($import, string $filePath, string $readerType, string $disk = null)
+    public function __construct($import, string $filePath, string $readerType)
     {
         $this->import = $import;
         $this->filePath = $filePath;
         $this->readerType = $readerType;
-        $this->disk = $disk;
     }
 
     /**
@@ -45,6 +39,6 @@ class QueueImport implements ShouldQueue
      */
     public function handle(Reader $reader)
     {
-        $reader->readNow($this->import, $this->filePath, $this->readerType, $this->disk);
+        $reader->readNow($this->import, $this->filePath, $this->readerType);
     }
 }

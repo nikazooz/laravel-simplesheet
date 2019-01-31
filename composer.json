@@ -44,10 +44,10 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Nikazooz\\Simplesheet\\SpreadsheetServiceProvider"
+        "Nikazooz\\Simplesheet\\SimplesheetServiceProvider"
       ],
       "aliases": {
-        "Spreadsheet": "Nikazooz\\Simplesheet\\Facades\\Spreadsheet"
+        "Simplesheet": "Nikazooz\\Simplesheet\\Facades\\Simplesheet"
       }
     }
   }

@@ -7,7 +7,8 @@ use Nikazooz\Simplesheet\Validators\Failure;
 interface SkipsOnFailure
 {
     /**
-     * @param Failure[] $failures
+     * @param  \Nikazooz\Simplesheet\Validators\Failure[]  $failures
+     * @return void
      */
     public function onFailure(Failure ...$failures);
 }

@@ -51,7 +51,7 @@ trait ProcessesRows
         }
     }
 
-     /**
+    /**
      * @param  array  $row
      * @param  array  $headingRow
      * @return array

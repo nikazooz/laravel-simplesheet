@@ -14,6 +14,7 @@ trait SkipsFailures
 
     /**
      * @param  \Nikazooz\Simplesheet\Validators\Failure  ...$failures
+     * @return void
      */
     public function onFailure(Failure ...$failures)
     {

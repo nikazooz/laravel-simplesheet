@@ -5,8 +5,7 @@ namespace Nikazooz\Simplesheet\Concerns;
 interface WithMapping
 {
     /**
-     * @param mixed $row
-     *
+     * @param  mixed  $row
      * @return array
      */
     public function map($row): array;

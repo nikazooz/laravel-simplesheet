@@ -7,7 +7,7 @@ use Iterator;
 interface FromIterator
 {
     /**
-     * @return Iterator
+     * @return \Iterator
      */
     public function iterator(): Iterator;
 }

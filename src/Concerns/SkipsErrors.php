@@ -15,6 +15,7 @@ trait SkipsErrors
 
     /**
      * @param  \Throwable  $e
+     * @return void
      */
     public function onError(Throwable $e)
     {

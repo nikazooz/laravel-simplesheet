@@ -9,7 +9,7 @@ use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
 trait Exportable
 {
     /**
-     * @param  string  $fileName
+     * @param  string|null  $fileName
      * @param  string|null  $writerType
      * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      *
@@ -27,7 +27,7 @@ trait Exportable
     }
 
     /**
-     * @param  string  $filePath
+     * @param  string|null  $filePath
      * @param  string|null  $disk
      * @param  string|null  $writerType
      * @return bool

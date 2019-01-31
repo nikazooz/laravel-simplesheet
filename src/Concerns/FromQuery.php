@@ -7,7 +7,7 @@ use Illuminate\Database\Query\Builder;
 interface FromQuery
 {
     /**
-     * @return Builder
+     * @return \Illuminate\Database\Query\Builder
      */
     public function query();
 }

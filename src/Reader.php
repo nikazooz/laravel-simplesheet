@@ -89,9 +89,9 @@ class Reader
                     $sheet->import($sheetImport, $sheet->getStartRow($sheetImport));
                 }
             }
-        });
 
-        $this->afterReading($import);
+            $this->afterReading($import);
+        });
 
         $reader->close();
 

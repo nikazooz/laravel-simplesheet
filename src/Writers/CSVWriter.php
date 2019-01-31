@@ -123,7 +123,7 @@ class CsvWriter extends Writer
     {
         return implode($this->fieldDelimiter, array_map(function ($cell) {
             return $this->encloseString($cell);
-        }, $dataRow)) . $this->lineEnding;
+        }, $row)) . $this->lineEnding;
     }
 
     /**
@@ -136,7 +136,7 @@ class CsvWriter extends Writer
             return $str;
         }
 
-        return sprintf('%s%s%s', [
+        return vsprintf('%s%s%s', [
             $this->fieldEnclosure,
             addslashes($str),
             $this->fieldEnclosure,

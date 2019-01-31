@@ -125,7 +125,7 @@ class SimplesheetTest extends TestCase
             {
                 return collect([
                     ['A1', 'B1'],
-                    ['A2', 'B2'],
+                    ['A2', 'B2 Test'],
                 ]);
             }
 
@@ -134,7 +134,7 @@ class SimplesheetTest extends TestCase
              */
             public static function beforeWriting(BeforeWriting $event)
             {
-                $event->writer->setLineEnding(PHP_EOL);
+                $event->writer->setLineEnding("\r\n");
                 $event->writer->setEnclosure('"');
                 $event->writer->setDelimiter(';');
                 $event->writer->setIncludeSeparatorLine(true);
@@ -148,7 +148,7 @@ class SimplesheetTest extends TestCase
 
         $this->assertContains('sep=;', $contents);
         $this->assertContains('A1;B1', $contents);
-        $this->assertContains('A2;B2', $contents);
+        $this->assertContains('A2;"B2 Test"', $contents);
     }
 
     /**

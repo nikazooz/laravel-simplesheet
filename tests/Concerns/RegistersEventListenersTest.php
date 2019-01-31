@@ -13,6 +13,7 @@ use Nikazooz\Simplesheet\Events\BeforeExport;
 use Nikazooz\Simplesheet\Events\BeforeImport;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
 use Nikazooz\Simplesheet\Imports\Sheet as ImportSheet;
+use Nikazooz\Simplesheet\Events\BeforeTransactionCommit;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\ExportWithEvents;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\BeforeExportListener;
@@ -79,6 +80,12 @@ class RegistersEventListenersTest extends TestCase
             $eventsTriggered++;
         };
 
+        $event::$beforeTransactionCommit = function ($event) use (&$eventsTriggered) {
+            $this->assertInstanceOf(BeforeTransactionCommit::class, $event);
+            $this->assertInstanceOf(Reader::class, $event->reader);
+            $eventsTriggered++;
+        };
+
         $event::$beforeSheet = function ($event) use (&$eventsTriggered) {
             $this->assertInstanceOf(BeforeSheet::class, $event);
             $this->assertInstanceOf(ImportSheet::class, $event->sheet);
@@ -92,7 +99,7 @@ class RegistersEventListenersTest extends TestCase
         };
 
         $event->import('import.xlsx');
-        $this->assertEquals(4, $eventsTriggered);
+        $this->assertEquals(5, $eventsTriggered);
     }
 
     /**

@@ -8,6 +8,7 @@ use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Events\BeforeExport;
 use Nikazooz\Simplesheet\Events\BeforeImport;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
+use Nikazooz\Simplesheet\Events\BeforeTransactionCommit;
 
 trait RegistersEventListeners
 {
@@ -32,6 +33,10 @@ trait RegistersEventListeners
 
         if (method_exists($this, 'afterImport')) {
             $listeners[AfterImport::class] = [static::class, 'afterImport'];
+        }
+
+        if (method_exists($this, 'beforeTransactionCommit')) {
+            $listeners[BeforeTransactionCommit::class] = [static::class, 'beforeTransactionCommit'];
         }
 
         if (method_exists($this, 'beforeSheet')) {

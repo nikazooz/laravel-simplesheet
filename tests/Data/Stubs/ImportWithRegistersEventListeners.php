@@ -23,6 +23,11 @@ class ImportWithRegistersEventListeners implements WithEvents
     /**
      * @var callable
      */
+    public static $beforeTransactionCommit;
+
+    /**
+     * @var callable
+     */
     public static $beforeSheet;
 
     /**
@@ -38,6 +43,11 @@ class ImportWithRegistersEventListeners implements WithEvents
     public static function afterImport()
     {
         (static::$afterImport)(...func_get_args());
+    }
+
+    public static function beforeTransactionCommit()
+    {
+        (static::$beforeTransactionCommit)(...func_get_args());
     }
 
     public static function beforeSheet()

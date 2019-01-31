@@ -19,6 +19,7 @@ use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
 use Nikazooz\Simplesheet\Concerns\SkipsUnknownSheets;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Nikazooz\Simplesheet\Events\BeforeTransactionCommit;
 use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 
@@ -90,9 +91,10 @@ class Reader
                 }
             }
 
-            $this->afterReading($import);
+            $this->raise(new BeforeTransactionCommit($this, $import));
         });
 
+        $this->afterReading($import);
         $reader->close();
 
         return $this;

@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Tests;
 
+use Nikazooz\Simplesheet\HeadingRowImport;
 use Nikazooz\Simplesheet\Imports\HeadingRowFormatter;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\HeadingRowImport;
 
 class HeadingRowImportTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
+namespace Nikazooz\Simplesheet;
 
 use Nikazooz\Simplesheet\Concerns\WithLimit;
 use Nikazooz\Simplesheet\Concerns\Importable;

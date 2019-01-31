@@ -89,12 +89,26 @@ class SimplesheetTest extends TestCase
      */
     public function can_store_csv_export_with_default_settings()
     {
-        $export = new EmptyExport();
+        $export = new class implements FromCollection {
+            /**
+             * @return \Illuminate\Support\Collection
+             */
+            public function collection()
+            {
+                return collect([
+                    ['A1', 'B1'],
+                    ['A2', 'B2 Test'],
+                ]);
+            }
+        };
 
         $response = $this->SUT->store($export, 'filename.csv');
 
         $this->assertTrue($response);
         $this->assertFileExists(__DIR__ . '/Data/Disks/Local/filename.csv');
+        $contents = file_get_contents(__DIR__ . '/Data/Disks/Local/filename.csv');
+        $this->assertContains('A1,B1', $contents);
+        $this->assertContains('A2,"B2 Test"', $contents);
     }
 
     /**

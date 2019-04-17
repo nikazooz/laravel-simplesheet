@@ -17,6 +17,7 @@ use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Factories\WriterFactory;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
+use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
 
 class Writer
 {
@@ -97,6 +98,10 @@ class Writer
         $this->throwExceptionIfWriterIsNotSet();
 
         $this->raise(new BeforeWriting($this, $export));
+
+        if ($export instanceof WithCustomCsvSettings) {
+            $this->applyCsvSettings($export->getCsvSettings());
+        }
 
         $this->configureCsvWriter();
         $this->spoutWriter->openToFile($fileName);

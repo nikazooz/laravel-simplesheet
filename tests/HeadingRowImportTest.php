@@ -7,7 +7,7 @@ use Nikazooz\Simplesheet\Imports\HeadingRowFormatter;
 
 class HeadingRowImportTest extends TestCase
 {
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         HeadingRowFormatter::reset();
     }

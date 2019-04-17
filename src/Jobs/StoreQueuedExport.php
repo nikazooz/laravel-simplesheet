@@ -13,7 +13,7 @@ class StoreQueuedExport implements ShouldQueue
     /**
      * @var string
      */
-    private $tempPath;
+    private $tmpPath;
 
     /**
      * @var string
@@ -26,23 +26,24 @@ class StoreQueuedExport implements ShouldQueue
     private $disk;
 
     /**
-     * @param  string  $tempPath
+     * @param  string  $tmpPath
      * @param  string  $path
      * @param  string|null  $disk
      * @return void
      */
-    public function __construct(string $tempPath, string $path, string $disk = null)
+    public function __construct(string $tmpPath, string $path, string $disk = null)
     {
-        $this->tempPath = $tempPath;
+        $this->tmpPath = $tmpPath;
         $this->path = $path;
         $this->disk = $disk;
     }
 
     /**
      * @param  \Illuminate\Filesystem\FilesystemManager  $filesystem
+     * @return void
      */
     public function handle(FilesystemManager $filesystem)
     {
-        $filesystem->disk($this->disk)->put($this->path, fopen($this->tempPath, 'r+'));
+        $filesystem->disk($this->disk)->put($this->path, fopen($this->tmpPath, 'r+'));
     }
 }

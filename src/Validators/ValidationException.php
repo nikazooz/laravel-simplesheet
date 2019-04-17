@@ -7,7 +7,7 @@ use Illuminate\Validation\ValidationException as IlluminateValidationException;
 class ValidationException extends IlluminateValidationException
 {
     /**
-     * @var \Nikazooz\Simplesheet\Validators\Failure[]
+     * @var array
      */
     protected $failures;
 
@@ -22,7 +22,7 @@ class ValidationException extends IlluminateValidationException
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public function errors(): array
     {

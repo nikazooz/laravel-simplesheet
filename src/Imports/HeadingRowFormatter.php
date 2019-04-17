@@ -2,6 +2,7 @@
 
 namespace Nikazooz\Simplesheet\Imports;
 
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Illuminate\Support\Collection;
 
@@ -96,7 +97,7 @@ class HeadingRowFormatter
 
         switch (static::$formatter) {
             case self::FORMATTER_SLUG:
-                return str_slug($value, '_');
+                return Str::slug($value, '_');
         }
 
         // No formatter (FORMATTER_NONE)

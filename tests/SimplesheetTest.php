@@ -25,7 +25,7 @@ class SimplesheetTest extends TestCase
      */
     protected $SUT;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

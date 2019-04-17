@@ -2,6 +2,7 @@
 
 namespace Nikazooz\Simplesheet;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Box\Spout\Reader\ReaderInterface;
@@ -78,7 +79,7 @@ class Reader
      * @param  string  $readerType
      * @return \Nikazooz\Simplesheet\Reader
      */
-    public function readNow($import, $filePath, string $readerType)
+    public function readNow($import, string $filePath, string $readerType)
     {
         $reader = $this->getReader($import, $filePath, $readerType);
 
@@ -105,12 +106,12 @@ class Reader
      * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $file
      * @param  string  $readerType
      * @param  string|null  $disk
+     * @return array
      *
      * @throws \InvalidArgumentException
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \Nikazooz\Simplesheet\Exceptions\UnreadableFile
      * @throws \Box\Spout\Reader\Exception\ReaderException
-     * @return array
      */
     public function toArray($import, $file, string $readerType, string $disk = null): array
     {
@@ -136,11 +137,11 @@ class Reader
      * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $file
      * @param  string  $readerType
      * @param  string|null  $disk
+     * @return \Illuminate\Support\Collection
      *
      * @throws \InvalidArgumentException
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \Box\Spout\Reader\Exception\ReaderException
-     * @return \Illuminate\Support\Collection
      */
     public function toCollection($import, $file, string $readerType, string $disk = null): Collection
     {
@@ -168,7 +169,7 @@ class Reader
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    protected function copyToFileSystem($file, string $disk = null)
+    protected function copyToFileSystem($file, string $disk = null): string
     {
         $tempFilePath = $this->getTempFile();
 
@@ -191,7 +192,7 @@ class Reader
      */
     protected function getTempFile(): string
     {
-        return $this->tempPath . DIRECTORY_SEPARATOR . str_random(16);
+        return $this->tempPath . DIRECTORY_SEPARATOR . Str::random(16);
     }
 
     /**
@@ -211,13 +212,13 @@ class Reader
             if ($import instanceof SkipsUnknownSheets) {
                 $import->onUnknownSheet($index);
 
-                return null;
+                return;
             }
 
             if ($sheetImport instanceof SkipsUnknownSheets) {
                 $sheetImport->onUnknownSheet($index);
 
-                return null;
+                return;
             }
 
             throw $e;

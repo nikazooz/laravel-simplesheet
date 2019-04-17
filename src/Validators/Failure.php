@@ -22,15 +22,15 @@ class Failure implements Arrayable
     protected $errors;
 
     /**
-     * @param int    $row
-     * @param string $attribute
-     * @param array  $errors
+     * @param  int  $rowNumber
+     * @param  string  $attributeName
+     * @param  array  $errors
      */
-    public function __construct(int $row, string $attribute, array $errors)
+    public function __construct(int $rowNumber, string $attributeName, array $errors)
     {
-        $this->row       = $row;
-        $this->attribute = $attribute;
-        $this->errors    = $errors;
+        $this->row = $rowNumber;
+        $this->attribute = $attributeName;
+        $this->errors = $errors;
     }
 
     /**

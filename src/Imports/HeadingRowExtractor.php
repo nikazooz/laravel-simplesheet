@@ -43,7 +43,7 @@ class HeadingRowExtractor
     }
 
     /**
-     * @param  \SheetInterface  $sheet
+     * @param  \Box\Spout\Reader\SheetInterface  $sheet
      * @param  \Nikazooz\Simplesheet\Concerns\WithHeadingRow|mixed  $importable
      * @return array
      */

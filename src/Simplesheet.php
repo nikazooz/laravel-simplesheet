@@ -76,23 +76,26 @@ class Simplesheet implements Exporter, Importer
      */
     public function download($export, string $fileName, string $writerType = null)
     {
-        $file = $this->export($export, $fileName, $writerType);
-
-        return $this->responseFactory->download($file, $fileName);
+        return $this->responseFactory->download(
+            $this->export($export, $fileName, $writerType),
+            $fileName
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function store($export, string $filePath, string $disk = null, string $writerType = null)
+    public function store($export, string $filePath, string $diskName = null, string $writerType = null, $diskOptions = [])
     {
         if ($export instanceof ShouldQueue) {
-            return $this->queue($export, $filePath, $disk, $writerType);
+            return $this->queue($export, $filePath, $diskName, $writerType, $diskOptions);
         }
 
         $file = $this->export($export, $filePath, $writerType);
 
-        return $this->filesystem->disk($disk)->put($filePath, fopen($file, 'r+'));
+        return $this->filesystem->disk($diskName, $diskOptions)->put(
+            $filePath, fopen($file, 'rb+')
+        );
     }
 
     /**
@@ -103,7 +106,7 @@ class Simplesheet implements Exporter, Importer
      *
      * @throws \Nikazooz\Simplesheet\NoTypeDetectedException
      */
-    protected function export($export, string $fileName, string $writerType = null)
+    protected function export($export, string $fileName, string $writerType = null, $diskOptions = [])
     {
         $writerType = $this->findTypeByExtension($fileName, $writerType);
 
@@ -113,11 +116,11 @@ class Simplesheet implements Exporter, Importer
      /**
      * {@inheritdoc}
      */
-    public function queue($export, string $filePath, string $disk = null, string $writerType = null)
+    public function queue($export, string $filePath, string $diskName = null, string $writerType = null, $diskOptions = [])
     {
         $writerType = $this->findTypeByExtension($filePath, $writerType);
 
-        return $this->queuedWriter->store($export, $filePath, $disk, $writerType);
+        return $this->queuedWriter->store($export, $filePath, $diskName, $writerType);
     }
 
     /**

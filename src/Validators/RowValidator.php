@@ -11,12 +11,12 @@ use Illuminate\Validation\ValidationException as IlluminateValidationException;
 class RowValidator
 {
     /**
-     * @var Factory
+     * @var \Illuminate\Contracts\Validation\Factory
      */
     private $validator;
 
     /**
-     * @param Factory $validator
+     * @param  \Illuminate\Contracts\Validation\Factory  $validator
      */
     public function __construct(Factory $validator)
     {
@@ -26,6 +26,7 @@ class RowValidator
     /**
      * @param  array  $rows
      * @param  \Nikazooz\Simplesheet\Concerns\WithValidation  $import
+     * @return void
      *
      * @throws \Nikazooz\Simplesheet\Validators\ValidationException
      */
@@ -64,8 +65,7 @@ class RowValidator
     }
 
     /**
-     * @param WithValidation $import
-     *
+     * @param  \Nikazooz\Simplesheet\Concerns\WithValidation  $import
      * @return array
      */
     private function messages(WithValidation $import): array
@@ -76,8 +76,7 @@ class RowValidator
     }
 
     /**
-     * @param WithValidation $import
-     *
+     * @param  \Nikazooz\Simplesheet\Concerns\WithValidation  $import
      * @return array
      */
     private function attributes(WithValidation $import): array
@@ -88,8 +87,7 @@ class RowValidator
     }
 
     /**
-     * @param WithValidation $import
-     *
+     * @param  \Nikazooz\Simplesheet\Concerns\WithValidation  $import
      * @return array
      */
     private function rules(WithValidation $import): array
@@ -98,8 +96,7 @@ class RowValidator
     }
 
     /**
-     * @param array $elements
-     *
+     * @param  array  $elements
      * @return array
      */
     private function formatKey(array $elements): array

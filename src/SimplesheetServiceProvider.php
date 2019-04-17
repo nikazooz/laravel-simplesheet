@@ -9,6 +9,11 @@ use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 
 class SimplesheetServiceProvider extends ServiceProvider
 {
+     /**
+     * {@inheritdoc}
+     */
+    protected $defered = true;
+
     /**
      * {@inheritdoc}
      */
@@ -34,7 +39,7 @@ class SimplesheetServiceProvider extends ServiceProvider
 
         $this->app->bind(Writer::class, function () {
             return new Writer(
-                $this->app['config']->get('simplesheet.exports.temp_path', sys_get_temp_dir()),
+                $this->app['config']->get('simplesheet.temporary_files.local_path', sys_get_temp_dir()),
                 $this->app['config']->get('simplesheet.exports.chunk_size', 100),
                 $this->app['config']->get('simplesheet.exports.csv', [])
             );
@@ -49,8 +54,8 @@ class SimplesheetServiceProvider extends ServiceProvider
         $this->app->bind(Reader::class, function () {
             return new Reader(
                 $this->app->make(FilesystemFactory::class),
-                $this->app['config']->get('simplesheet.exports.temp_path', sys_get_temp_dir()),
-                $this->app['config']->get('simplesheet.exports.csv', [])
+                $this->app['config']->get('simplesheet.temporary_files.local_path', sys_get_temp_dir()),
+                $this->app['config']->get('simplesheet.imports.csv', [])
             );
         });
 
@@ -69,6 +74,21 @@ class SimplesheetServiceProvider extends ServiceProvider
         $this->app->alias('simplesheet', Simplesheet::class);
         $this->app->alias('simplesheet', Exporter::class);
         $this->app->alias('simplesheet', Importer::class);
+    }
+
+     /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return [
+            'simplesheet',
+            Simplesheet::class,
+            Exporter::class,
+            Importer::class,
+        ];
     }
 
     /**

@@ -1,7 +1,8 @@
 <?php
 
-namespace Nikazooz\Simplesheet;
+namespace Nikazooz\Simplesheet\Writers;
 
+use Illuminate\Support\Collection;
 use Box\Spout\Reader\ReaderInterface;
 use Box\Spout\Writer\WriterInterface;
 use Nikazooz\Simplesheet\HasEventBus;
@@ -12,6 +13,7 @@ use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\WithTitle;
 use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
+use Nikazooz\Simplesheet\Helpers\ArrayHelper;
 use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Box\Spout\Writer\AbstractMultiSheetsWriter;
 use Nikazooz\Simplesheet\Concerns\FromIterator;
@@ -144,20 +146,24 @@ class Sheet
      */
     public function appendRows($rows, $sheetExport)
     {
-        foreach ($rows as $row) {
+        Collection::make($rows)->flatMap(function ($row) use ($sheetExport) {
             if ($sheetExport instanceof WithMapping) {
                 $row = $sheetExport->map($row);
             }
 
-            $this->appendRow(static::mapArraybleRow($row));
-        }
+            return ArrayHelper::ensureMultipleRows(
+                static::mapArraybleRow($row)
+            );
+        })->each(function ($row) {
+            $this->appendRow($row);
+        });
     }
 
     /**
      * @param  mixed  $row
      * @return array
      */
-    public static function mapArraybleRow($row): array
+    public static function mapArraybleRow($row)
     {
         // When dealing with eloquent models, we'll skip the relations
         // as we won't be able to display them anyway.
@@ -192,7 +198,7 @@ class Sheet
      * @param  \Nikazooz\Simplesheet\Concerns\WithCustomChunkSize|object  $export
      * @return int
      */
-    protected function getChunkSize($export): int
+    protected function getChunkSize($export)
     {
         if ($export instanceof WithCustomChunkSize) {
             return $export->chunkSize();
@@ -215,7 +221,7 @@ class Sheet
     /**
      * @return bool
      */
-    protected function multipleSheetsAreNotSupported(): bool
+    protected function multipleSheetsAreNotSupported()
     {
         return ! $this->multipleSheetsAreSupported();
     }
@@ -223,7 +229,7 @@ class Sheet
     /**
      * @return bool
      */
-    protected function multipleSheetsAreSupported(): bool
+    protected function multipleSheetsAreSupported()
     {
         return $this->spoutWriter instanceof AbstractMultiSheetsWriter;
     }
@@ -231,7 +237,7 @@ class Sheet
     /**
      * @return bool
      */
-    protected function isNotTheFirstOne(): bool
+    protected function isNotTheFirstOne()
     {
         return $this->index > 0;
     }
@@ -247,7 +253,6 @@ class Sheet
             $this->spoutWriter->setCurrentSheet($this->getSpoutSheet());
         }
     }
-
 
     /**
      * @param  \Nikazooz\Simplesheet\Concerns\WithTitle  $sheetExport

@@ -16,7 +16,7 @@ class WithBatchInsertsTest extends TestCase
     /**
      * Setup the test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -105,8 +105,9 @@ class WithBatchInsertsTest extends TestCase
         };
 
         $import->import('import-batches.xlsx');
+        $count = (int) ceil(5000 / $import->batchSize());
 
-        $this->assertCount(ceil(5000 / $import->batchSize()), DB::getQueryLog());
+        $this->assertCount($count, DB::getQueryLog());
         DB::connection()->disableQueryLog();
     }
 

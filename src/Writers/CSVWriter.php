@@ -33,6 +33,10 @@ class CsvWriter extends Writer
         return $this;
     }
 
+    /**
+     * @param  string  $lineEnding
+     * @return \Nikazooz\Simplesheet\Writers\CsvWriter
+     */
     public function setLineEnding($lineEnding)
     {
         $this->lineEnding = $lineEnding;
@@ -40,6 +44,10 @@ class CsvWriter extends Writer
         return $this;
     }
 
+    /**
+     * @param  bool  $excelCompatibility
+     * @return \Nikazooz\Simplesheet\Writers\CsvWriter
+     */
     public function setExcelCompatibility($excelCompatibility)
     {
         $this->excelCompatibility = $excelCompatibility;

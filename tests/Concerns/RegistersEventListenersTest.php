@@ -2,9 +2,9 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use Nikazooz\Simplesheet\Sheet;
 use Nikazooz\Simplesheet\Reader;
 use Nikazooz\Simplesheet\Writer;
+use Nikazooz\Simplesheet\Writers\Sheet;
 use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Events\AfterSheet;
 use Nikazooz\Simplesheet\Events\AfterImport;

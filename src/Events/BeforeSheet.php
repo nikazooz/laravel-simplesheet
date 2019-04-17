@@ -5,7 +5,7 @@ namespace Nikazooz\Simplesheet\Events;
 class BeforeSheet extends Event
 {
     /**
-     * @var \Nikazooz\Simplesheet\Sheet|\Nikazooz\Simplesheet\Imports\Sheet
+     * @var \Nikazooz\Simplesheet\Writers\Sheet|\Nikazooz\Simplesheet\Imports\Sheet
      */
     public $sheet;
 
@@ -15,7 +15,7 @@ class BeforeSheet extends Event
     private $exportable;
 
     /**
-     * @param  \Nikazooz\Simplesheet\Sheet|\Nikazooz\Simplesheet\Imports\Sheet  $sheet
+     * @param  \Nikazooz\Simplesheet\Writers\Sheet|\Nikazooz\Simplesheet\Imports\Sheet  $sheet
      * @param  object  $exportable
      */
     public function __construct($sheet, $exportable)

@@ -2,19 +2,7 @@
   "name": "nikazooz/laravel-simplesheet",
   "description": "Simple, powerful and memory-efficient spreadsheet exports and imports in Laravel",
   "license": "MIT",
-  "keywords": [
-    "laravel",
-    "php",
-    "box",
-    "spout",
-    "phpexcel",
-    "spreadsheet",
-    "excel",
-    "csv",
-    "export",
-    "import",
-    "batch"
-  ],
+  "keywords": ["laravel", "php", "box", "spout", "phpexcel", "spreadsheet", "excel", "csv", "export", "import", "batch", "simplesheet"],
   "authors": [
     {
       "name": "Nenad Živanović",
@@ -22,14 +10,15 @@
     }
   ],
   "require": {
-    "php": "^7.0",
+    "ext-json": "*",
+    "php": "^7.1",
     "box/spout": "^2.7",
     "illuminate/support": "^5.5"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0",
-    "orchestra/testbench": "^3.7",
-    "orchestra/database": "^3.7"
+    "orchestra/testbench": "^3.5",
+    "orchestra/database": "^3.5"
   },
   "autoload": {
     "psr-4": {
@@ -50,5 +39,7 @@
         "Simplesheet": "Nikazooz\\Simplesheet\\Facades\\Simplesheet"
       }
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

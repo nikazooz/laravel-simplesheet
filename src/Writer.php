@@ -4,6 +4,7 @@ namespace Nikazooz\Simplesheet;
 
 use Illuminate\Support\Str;
 use Box\Spout\Writer\WriterInterface;
+use Nikazooz\Simplesheet\Writers\Sheet;
 use Illuminate\Contracts\Support\Arrayable;
 use Nikazooz\Simplesheet\Writers\CsvWriter;
 use Nikazooz\Simplesheet\Concerns\FromArray;
@@ -152,7 +153,7 @@ class Writer
 
     /**
      * @param  int|null  $sheetIndex
-     * @return \Nikazooz\Simplesheet\Sheet
+     * @return \Nikazooz\Simplesheet\Writers\Sheet
      *
      * @throws \Exception
      */

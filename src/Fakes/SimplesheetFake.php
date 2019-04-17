@@ -47,13 +47,13 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function store($export, string $filePath, string $disk = null, string $writerType = null)
+    public function store($export, string $filePath, string $diskName = null, string $writerType = null, $diskOptions = [])
     {
         if ($export instanceof ShouldQueue) {
-            return $this->queue($export, $filePath, $disk, $writerType);
+            return $this->queue($export, $filePath, $diskName, $writerType);
         }
 
-        $this->stored[$disk ?? 'default'][$filePath] = $export;
+        $this->stored[$diskName ?? 'default'][$filePath] = $export;
 
         return true;
     }
@@ -61,12 +61,12 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function queue($export, string $filePath, string $disk = null, string $writerType = null)
+    public function queue($export, string $filePath, string $diskName = null, string $writerType = null, $diskOptions = [])
     {
         Queue::fake();
 
-        $this->stored[$disk ?? 'default'][$filePath] = $export;
-        $this->queued[$disk ?? 'default'][$filePath] = $export;
+        $this->stored[$diskName ?? 'default'][$filePath] = $export;
+        $this->queued[$diskName ?? 'default'][$filePath] = $export;
 
         return new PendingDispatch(new class {
             use Queueable;
@@ -81,15 +81,15 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function import($import, $file, string $disk = null, string $readerType = null)
+    public function import($import, $file, string $diskName = null, string $readerType = null)
     {
         if ($import instanceof ShouldQueue) {
-            return $this->queueImport($import, $file, $disk, $readerType);
+            return $this->queueImport($import, $file, $diskName, $readerType);
         }
 
         $filePath = ($file instanceof UploadedFile) ? $file->getClientOriginalName() : $file;
 
-        $this->imported[$disk ?? 'default'][$filePath] = $import;
+        $this->imported[$diskName ?? 'default'][$filePath] = $import;
 
         return $this;
     }
@@ -97,11 +97,11 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function toArray($import, $file, string $disk = null, string $readerType = null): array
+    public function toArray($import, $file, string $diskName = null, string $readerType = null): array
     {
         $filePath = ($file instanceof UploadedFile) ? $file->getFilename() : $file;
 
-        $this->imported[$disk ?? 'default'][$filePath] = $import;
+        $this->imported[$diskName ?? 'default'][$filePath] = $import;
 
         return [];
     }
@@ -109,11 +109,11 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function toCollection($import, $file, string $disk = null, string $readerType = null): Collection
+    public function toCollection($import, $file, string $diskName = null, string $readerType = null): Collection
     {
         $filePath = ($file instanceof UploadedFile) ? $file->getFilename() : $file;
 
-        $this->imported[$disk ?? 'default'][$filePath] = $import;
+        $this->imported[$diskName ?? 'default'][$filePath] = $import;
 
         return new Collection();
     }
@@ -121,14 +121,14 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function queueImport(ShouldQueue $import, $file, string $disk = null, string $readerType = null)
+    public function queueImport(ShouldQueue $import, $file, string $diskName = null, string $readerType = null)
     {
         Queue::fake();
 
         $filePath = ($file instanceof UploadedFile) ? $file->getFilename() : $file;
 
-        $this->queued[$disk ?? 'default'][$filePath]   = $import;
-        $this->imported[$disk ?? 'default'][$filePath] = $import;
+        $this->queued[$diskName ?? 'default'][$filePath]   = $import;
+        $this->imported[$diskName ?? 'default'][$filePath] = $import;
 
         return new PendingDispatch(new class {
             use Queueable;
@@ -161,24 +161,24 @@ class SimplesheetFake implements Exporter
 
     /**
      * @param  string  $filePath
-     * @param  string|callable|null  $disk
+     * @param  string|callable|null  $diskName
      * @param  callable|null  $callback
      * @return void
      */
-    public function assertStored(string $filePath, $disk = null, $callback = null)
+    public function assertStored(string $filePath, $diskName = null, $callback = null)
     {
-        if (is_callable($disk)) {
-            $callback = $disk;
-            $disk = null;
+        if (is_callable($diskName)) {
+            $callback = $diskName;
+            $diskName = null;
         }
 
-        $disk = $disk ?? 'default';
-        $storedOnDisk = $this->stored[$disk] ?? [];
+        $diskName = $diskName ?? 'default';
+        $storedOnDisk = $this->stored[$diskName] ?? [];
 
         Assert::assertArrayHasKey(
             $filePath,
             $storedOnDisk,
-            sprintf('%s is not stored on disk %s', $filePath, $disk)
+            sprintf('%s is not stored on disk %s', $filePath, $diskName)
         );
 
         $callback = $callback ?: function () {

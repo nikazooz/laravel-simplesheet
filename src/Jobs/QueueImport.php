@@ -12,7 +12,7 @@ class QueueImport implements ShouldQueue
     use ExtendedQueueable, Dispatchable;
 
     /**
-     * @var string
+     * @var object
      */
     public $import;
 
@@ -26,6 +26,12 @@ class QueueImport implements ShouldQueue
      */
     public $readerType;
 
+    /**
+     * @param  object  $import
+     * @param  string  $filePath
+     * @param  string  $readerType
+     * @return void
+     */
     public function __construct($import, string $filePath, string $readerType)
     {
         $this->import = $import;

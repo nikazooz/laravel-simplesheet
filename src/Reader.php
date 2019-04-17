@@ -15,40 +15,35 @@ use Nikazooz\Simplesheet\Events\AfterImport;
 use Box\Spout\Reader\CSV\Reader as CsvReader;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\BeforeImport;
+use Nikazooz\Simplesheet\Files\TemporaryFile;
 use Nikazooz\Simplesheet\Factories\ReaderFactory;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
+use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 use Nikazooz\Simplesheet\Concerns\SkipsUnknownSheets;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
 use Nikazooz\Simplesheet\Events\BeforeTransactionCommit;
 use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 
 class Reader
 {
     use HasEventBus, MapsCsvSettings;
 
     /**
-     * @var \Illuminate\Contracts\Filesystem\Factory
+     * @var TemporaryFileFactory
      */
-    private $filesystem;
-
-     /**
-     * @var string
-     */
-    protected $tempPath;
+    protected $temporaryFileFactory;
 
     /**
+     * @param  \Nikazooz\Simplesheet\Files\TemporaryFileFactory  $temporaryFileFactory
      * @param  \Illuminate\Contracts\Filesystem\Factory  $filesystem
-     * @param  string  $tempPath
      * @param  array  $csvSettings
      * @return void
      */
-    public function __construct(FilesystemFactory $filesystem, string $tempPath, array $csvSettings = [])
+    public function __construct(TemporaryFileFactory $temporaryFileFactory, array $csvSettings = [])
     {
-        $this->filesystem = $filesystem;
-        $this->tempPath = $tempPath;
+        $this->temporaryFileFactory = $temporaryFileFactory;
 
         $this->applyCsvSettings($csvSettings);
     }
@@ -65,24 +60,23 @@ class Reader
      */
     public function read($import, $file, string $readerType, string $disk = null)
     {
-        $filePath = $this->copyToFileSystem($file, $disk);
-
         if ($import instanceof ShouldQueue) {
-            return QueueImport::dispatch($import, $filePath, $readerType);
+            return QueueImport::dispatch($import, $file, $readerType);
         }
 
-        return $this->readNow($import, $filePath, $readerType);
+        return $this->readNow($import, $file, $readerType);
     }
 
     /**
      * @param  object  $import
-     * @param  string  $filePath
+     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $file
      * @param  string  $readerType
      * @return \Nikazooz\Simplesheet\Reader
      */
-    public function readNow($import, string $filePath, string $readerType)
+    public function readNow($import, $file, string $readerType, string $disk = null)
     {
-        $reader = $this->getReader($import, $filePath, $readerType);
+        $temporaryFile = $this->getTemporaryFile($file, $disk);
+        $reader = $this->getReader($import, $temporaryFile, $readerType);
 
         $this->beforeReading($import, $reader);
 
@@ -98,6 +92,7 @@ class Reader
 
         $this->afterReading($import);
         $reader->close();
+        $temporaryFile->delete();
 
         return $this;
     }
@@ -116,7 +111,8 @@ class Reader
      */
     public function toArray($import, $file, string $readerType, string $disk = null): array
     {
-        $reader = $this->getReader($import, $this->copyToFileSystem($file, $disk), $readerType);
+        $temporaryFile = $this->getTemporaryFile($file, $disk);
+        $reader = $this->getReader($import, $temporaryFile, $readerType);
         $this->beforeReading($import, $reader);
 
         $sheets = [];
@@ -129,6 +125,7 @@ class Reader
         $this->afterReading($import);
 
         $reader->close();
+        $temporaryFile->delete();
 
         return $sheets;
     }
@@ -146,7 +143,8 @@ class Reader
      */
     public function toCollection($import, $file, string $readerType, string $disk = null): Collection
     {
-        $reader = $this->getReader($import, $this->copyToFileSystem($file, $disk), $readerType);
+        $temporaryFile = $this->getTemporaryFile($file, $disk);
+        $reader = $this->getReader($import, $temporaryFile, $readerType);
         $this->beforeReading($import, $reader);
 
         $sheets = new Collection();
@@ -159,41 +157,25 @@ class Reader
         $this->afterReading($import);
 
         $reader->close();
+        $temporaryFile->delete();
 
         return $sheets;
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $file
+     * @param  mixed  $file
      * @param  string|null  $disk
-     * @return string
+     * @return TemporaryFile
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    protected function copyToFileSystem($file, string $disk = null): string
+    protected function getTemporaryFile($file, string $disk = null): TemporaryFile
     {
-        $tempFilePath = $this->getTempFile();
-
-        if ($file instanceof UploadedFile) {
-            return $file->move($tempFilePath)->getRealPath();
+        if ($file instanceof TemporaryFile) {
+            return $file;
         }
 
-        $tmpStream = fopen($tempFilePath, 'w+');
-
-        $readStream = $this->filesystem->disk($disk)->readStream($file);
-
-        stream_copy_to_stream($readStream, $tmpStream);
-        fclose($tmpStream);
-
-        return $tempFilePath;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getTempFile(): string
-    {
-        return $this->tempPath . DIRECTORY_SEPARATOR . Str::random(16);
+        return $this->temporaryFileFactory->make()->copyFrom($file, $disk);
     }
 
     /**
@@ -262,7 +244,7 @@ class Reader
 
     /**
      * @param  object  $import
-     * @param  string  $filePath
+     * @param  TemporaryFile  $temporaryFile
      * @param  string  $readerType
      * @return \Box\Spout\Reader\ReaderInterface
      *
@@ -271,7 +253,7 @@ class Reader
      * @throws \InvalidArgumentException
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function getReader($import, $filePath, string $readerType): ReaderInterface
+    public function getReader($import, TemporaryFile $temporaryFile, string $readerType): ReaderInterface
     {
         if ($import instanceof WithEvents) {
             $this->registerListeners($import->registerEvents());
@@ -293,7 +275,7 @@ class Reader
             $reader->setEncoding($this->inputEncoding);
         }
 
-        $reader->open($filePath);
+        $reader->open($temporaryFile->getLocalPath());
 
         return $reader;
     }

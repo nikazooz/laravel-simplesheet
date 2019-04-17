@@ -335,9 +335,8 @@ class SimplesheetTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException
      */
-    public function import_will_throw_error_when_no_reader_type_could_be_detected()
+    public function can_import_a_simple_xlsx_file_from_real_path()
     {
         $import = new class implements ToArray {
             /**
@@ -352,7 +351,49 @@ class SimplesheetTest extends TestCase
             }
         };
 
+        $this->SUT->import($import, __DIR__ . '/Data/Disks/Local/import.xlsx');
+    }
+
+    /**
+     * @test
+     */
+    public function import_will_throw_error_when_no_reader_type_could_be_detected()
+    {
+        $this->expectException(\Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException::class);
+
+        $import = new class implements ToArray {
+            /**
+             * @param array $array
+             */
+            public function array(array $array)
+            {
+                Assert::assertEquals([
+                    ['test', 'test'],
+                    ['test', 'test'],
+                ], $array);
+            }
+        };
+
         $this->SUT->import($import, UploadedFile::fake()->create('import.zip'));
+    }
+
+    /**
+     * @test
+     */
+    public function import_will_throw_error_when_no_reader_type_could_be_detected_with_unknown_extension()
+    {
+        $this->expectException(\Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException::class);
+
+        $import = new class implements ToArray {
+            /**
+             * @param array $array
+             */
+            public function array(array $array)
+            {
+                //
+            }
+        };
+        $this->SUT->import($import, 'unknown-reader-type.zip');
     }
 
     /**

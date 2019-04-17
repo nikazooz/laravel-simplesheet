@@ -111,7 +111,7 @@ class Simplesheet implements Exporter, Importer
      */
     public function queue($export, string $filePath, string $diskName = null, string $writerType = null, $diskOptions = [])
     {
-        $writerType = $this->findTypeByExtension($filePath, $writerType);
+        $writerType = FileTypeDetector::detect($filePath, $writerType);
 
         return $this->queuedWriter->store($export, $filePath, $diskName, $writerType, $diskOptions);
     }
@@ -140,7 +140,7 @@ class Simplesheet implements Exporter, Importer
      */
     protected function export($export, string $fileName, string $writerType = null, $diskOptions = [])
     {
-        $writerType = $this->findTypeByExtension($fileName, $writerType);
+        $writerType = FileTypeDetector::detect($fileName, $writerType);
 
         return $this->writer->export($export, $writerType);
     }
@@ -198,7 +198,7 @@ class Simplesheet implements Exporter, Importer
      */
     public function import($import, $filePath, string $disk = null, string $readerType = null)
     {
-        $readerType = $this->findTypeByExtension($filePath, $readerType);
+        $readerType = FileTypeDetector::detect($filePath, $readerType);
 
         $response = $this->reader->read($import, $filePath, $readerType, $disk);
 
@@ -214,7 +214,7 @@ class Simplesheet implements Exporter, Importer
      */
     public function toArray($import, $filePath, string $disk = null, string $readerType = null): array
     {
-        $readerType = $this->findTypeByExtension($filePath, $readerType);
+        $readerType = FileTypeDetector::detect($filePath, $readerType);
 
         return $this->reader->toArray($import, $filePath, $readerType, $disk);
     }
@@ -224,7 +224,7 @@ class Simplesheet implements Exporter, Importer
      */
     public function toCollection($import, $filePath, string $disk = null, string $readerType = null): Collection
     {
-        $readerType = $this->findTypeByExtension($filePath, $readerType);
+        $readerType = FileTypeDetector::detect($filePath, $readerType);
 
         return $this->reader->toCollection($import, $filePath, $readerType, $disk);
     }

@@ -60,8 +60,7 @@ class SimplesheetServiceProvider extends ServiceProvider
 
         $this->app->bind(Reader::class, function () {
             return new Reader(
-                $this->app->make(FilesystemFactory::class),
-                $this->app['config']->get('simplesheet.temporary_files.local_path', sys_get_temp_dir()),
+                $this->app->make(TemporaryFileFactory::class),
                 $this->app['config']->get('simplesheet.imports.csv', [])
             );
         });

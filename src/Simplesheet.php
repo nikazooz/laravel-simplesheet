@@ -6,13 +6,14 @@ use Box\Spout\Common\Type;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Nikazooz\Simplesheet\Files\Filesystem;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Nikazooz\Simplesheet\Helpers\FileTypeDetector;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 
 class Simplesheet implements Exporter, Importer
 {
@@ -37,7 +38,7 @@ class Simplesheet implements Exporter, Importer
     protected $reader;
 
     /**
-     * @var \Illuminate\Contracts\Filesystem\Factory
+     * @var \Nikazooz\Simplesheet\Files\Filesystem
      */
     protected $filesystem;
 
@@ -54,14 +55,15 @@ class Simplesheet implements Exporter, Importer
     /**
      * @param  \Nikazooz\Simplesheet\Writer  $writer
      * @param  \Nikazooz\Simplesheet\QueuedWriter  $queuedWriter
-     * @param  \Illuminate\Contracts\Filesystem\Factory  $filesystem
+     * @param  \Nikazooz\Simplesheet\Files\Filesystem  $filesystem
      * @param  \Illuminate\Contracts\Routing\ResponseFactory  $responseFactory
+     * @return void
      */
     public function __construct(
         Writer $writer,
         QueuedWriter $queuedWriter,
         Reader $reader,
-        FilesystemFactory $filesystem,
+        Filesystem $filesystem,
         ResponseFactory $responseFactory
     ) {
         $this->writer = $writer;
@@ -74,12 +76,13 @@ class Simplesheet implements Exporter, Importer
     /**
      * {@inheritdoc}
      */
-    public function download($export, string $fileName, string $writerType = null)
+    public function download($export, string $fileName, string $writerType = null, array $headers = [])
     {
         return $this->responseFactory->download(
-            $this->export($export, $fileName, $writerType),
-            $fileName
-        );
+           $this->export($export, $fileName, $writerType)->getLocalPath(),
+            $fileName,
+            $headers
+        )->deleteFileAfterSend(true);
     }
 
     /**
@@ -91,11 +94,40 @@ class Simplesheet implements Exporter, Importer
             return $this->queue($export, $filePath, $diskName, $writerType, $diskOptions);
         }
 
-        $file = $this->export($export, $filePath, $writerType);
+        $temporaryFile = $this->export($export, $filePath, $writerType);
 
-        return $this->filesystem->disk($diskName, $diskOptions)->put(
-            $filePath, fopen($file, 'rb+')
+        $exported = $this->filesystem->disk($diskName, $diskOptions)->copy(
+            $temporaryFile,
+            $filePath
         );
+
+        $temporaryFile->delete();
+
+        return $exported;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function queue($export, string $filePath, string $diskName = null, string $writerType = null, $diskOptions = [])
+    {
+        $writerType = $this->findTypeByExtension($filePath, $writerType);
+
+        return $this->queuedWriter->store($export, $filePath, $diskName, $writerType, $diskOptions);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function raw($export, string $writerType)
+    {
+        $temporaryFile = $this->writer->export($export, $writerType);
+
+        $contents = $temporaryFile->contents();
+
+        $temporaryFile->delete();
+
+        return $contents;
     }
 
     /**
@@ -111,16 +143,6 @@ class Simplesheet implements Exporter, Importer
         $writerType = $this->findTypeByExtension($fileName, $writerType);
 
         return $this->writer->export($export, $writerType);
-    }
-
-     /**
-     * {@inheritdoc}
-     */
-    public function queue($export, string $filePath, string $diskName = null, string $writerType = null, $diskOptions = [])
-    {
-        $writerType = $this->findTypeByExtension($filePath, $writerType);
-
-        return $this->queuedWriter->store($export, $filePath, $diskName, $writerType);
     }
 
     /**

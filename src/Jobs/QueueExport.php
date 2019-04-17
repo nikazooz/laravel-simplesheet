@@ -5,6 +5,7 @@ namespace Nikazooz\Simplesheet\Jobs;
 use Nikazooz\Simplesheet\Writer;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Nikazooz\Simplesheet\Files\TemporaryFile;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
 
 class QueueExport implements ShouldQueue
@@ -17,9 +18,9 @@ class QueueExport implements ShouldQueue
     private $export;
 
     /**
-     * @var string
+     * @var TemporaryFile
      */
-    private $tempFile;
+    private $temporaryFile;
 
     /**
      * @var string
@@ -28,15 +29,15 @@ class QueueExport implements ShouldQueue
 
     /**
      * @param  object  $export
-     * @param  string  $tempFile
+     * @param  TemporaryFile  $temporaryFile
      * @param  string  $writerType
      * @return void
      */
-    public function __construct($export, string $tempFile, string $writerType)
+    public function __construct($export, TemporaryFile $temporaryFile, string $writerType)
     {
         $this->export = $export;
-        $this->tempFile = $tempFile;
         $this->writerType = $writerType;
+        $this->temporaryFile = $temporaryFile;
     }
 
     /**
@@ -45,6 +46,6 @@ class QueueExport implements ShouldQueue
      */
     public function handle(Writer $writer)
     {
-        $writer->export($this->export, $this->writerType, $this->tempFile);
+        $writer->export($this->export, $this->writerType, $this->temporaryFile);
     }
 }

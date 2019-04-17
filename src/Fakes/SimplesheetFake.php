@@ -37,7 +37,7 @@ class SimplesheetFake implements Exporter
     /**
      * {@inheritdoc}
      */
-    public function download($export, string $fileName, string $writerType = null)
+    public function download($export, string $fileName, string $writerType = null, array $headers = [])
     {
         $this->downloads[$fileName] = $export;
 
@@ -76,6 +76,14 @@ class SimplesheetFake implements Exporter
                 //
             }
         });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function raw($export, string $writerType)
+    {
+        return 'RAW-CONTENTS';
     }
 
     /**

@@ -3,17 +3,18 @@
 namespace Nikazooz\Simplesheet\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Nikazooz\Simplesheet\Files\Filesystem;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Filesystem\FilesystemManager;
+use Nikazooz\Simplesheet\Files\TemporaryFile;
 
 class StoreQueuedExport implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * @var string
+     * @var TemporaryFile
      */
-    private $tmpPath;
+    private $temporaryFile;
 
     /**
      * @var string
@@ -26,24 +27,36 @@ class StoreQueuedExport implements ShouldQueue
     private $disk;
 
     /**
-     * @param  string  $tmpPath
+     * @var string|null
+     */
+    private $diskOptions = [];
+
+    /**
+     * @param  TemporaryFile  $temporaryFile
      * @param  string  $path
      * @param  string|null  $disk
+     * @param  array  $diskOptions
      * @return void
      */
-    public function __construct(string $tmpPath, string $path, string $disk = null)
+    public function __construct(TemporaryFile $temporaryFile, string $path, string $disk = null, array $diskOptions = [])
     {
-        $this->tmpPath = $tmpPath;
         $this->path = $path;
         $this->disk = $disk;
+        $this->diskOptions = $diskOptions;
+        $this->temporaryFile = $temporaryFile;
     }
 
     /**
-     * @param  \Illuminate\Filesystem\FilesystemManager  $filesystem
+     * @param  \Nikazooz\Simplesheet\Files\Filesystem  $filesystem
      * @return void
      */
-    public function handle(FilesystemManager $filesystem)
+    public function handle(Filesystem $filesystem)
     {
-        $filesystem->disk($this->disk)->put($this->path, fopen($this->tmpPath, 'r+'));
+        $filesystem->disk($this->disk, $this->diskOptions)->copy(
+            $this->temporaryFile,
+            $this->path
+        );
+
+        $this->temporaryFile->delete();
     }
 }

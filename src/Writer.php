@@ -11,11 +11,14 @@ use Nikazooz\Simplesheet\Concerns\FromArray;
 use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\BeforeExport;
+use Nikazooz\Simplesheet\Files\TemporaryFile;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
 use Nikazooz\Simplesheet\Concerns\FromIterator;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Factories\WriterFactory;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
+use Nikazooz\Simplesheet\Files\RemoteTemporaryFile;
+use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
 use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
 
@@ -24,9 +27,9 @@ class Writer
     use HasEventBus, MapsCsvSettings;
 
     /**
-     * @var string
+     * @var TemporaryFileFactory
      */
-    protected $tempPath;
+    protected $temporaryFileFactory;
 
     /**
      * @var \Box\Spout\Writer\WriterInterface
@@ -41,41 +44,42 @@ class Writer
     /**
      * New Writer instance.
      *
-     * @param  string  $tempPath
+     * @param  TemporaryFileFactory  $temporaryFileFactory
      * @param  int  $chunkSize
      * @param  array  $csvSettings
      * @return void
      */
-    public function __construct(string $tempPath, int $chunkSize, array $csvSettings = [])
+    public function __construct(TemporaryFileFactory $temporaryFileFactory, int $chunkSize, array $csvSettings = [])
     {
-        $this->tempPath = $tempPath;
         $this->chunkSize = $chunkSize;
+        $this->temporaryFileFactory = $temporaryFileFactory;
+
         $this->applyCsvSettings($csvSettings);
     }
 
     /**
      * @param  object  $export
      * @param  string  $writerType
-     * @param  string|null  $tempFile
-     * @return string
+     * @param  TemporaryFile|null  $temporaryFile
+     * @return TemporaryFile
      */
-    public function export($export, string $writerType, string $tempFile = null): string
+    public function export($export, string $writerType, TemporaryFile $temporaryFile = null): TemporaryFile
     {
         $this->open($export, $writerType);
 
-        $fileName = $tempFile ?? $this->tempFile();
+        $temporaryFile = $temporaryFile ?? $this->temporaryFileFactory->makeLocal();
 
-        $this->write($export, $fileName);
+        $this->write($export, $temporaryFile, $writerType);
 
         $this->cleanUp();
 
-        return $fileName;
+        return $temporaryFile;
     }
 
     /**
      * @param  object  $export
      * @param  string  $writerType
-     * @return void
+     * @return $this
      */
     private function open($export, $writerType)
     {
@@ -86,14 +90,17 @@ class Writer
         $this->raise(new BeforeExport($this, $export));
 
         $this->spoutWriter = WriterFactory::create($writerType);
+
+        return $this;
     }
 
     /**
      * @param  object  $export
-     * @param  string  $fileName
-     * @return void
+     * @param  TemporaryFile  $temporaryFile
+     * @param  string  $writerType
+     * @return TemporaryFile
      */
-    private function write($export, $fileName)
+    private function write($export, TemporaryFile $temporaryFile, string $writerType)
     {
         $this->throwExceptionIfWriterIsNotSet();
 
@@ -104,11 +111,17 @@ class Writer
         }
 
         $this->configureCsvWriter();
-        $this->spoutWriter->openToFile($fileName);
+        $this->spoutWriter->openToFile($temporaryFile->getLocalPath());
 
         foreach ($this->getSheetExports($export) as $sheetIndex => $sheetExport) {
             $this->addNewSheet($sheetIndex)->export($sheetExport);
         }
+
+        if ($temporaryFile instanceof RemoteTemporaryFile) {
+            $temporaryFile->updateRemote();
+        }
+
+        return $temporaryFile;
     }
 
     /**
@@ -131,14 +144,6 @@ class Writer
     {
         $this->spoutWriter->close();
         unset($this->spoutWriter);
-    }
-
-    /**
-     * @return string
-     */
-    public function tempFile(): string
-    {
-        return $this->tempPath . DIRECTORY_SEPARATOR . 'laravel-simplesheet-' . Str::random(16);
     }
 
     /**

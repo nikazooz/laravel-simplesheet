@@ -3,8 +3,10 @@
 namespace Nikazooz\Simplesheet;
 
 use Illuminate\Support\ServiceProvider;
+use Nikazooz\Simplesheet\Files\Filesystem;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Laravel\Lumen\Application as LumenApplication;
+use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 
 class SimplesheetServiceProvider extends ServiceProvider
@@ -37,17 +39,22 @@ class SimplesheetServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom($this->getConfigFile(), 'simplesheet');
 
-        $this->app->bind(Writer::class, function () {
-            return new Writer(
-                $this->app['config']->get('simplesheet.temporary_files.local_path', sys_get_temp_dir()),
-                $this->app['config']->get('simplesheet.exports.chunk_size', 100),
-                $this->app['config']->get('simplesheet.exports.csv', [])
+         $this->app->bind(TemporaryFileFactory::class, function () {
+            return new TemporaryFileFactory(
+                $this->app['config']->get('simplesheet.temporary_files.local_path', storage_path('framework/laravel-simplesheet')),
+                $this->app['config']->get('simplesheet.temporary_files.remote_disk')
             );
         });
 
-        $this->app->bind(QueuedWriter::class, function () {
-            return new QueuedWriter(
-                $this->app->make(Writer::class)
+        $this->app->bind(Filesystem::class, function () {
+            return new Filesystem($this->app->make('filesystem'));
+        });
+
+        $this->app->bind(Writer::class, function () {
+            return new Writer(
+                $this->app->make(TemporaryFileFactory::class),
+                $this->app['config']->get('simplesheet.exports.chunk_size', 100),
+                $this->app['config']->get('simplesheet.exports.csv', [])
             );
         });
 
@@ -64,7 +71,7 @@ class SimplesheetServiceProvider extends ServiceProvider
                 $this->app->make(Writer::class),
                 $this->app->make(QueuedWriter::class),
                 $this->app->make(Reader::class),
-                $this->app->make(FilesystemFactory::class),
+                $this->app->make(Filesystem::class),
                 $this->app->make(ResponseFactory::class)
             ))->setExtensionsMap(
                 $this->app['config']->get('simplesheet.extension_detector', [])

@@ -7,23 +7,24 @@ use Nikazooz\Simplesheet\Jobs\QueueExport;
 use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Jobs\StoreQueuedExport;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
 use Nikazooz\Simplesheet\Concerns\WithCustomChunkSize;
 
 class QueuedWriter
 {
     /**
-     * @var \Nikazooz\Simplesheet\Writer
+     * @var \Nikazooz\Simplesheet\Files\TemporaryFileFactory
      */
-    protected $writer;
+    protected $temporaryFileFactory;
 
     /**
-     * @param  \Nikazooz\Simplesheet\Writer  $writer
+     * @param  \Nikazooz\Simplesheet\Files\TemporaryFileFactory  $temporaryFileFactory
      * @return void
      */
-    public function __construct(Writer $writer)
+    public function __construct(TemporaryFileFactory $temporaryFileFactory)
     {
-        $this->writer = $writer;
+        $this->temporaryFileFactory = $temporaryFileFactory;
     }
 
     /**
@@ -31,14 +32,15 @@ class QueuedWriter
      * @param  string  $filePath
      * @param  string|null  $disk
      * @param  string|null  $writerType
+     * @param  array  $diskOptions
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
-    public function store($export, string $filePath, string $disk = null, string $writerType = null)
+    public function store($export, string $filePath, string $disk = null, string $writerType = null, $diskOptions = [])
     {
-        $tempFile = $this->writer->tempFile();
+        $temporaryFile = $this->temporaryFileFactory->make();
 
         return QueueExport::withChain([
-            new StoreQueuedExport($tempFile, $filePath, $disk),
-        ])->dispatch($export, $tempFile, $writerType);
+            new StoreQueuedExport($temporaryFile, $filePath, $disk, $diskOptions),
+        ])->dispatch($export, $temporaryFile, $writerType);
     }
 }

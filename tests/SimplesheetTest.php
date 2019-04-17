@@ -87,6 +87,18 @@ class SimplesheetTest extends TestCase
     /**
      * @test
      */
+    public function can_get_raw_export_contents()
+    {
+        $export = new EmptyExport;
+
+        $response = $this->SUT->raw($export, Simplesheet::XLSX);
+
+        $this->assertNotEmpty($response);
+    }
+
+    /**
+     * @test
+     */
     public function can_store_csv_export_with_default_settings()
     {
         $export = new class implements FromCollection {

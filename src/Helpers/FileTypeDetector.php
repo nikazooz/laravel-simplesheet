@@ -8,6 +8,11 @@ use Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException;
 class FileTypeDetector
 {
     /**
+     * @var array
+     */
+    protected static $extensionMap = [];
+
+    /**
      * @param UploadedFile|string $filePath
      * @param string|null $type
      *
@@ -20,7 +25,7 @@ class FileTypeDetector
             return $type;
         }
 
-        $supportedExtensions = config('simplesheet.extension_detector');
+        $supportedExtensions = static::$extensionMap;
         $extension = strtolower(trim(static::getRawExtension($filePath)));
 
         if ($extension === '' || ! array_key_exists($extension, $supportedExtensions)) {
@@ -61,5 +66,10 @@ class FileTypeDetector
         }
 
         return $type;
+    }
+
+    public static function setExtensionMap(array $extensionMap)
+    {
+        static::$extensionMap = $extensionMap;
     }
 }

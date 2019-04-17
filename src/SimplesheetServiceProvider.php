@@ -6,8 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Nikazooz\Simplesheet\Files\Filesystem;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Laravel\Lumen\Application as LumenApplication;
+use Nikazooz\Simplesheet\Helpers\FileTypeDetector;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 
 class SimplesheetServiceProvider extends ServiceProvider
 {
@@ -66,20 +66,22 @@ class SimplesheetServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('simplesheet', function () {
-            return (new Simplesheet(
+            return new Simplesheet(
                 $this->app->make(Writer::class),
                 $this->app->make(QueuedWriter::class),
                 $this->app->make(Reader::class),
                 $this->app->make(Filesystem::class),
                 $this->app->make(ResponseFactory::class)
-            ))->setExtensionsMap(
-                $this->app['config']->get('simplesheet.extension_detector', [])
             );
         });
 
         $this->app->alias('simplesheet', Simplesheet::class);
         $this->app->alias('simplesheet', Exporter::class);
         $this->app->alias('simplesheet', Importer::class);
+
+        FileTypeDetector::setExtensionMap(
+             $this->app['config']->get('simplesheet.extension_detector', [])
+        );
     }
 
      /**

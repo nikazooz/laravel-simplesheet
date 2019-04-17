@@ -48,11 +48,6 @@ class Simplesheet implements Exporter, Importer
     protected $responseFactory;
 
     /**
-     * @var array
-     */
-    protected $extensions = [];
-
-    /**
      * @param  \Nikazooz\Simplesheet\Writer  $writer
      * @param  \Nikazooz\Simplesheet\QueuedWriter  $queuedWriter
      * @param  \Nikazooz\Simplesheet\Files\Filesystem  $filesystem
@@ -143,54 +138,6 @@ class Simplesheet implements Exporter, Importer
         $writerType = FileTypeDetector::detect($fileName, $writerType);
 
         return $this->writer->export($export, $writerType);
-    }
-
-    /**
-     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $fileName
-     * @param  string|null  $type
-     * @return string
-     *
-     * @throws \Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException
-     */
-    public function findTypeByExtension($fileName, string $type = null)
-    {
-        if (null !== $type) {
-            return $type;
-        }
-
-        $extension = strtolower(trim($this->getRawExtension($fileName)));
-
-        if ($extension === '' || ! array_key_exists($extension, $this->extensions)) {
-            throw new NoTypeDetectedException();
-        }
-
-        return $this->extensions[$extension];
-    }
-
-    /**
-     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string  $fileName
-     * @return string
-     */
-    protected function getRawExtension($fileName)
-    {
-        if ($fileName instanceof UploadedFile) {
-            return $fileName->getClientOriginalExtension();
-        }
-
-        $pathInfo  = pathinfo($fileName);
-
-        return $pathInfo['extension'] ?? '';
-    }
-
-    /**
-     * @param  array  $extensions
-     * @return $this
-     */
-    public function setExtensionsMap(array $extensions = [])
-    {
-        $this->extensions = $extensions;
-
-        return $this;
     }
 
     /**

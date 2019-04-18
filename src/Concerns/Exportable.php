@@ -11,11 +11,12 @@ trait Exportable
     /**
      * @param  string|null  $fileName
      * @param  string|null  $writerType
+     * @param  array  $headers
      * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      *
      * @throws \Nikazooz\Simplesheet\Exceptions\NoFilenameGivenException
      */
-    public function download(string $fileName = null, string $writerType = null)
+    public function download(string $fileName = null, string $writerType = null, array $headers = [])
     {
         $fileName = $fileName ?? $this->fileName ?? null;
 
@@ -23,7 +24,12 @@ trait Exportable
             throw new NoFilenameGivenException();
         }
 
-        return $this->getExporter()->download($this, $fileName, $writerType ?? $this->writerType ?? null);
+        return $this->getExporter()->download(
+            $this,
+            $fileName,
+            $writerType ?? $this->writerType ?? null,
+            $headers
+        );
     }
 
     /**

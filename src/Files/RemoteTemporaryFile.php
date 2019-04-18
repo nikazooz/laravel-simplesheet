@@ -10,7 +10,7 @@ class RemoteTemporaryFile extends TemporaryFile
     private $disk;
 
     /**
-     * @var Disk|null
+     * @var \Nikazooz\Simplesheet\Files\Disk|null
      */
     private $diskInstance;
 
@@ -20,14 +20,14 @@ class RemoteTemporaryFile extends TemporaryFile
     private $filename;
 
     /**
-     * @var LocalTemporaryFile
+     * @var \Nikazooz\Simplesheet\Files\LocalTemporaryFile
      */
     private $localTemporaryFile;
 
     /**
-     * @param string             $disk
-     * @param string             $filename
-     * @param LocalTemporaryFile $localTemporaryFile
+     * @param  string  $disk
+     * @param  string  $filename
+     * @param  \Nikazooz\Simplesheet\Files\LocalTemporaryFile  $localTemporaryFile
      */
     public function __construct(string $disk, string $filename, LocalTemporaryFile $localTemporaryFile)
     {
@@ -88,6 +88,8 @@ class RemoteTemporaryFile extends TemporaryFile
 
     /**
      * Store on remote disk.
+     *
+     * @return void
      */
     public function updateRemote()
     {
@@ -122,7 +124,7 @@ class RemoteTemporaryFile extends TemporaryFile
     }
 
     /**
-     * @return Disk
+     * @return \Nikazooz\Simplesheet\Files\Disk
      */
     public function disk(): Disk
     {

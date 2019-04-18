@@ -39,6 +39,10 @@ trait RegistersEventListeners
             $listeners[BeforeTransactionCommit::class] = [static::class, 'beforeTransactionCommit'];
         }
 
+        if (method_exists($this, 'importFailed')) {
+            $listeners[ImportFailed::class] = [static::class, 'importFailed'];
+        }
+
         if (method_exists($this, 'beforeSheet')) {
             $listeners[BeforeSheet::class] = [static::class, 'beforeSheet'];
         }

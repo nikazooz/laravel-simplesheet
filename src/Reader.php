@@ -2,6 +2,7 @@
 
 namespace Nikazooz\Simplesheet;
 
+use Throwable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,7 @@ use Nikazooz\Simplesheet\Events\AfterImport;
 use Box\Spout\Reader\CSV\Reader as CsvReader;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\BeforeImport;
+use Nikazooz\Simplesheet\Events\ImportFailed;
 use Nikazooz\Simplesheet\Files\TemporaryFile;
 use Nikazooz\Simplesheet\Factories\ReaderFactory;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
@@ -61,7 +63,7 @@ class Reader
     public function read($import, $file, string $readerType, string $disk = null)
     {
         if ($import instanceof ShouldQueue) {
-            return QueueImport::dispatch($import, $file, $readerType);
+            return QueueImport::dispatch($import, $this->getTemporaryFile($file, $disk), $readerType);
         }
 
         return $this->readNow($import, $file, $readerType);
@@ -76,22 +78,29 @@ class Reader
     public function readNow($import, $file, string $readerType, string $disk = null)
     {
         $temporaryFile = $this->getTemporaryFile($file, $disk);
-        $reader = $this->getReader($import, $temporaryFile, $readerType);
 
-        $this->beforeReading($import, $reader);
+        try {
+            $reader = $this->getReader($import, $temporaryFile, $readerType);
 
-        DB::transaction(function () use ($reader, $import) {
-            foreach ($this->sheetImports as $index => $sheetImport) {
-                if ($sheet = $this->getSheet($reader, $import, $sheetImport, $index)) {
-                    $sheet->import($sheetImport, $sheet->getStartRow($sheetImport));
+            $this->beforeReading($import, $reader);
+
+            DB::transaction(function () use ($reader, $import) {
+                foreach ($this->sheetImports as $index => $sheetImport) {
+                    if ($sheet = $this->getSheet($reader, $import, $sheetImport, $index)) {
+                        $sheet->import($sheetImport, $sheet->getStartRow($sheetImport));
+                    }
                 }
-            }
 
-            $this->raise(new BeforeTransactionCommit($this, $import));
-        });
+                $this->raise(new BeforeTransactionCommit($this, $import));
+            });
 
-        $this->afterReading($import);
-        $reader->close();
+            $this->afterReading($import);
+            $reader->close();
+        } catch (Throwable $e) {
+            $this->raise(new ImportFailed($e));
+            throw $e;
+        }
+
         $temporaryFile->delete();
 
         return $this;
@@ -165,7 +174,7 @@ class Reader
     /**
      * @param  mixed  $file
      * @param  string|null  $disk
-     * @return TemporaryFile
+     * @return \Nikazooz\Simplesheet\Files\TemporaryFile
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */

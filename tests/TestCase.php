@@ -4,6 +4,7 @@ namespace Nikazooz\Simplesheet\Tests;
 
 use Illuminate\Http\Testing\File;
 use Box\Spout\Reader\ReaderFactory;
+use Illuminate\Contracts\Queue\Job;
 use Box\Spout\Reader\ReaderInterface;
 use Orchestra\Database\ConsoleServiceProvider;
 use Nikazooz\Simplesheet\SimplesheetServiceProvider;
@@ -109,5 +110,19 @@ class TestCase extends OrchestraTestCase
             'driver' => 'sqlite',
             'database' => ':memory:',
         ]);
+    }
+
+    /**
+     * @param  \Illuminate\Contracts\Queue\Job  $job
+     * @param  string  $property
+     * @return mixed
+     */
+    protected function inspectJobProperty(Job $job, string $property)
+    {
+        $dict  = (array) unserialize($job->payload()['data']['command']);
+
+        $class = $job->resolveName();
+
+         return $dict[$property] ?? $dict["\0*\0$property"] ?? $dict["\0$class\0$property"];
     }
 }

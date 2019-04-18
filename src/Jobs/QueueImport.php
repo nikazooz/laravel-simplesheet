@@ -2,10 +2,14 @@
 
 namespace Nikazooz\Simplesheet\Jobs;
 
+use Throwable;
 use Nikazooz\Simplesheet\Reader;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Nikazooz\Simplesheet\Concerns\WithEvents;
+use Nikazooz\Simplesheet\Events\ImportFailed;
 use Nikazooz\Simplesheet\Facades\Simplesheet;
+use Nikazooz\Simplesheet\Files\TemporaryFile;
 
 class QueueImport implements ShouldQueue
 {
@@ -17,9 +21,9 @@ class QueueImport implements ShouldQueue
     public $import;
 
     /**
-     * @var string
+     * @var \Nikazooz\Simplesheet\Files\TemporaryFile
      */
-    public $filePath;
+    public $temporaryFile;
 
     /**
      * @var string
@@ -28,15 +32,15 @@ class QueueImport implements ShouldQueue
 
     /**
      * @param  object  $import
-     * @param  string  $filePath
+     * @param  \Nikazooz\Simplesheet\Files\TemporaryFile  $temporaryFile
      * @param  string  $readerType
      * @return void
      */
-    public function __construct($import, string $filePath, string $readerType)
+    public function __construct($import, TemporaryFile $temporaryFile, string $readerType)
     {
         $this->import = $import;
-        $this->filePath = $filePath;
         $this->readerType = $readerType;
+        $this->temporaryFile = $temporaryFile;
     }
 
     /**
@@ -45,6 +49,18 @@ class QueueImport implements ShouldQueue
      */
     public function handle(Reader $reader)
     {
-        $reader->readNow($this->import, $this->filePath, $this->readerType);
+        $reader->readNow($this->import, $this->temporaryFile, $this->readerType);
+    }
+
+    /**
+     * @param  \Throwable  $e
+     * @return void
+     */
+    public function failed(Throwable $e)
+    {
+        if ($this->import instanceof WithEvents) {
+            $this->registerListeners($this->import->registerEvents());
+            $this->raise(new ImportFailed($e));
+        }
     }
 }

@@ -71,13 +71,9 @@ class QueuedImportTest extends TestCase
                 $this->assertInstanceOf(RemoteTemporaryFile::class, $tempFile);
 
                 // Should exist remote
-                $this->assertTrue(
-                    $tempFile->exists()
-                );
+                $this->assertTrue($tempFile->exists());
 
-                $this->assertTrue(
-                    file_exists($tempFile->getLocalPath())
-                );
+                $this->assertTrue(unlink($tempFile->getLocalPath()));
             }
         });
 

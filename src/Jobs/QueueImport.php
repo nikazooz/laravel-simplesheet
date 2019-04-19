@@ -49,7 +49,7 @@ class QueueImport implements ShouldQueue
      */
     public function handle(Reader $reader)
     {
-        $reader->readNow($this->import, $this->temporaryFile, $this->readerType);
+        $reader->readNow($this->import, $this->temporaryFile->sync(), $this->readerType);
     }
 
     /**

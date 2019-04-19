@@ -56,11 +56,7 @@ class Writer
 
         $temporaryFile = $temporaryFile ?? $this->temporaryFileFactory->makeLocal();
 
-        $this->write($export, $temporaryFile, $writerType);
-
-        $this->cleanUp();
-
-        return $temporaryFile;
+        return $this->write($export, $temporaryFile, $writerType);
     }
 
     /**
@@ -98,6 +94,8 @@ class Writer
         foreach ($this->getSheetExports($export) as $sheetIndex => $sheetExport) {
             $this->addNewSheet($sheetIndex)->export($sheetExport);
         }
+
+        $this->cleanUp();
 
         if ($temporaryFile instanceof RemoteTemporaryFile) {
             $temporaryFile->updateRemote();

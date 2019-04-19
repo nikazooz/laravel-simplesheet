@@ -32,7 +32,7 @@ class FromArrayTest extends TestCase
 
         $this->assertTrue($response);
 
-        $contents = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-array-store.xlsx', 'xlsx');
+        $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-array-store.xlsx', 'xlsx');
 
         $this->assertEquals($export->array(), $contents);
     }

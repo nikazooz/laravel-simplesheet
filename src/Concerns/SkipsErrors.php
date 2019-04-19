@@ -4,7 +4,6 @@ namespace Nikazooz\Simplesheet\Concerns;
 
 use Throwable;
 use Illuminate\Support\Collection;
-use Nikazooz\Simplesheet\Validators\Failure;
 
 trait SkipsErrors
 {

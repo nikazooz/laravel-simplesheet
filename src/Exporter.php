@@ -21,7 +21,7 @@ interface Exporter
      * @param  mixed  $diskOptions
      * @return bool
      */
-    public function store($export, string $filePath, string $diskName = null, string $writerType = null,  $diskOptions = []);
+    public function store($export, string $filePath, string $diskName = null, string $writerType = null, $diskOptions = []);
 
     /**
      * @param  object  $export
@@ -31,7 +31,7 @@ interface Exporter
      * @param  array  $diskOptions
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
-    public function queue($export, string $filePath, string $diskName = null, string $writerType = null,  $diskOptions = []);
+    public function queue($export, string $filePath, string $diskName = null, string $writerType = null, $diskOptions = []);
 
     /**
      * @param  object  $export

@@ -13,8 +13,8 @@ class EndRowFinder
      */
     public static function find($import, int $startRow = null)
     {
-        if (!$import instanceof WithLimit) {
-            return null;
+        if (! $import instanceof WithLimit) {
+            return;
         }
 
         // When no start row given,

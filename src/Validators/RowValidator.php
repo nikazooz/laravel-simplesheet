@@ -43,7 +43,7 @@ class RowValidator
             foreach ($e->errors() as $attribute => $messages) {
                 $row = strtok($attribute, '.');
                 $attributeName = strtok('');
-                $attributeName = $attributes['*.' . $attributeName] ?? $attributeName;
+                $attributeName = $attributes['*.'.$attributeName] ?? $attributeName;
 
                 $failures[] = new Failure(
                     $row,
@@ -102,7 +102,7 @@ class RowValidator
     private function formatKey(array $elements): array
     {
         return collect($elements)->mapWithKeys(function ($rule, $attribute) {
-            $attribute = starts_with($attribute, '*.') ? $attribute : '*.' . $attribute;
+            $attribute = starts_with($attribute, '*.') ? $attribute : '*.'.$attribute;
 
             return [$attribute => $rule];
         })->all();

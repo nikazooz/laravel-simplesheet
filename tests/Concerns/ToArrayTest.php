@@ -58,8 +58,8 @@ class ToArrayTest extends TestCase
                 $sheetNumber = $this->called;
 
                 Assert::assertEquals([
-                    [$sheetNumber . '.A1', $sheetNumber . '.B1'],
-                    [$sheetNumber . '.A2', $sheetNumber . '.B2'],
+                    [$sheetNumber.'.A1', $sheetNumber.'.B1'],
+                    [$sheetNumber.'.A2', $sheetNumber.'.B2'],
                 ], $array);
             }
         };

@@ -2,14 +2,9 @@
 
 namespace Nikazooz\Simplesheet;
 
-use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Jobs\QueueExport;
-use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Jobs\StoreQueuedExport;
-use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
-use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
-use Nikazooz\Simplesheet\Concerns\WithCustomChunkSize;
 
 class QueuedWriter
 {

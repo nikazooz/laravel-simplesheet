@@ -18,7 +18,7 @@ class WithMappingTest extends TestCase
 
         $this->assertTrue($response);
 
-        $actual = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/with-mapping-store.xlsx', 'xlsx');
+        $actual = $this->readAsArray(__DIR__.'/../Data/Disks/Local/with-mapping-store.xlsx', 'xlsx');
 
         $expected = [
             [

@@ -34,7 +34,7 @@ class Simplesheet extends Facade
         static::swap(new SimplesheetFake());
     }
 
-     /**
+    /**
      * Get the registered name of the component.
      *
      * @return string

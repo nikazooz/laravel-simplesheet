@@ -17,7 +17,7 @@ class QueuedExportTest extends TestCase
         $export = new QueuedExport();
 
         $export->queue('queued-export.xlsx')->chain([
-            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Local/queued-export.xlsx'),
+            new AfterQueueExportJob(__DIR__.'/Data/Disks/Local/queued-export.xlsx'),
         ]);
     }
 
@@ -29,7 +29,7 @@ class QueuedExportTest extends TestCase
         $export = new QueuedExport();
 
         $export->queue('queued-export.xlsx', 'test')->chain([
-            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Test/queued-export.xlsx'),
+            new AfterQueueExportJob(__DIR__.'/Data/Disks/Test/queued-export.xlsx'),
         ]);
     }
 
@@ -41,7 +41,7 @@ class QueuedExportTest extends TestCase
         $export = new ShouldQueueExport();
 
         $export->store('queued-export.xlsx', 'test')->chain([
-            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Test/queued-export.xlsx'),
+            new AfterQueueExportJob(__DIR__.'/Data/Disks/Test/queued-export.xlsx'),
         ]);
     }
 
@@ -53,10 +53,10 @@ class QueuedExportTest extends TestCase
         $export = new EloquentCollectionWithMappingExport();
 
         $export->queue('queued-export.xlsx')->chain([
-            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Local/queued-export.xlsx'),
+            new AfterQueueExportJob(__DIR__.'/Data/Disks/Local/queued-export.xlsx'),
         ]);
 
-        $actual = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-export.xlsx', 'xlsx');
+        $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-export.xlsx', 'xlsx');
 
         $this->assertEquals([
             ['Patrick', 'Brouwers'],

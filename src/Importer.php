@@ -4,8 +4,6 @@ namespace Nikazooz\Simplesheet;
 
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\PendingDispatch;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface Importer
 {

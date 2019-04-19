@@ -11,7 +11,7 @@ use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 
 class SimplesheetServiceProvider extends ServiceProvider
 {
-     /**
+    /**
      * {@inheritdoc}
      */
     protected $defered = true;
@@ -39,7 +39,7 @@ class SimplesheetServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom($this->getConfigFile(), 'simplesheet');
 
-         $this->app->bind(TemporaryFileFactory::class, function () {
+        $this->app->bind(TemporaryFileFactory::class, function () {
             return new TemporaryFileFactory(
                 $this->app['config']->get('simplesheet.temporary_files.local_path', storage_path('framework/laravel-simplesheet')),
                 $this->app['config']->get('simplesheet.temporary_files.remote_disk')
@@ -80,11 +80,11 @@ class SimplesheetServiceProvider extends ServiceProvider
         $this->app->alias('simplesheet', Importer::class);
 
         FileTypeDetector::setExtensionMap(
-             $this->app['config']->get('simplesheet.extension_detector', [])
+            $this->app['config']->get('simplesheet.extension_detector', [])
         );
     }
 
-     /**
+    /**
      * Get the services provided by the provider.
      *
      * @return array
@@ -104,6 +104,6 @@ class SimplesheetServiceProvider extends ServiceProvider
      */
     protected function getConfigFile(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'simplesheet.php';
+        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'simplesheet.php';
     }
 }

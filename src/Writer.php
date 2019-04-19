@@ -2,7 +2,6 @@
 
 namespace Nikazooz\Simplesheet;
 
-use Illuminate\Support\Str;
 use Nikazooz\Simplesheet\Writers\Sheet;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\BeforeExport;

@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\ImportFailed;
-use Nikazooz\Simplesheet\Facades\Simplesheet;
 use Nikazooz\Simplesheet\Files\TemporaryFile;
 
 class QueueImport implements ShouldQueue

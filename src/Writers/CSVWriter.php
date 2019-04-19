@@ -75,7 +75,7 @@ class CsvWriter extends Writer
         if ($this->includeSeparatorLine) {
             $this->globalFunctionsHelper->fputs(
                 $this->filePointer,
-                'sep=' . $this->fieldDelimiter . $this->lineEnding
+                'sep='.$this->fieldDelimiter.$this->lineEnding
             );
         }
     }
@@ -98,7 +98,7 @@ class CsvWriter extends Writer
         parent::addRowToWriter($dataRow, $style);
     }
 
-   /**
+    /**
      * Adds data to the currently opened writer.
      *
      * @param  array $dataRow Array containing data to be written.
@@ -131,7 +131,7 @@ class CsvWriter extends Writer
     {
         return implode($this->fieldDelimiter, array_map(function ($cell) {
             return $this->encloseString($cell);
-        }, $row)) . $this->lineEnding;
+        }, $row)).$this->lineEnding;
     }
 
     /**

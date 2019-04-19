@@ -5,11 +5,8 @@ namespace Nikazooz\Simplesheet\Concerns;
 use InvalidArgumentException;
 use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Importer;
-use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\PendingDispatch;
 use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait Importable
 {
@@ -78,7 +75,7 @@ trait Importable
      */
     public function queue($filePath = null, string $disk = null, string $readerType = null)
     {
-        if (!$this instanceof ShouldQueue) {
+        if (! $this instanceof ShouldQueue) {
             throw new InvalidArgumentException('Importable should implement ShouldQueue to be queued.');
         }
 

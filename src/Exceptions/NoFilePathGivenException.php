@@ -7,7 +7,7 @@ use InvalidArgumentException;
 
 class NoFilePathGivenException extends InvalidArgumentException implements Throwable
 {
-     /**
+    /**
      * @param  string  $message
      * @param  int  $code
      * @param  \Throwable|null  $previous

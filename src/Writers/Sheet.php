@@ -3,7 +3,6 @@
 namespace Nikazooz\Simplesheet\Writers;
 
 use Illuminate\Support\Collection;
-use Box\Spout\Reader\ReaderInterface;
 use Box\Spout\Writer\WriterInterface;
 use Nikazooz\Simplesheet\HasEventBus;
 use Illuminate\Contracts\Support\Arrayable;
@@ -207,7 +206,7 @@ class Sheet
         return $this->chunkSize;
     }
 
-     /**
+    /**
      * @param  int  $chunkSize
      * @return \Nikazooz\Simplesheet\Sheet
      */

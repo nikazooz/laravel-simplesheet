@@ -63,7 +63,7 @@ class TestCase extends OrchestraTestCase
         };
     }
 
-     /**
+    /**
      * @param  string  $filePath
      * @param  string|null  $filename
      * @return \Illuminate\Http\Testing\File
@@ -99,10 +99,10 @@ class TestCase extends OrchestraTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('filesystems.disks.local.root', __DIR__ . '/Data/Disks/Local');
+        $app['config']->set('filesystems.disks.local.root', __DIR__.'/Data/Disks/Local');
         $app['config']->set('filesystems.disks.test', [
             'driver' => 'local',
-            'root' => __DIR__ . '/Data/Disks/Test',
+            'root' => __DIR__.'/Data/Disks/Test',
         ]);
 
         $app['config']->set('database.default', 'testing');
@@ -119,10 +119,10 @@ class TestCase extends OrchestraTestCase
      */
     protected function inspectJobProperty(Job $job, string $property)
     {
-        $dict  = (array) unserialize($job->payload()['data']['command']);
+        $dict = (array) unserialize($job->payload()['data']['command']);
 
         $class = $job->resolveName();
 
-         return $dict[$property] ?? $dict["\0*\0$property"] ?? $dict["\0$class\0$property"];
+        return $dict[$property] ?? $dict["\0*\0$property"] ?? $dict["\0$class\0$property"];
     }
 }

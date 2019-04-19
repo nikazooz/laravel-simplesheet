@@ -4,7 +4,6 @@ namespace Nikazooz\Simplesheet\Tests\Concerns;
 
 use Nikazooz\Simplesheet\Reader;
 use Nikazooz\Simplesheet\Writer;
-use Nikazooz\Simplesheet\Simplesheet;
 use Nikazooz\Simplesheet\Writers\Sheet;
 use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Events\AfterSheet;
@@ -15,11 +14,9 @@ use Nikazooz\Simplesheet\Events\BeforeExport;
 use Nikazooz\Simplesheet\Events\BeforeImport;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
 use Nikazooz\Simplesheet\Imports\Sheet as ImportSheet;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\CustomConcern;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\ExportWithEvents;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\ImportWithEvents;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\CustomSheetConcern;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\BeforeExportListener;
 
 class WithEventsTest extends TestCase

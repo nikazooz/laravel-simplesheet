@@ -23,7 +23,7 @@ class WithValidationTest extends TestCase
         parent::setUp();
 
         $this->loadLaravelMigrations(['--database' => 'testing']);
-        $this->loadMigrationsFrom(dirname(__DIR__) . '/Data/Stubs/Database/Migrations');
+        $this->loadMigrationsFrom(dirname(__DIR__).'/Data/Stubs/Database/Migrations');
     }
 
     /**
@@ -42,8 +42,8 @@ class WithValidationTest extends TestCase
             public function model(array $row)
             {
                 return new User([
-                    'name'     => $row[0],
-                    'email'    => $row[1],
+                    'name' => $row[0],
+                    'email' => $row[1],
                     'password' => 'secret',
                 ]);
             }
@@ -92,8 +92,8 @@ class WithValidationTest extends TestCase
             public function model(array $row)
             {
                 return new User([
-                    'name'     => $row[0],
-                    'email'    => $row[1],
+                    'name' => $row[0],
+                    'email' => $row[1],
                     'password' => 'secret',
                 ]);
             }
@@ -144,8 +144,8 @@ class WithValidationTest extends TestCase
             public function model(array $row)
             {
                 return new User([
-                    'name'     => $row[0],
-                    'email'    => $row[1],
+                    'name' => $row[0],
+                    'email' => $row[1],
                     'password' => 'secret',
                 ]);
             }
@@ -198,8 +198,8 @@ class WithValidationTest extends TestCase
             public function model(array $row)
             {
                 return new User([
-                    'name'     => $row['name'],
-                    'email'    => $row['email'],
+                    'name' => $row['name'],
+                    'email' => $row['email'],
                     'password' => 'secret',
                 ]);
             }
@@ -242,8 +242,8 @@ class WithValidationTest extends TestCase
             public function model(array $row)
             {
                 return new User([
-                    'name'     => $row['name'],
-                    'email'    => $row['email'],
+                    'name' => $row['name'],
+                    'email' => $row['email'],
                     'password' => 'secret',
                 ]);
             }
@@ -288,7 +288,7 @@ class WithValidationTest extends TestCase
     private function validateFailure(ValidationException $e, int $row, string $attribute, array $messages)
     {
         $failures = $e->failures();
-        $failure  = head($failures);
+        $failure = head($failures);
 
         $this->assertEquals($row, $failure->row());
         $this->assertEquals($attribute, $failure->attribute());

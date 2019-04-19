@@ -34,7 +34,7 @@ class HeadingRowImportTest extends TestCase
     public function can_import_only_heading_row_with_custom_heading_row_formatter()
     {
         HeadingRowFormatter::extend('custom', function ($value) {
-            return 'custom-' . $value;
+            return 'custom-'.$value;
         });
 
         HeadingRowFormatter::default('custom');
@@ -110,7 +110,7 @@ class HeadingRowImportTest extends TestCase
     public function can_import_heading_row_with_custom_formatter_defined_in_config()
     {
         HeadingRowFormatter::extend('custom2', function ($value) {
-            return 'custom2-' . $value;
+            return 'custom2-'.$value;
         });
 
         config()->set('excel.imports.heading_row.formatter', 'custom2');

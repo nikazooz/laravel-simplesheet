@@ -58,7 +58,7 @@ trait HasEventBus
     {
         $name = \get_class($event);
 
-        $localListeners  = $this->events[$name] ?? [];
+        $localListeners = $this->events[$name] ?? [];
         $globalListeners = static::$globalEvents[$name] ?? [];
 
         return array_merge($globalListeners, $localListeners);

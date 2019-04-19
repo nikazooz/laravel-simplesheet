@@ -21,7 +21,7 @@ class WithBatchInsertsTest extends TestCase
         parent::setUp();
 
         $this->loadLaravelMigrations(['--database' => 'testing']);
-        $this->loadMigrationsFrom(dirname(__DIR__) . '/Data/Stubs/Database/Migrations');
+        $this->loadMigrationsFrom(dirname(__DIR__).'/Data/Stubs/Database/Migrations');
     }
 
     /**

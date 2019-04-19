@@ -74,7 +74,7 @@ class RemoteTemporaryFile extends TemporaryFile
      */
     public function sync(): TemporaryFile
     {
-        if (!$this->localTemporaryFile->exists()) {
+        if (! $this->localTemporaryFile->exists()) {
             touch($this->localTemporaryFile->getLocalPath());
         }
 

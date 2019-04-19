@@ -85,21 +85,21 @@ class ModelManager
     private function massFlush(ToModel $import)
     {
         $this->rows()->flatMap(function (array $attributes) use ($import) {
-             return $this->toModels($import, $attributes);
-         })->mapToGroups(function ($model) {
-             return [\get_class($model) => $this->prepare($model)->getAttributes()];
-         })->each(function (Collection $models, string $model) use ($import) {
-             try {
-                 /* @var Model $model */
-                 $model::query()->insert($models->toArray());
-             } catch (Throwable $e) {
-                 if ($import instanceof SkipsOnError) {
-                     $import->onError($e);
-                 } else {
-                     throw $e;
-                 }
-             }
-         });
+            return $this->toModels($import, $attributes);
+        })->mapToGroups(function ($model) {
+            return [\get_class($model) => $this->prepare($model)->getAttributes()];
+        })->each(function (Collection $models, string $model) use ($import) {
+            try {
+                /* @var Model $model */
+                $model::query()->insert($models->toArray());
+            } catch (Throwable $e) {
+                if ($import instanceof SkipsOnError) {
+                    $import->onError($e);
+                } else {
+                    throw $e;
+                }
+            }
+        });
     }
 
     /**

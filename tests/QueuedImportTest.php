@@ -21,7 +21,7 @@ class QueuedImportTest extends TestCase
         parent::setUp();
 
         $this->loadLaravelMigrations(['--database' => 'testing']);
-        $this->loadMigrationsFrom(__DIR__ . '/Data/Stubs/Database/Migrations');
+        $this->loadMigrationsFrom(__DIR__.'/Data/Stubs/Database/Migrations');
     }
 
     /**

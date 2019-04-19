@@ -18,7 +18,7 @@ class WithHeadingTest extends TestCase
 
         $this->assertTrue($response);
 
-        $actual = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/with-heading-store.xlsx', 'xlsx');
+        $actual = $this->readAsArray(__DIR__.'/../Data/Disks/Local/with-heading-store.xlsx', 'xlsx');
 
         $expected = [
             ['A', 'B', 'C'],

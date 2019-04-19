@@ -46,12 +46,12 @@ class TemporaryFileFactory
      */
     public function makeLocal(string $fileName = null): LocalTemporaryFile
     {
-        if (!file_exists($this->temporaryPath) && !mkdir($concurrentDirectory = $this->temporaryPath) && !is_dir($concurrentDirectory)) {
+        if (! file_exists($this->temporaryPath) && ! mkdir($concurrentDirectory = $this->temporaryPath) && ! is_dir($concurrentDirectory)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
         return new LocalTemporaryFile(
-            $this->temporaryPath . DIRECTORY_SEPARATOR . ($fileName ?: $this->generateFilename())
+            $this->temporaryPath.DIRECTORY_SEPARATOR.($fileName ?: $this->generateFilename())
         );
     }
 
@@ -74,6 +74,6 @@ class TemporaryFileFactory
      */
     private function generateFilename(): string
     {
-        return 'laravel-simplesheet-' . Str::random(32);
+        return 'laravel-simplesheet-'.Str::random(32);
     }
 }

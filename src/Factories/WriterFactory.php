@@ -16,7 +16,7 @@ class WriterFactory
 
     const CUSTOM_CSV_WRITER = [
         Simplesheet::CSV,
-        Simplesheet::TSV
+        Simplesheet::TSV,
     ];
 
     /**

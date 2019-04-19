@@ -12,9 +12,7 @@ use Nikazooz\Simplesheet\Events\AfterSheet;
 use Nikazooz\Simplesheet\Concerns\OnEachRow;
 use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
-use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Nikazooz\Simplesheet\Concerns\ToCollection;
-use Nikazooz\Simplesheet\Concerns\WithHeadingRow;
 use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
 
 class Sheet
@@ -35,7 +33,7 @@ class Sheet
         $this->sheet = $sheet;
     }
 
-     /**
+    /**
      * @param  \Box\Spout\Reader\ReaderInterface  $reader
      * @param  string|int  $index
      *

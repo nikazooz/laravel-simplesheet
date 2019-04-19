@@ -118,11 +118,11 @@ class WithHeadingRowTest extends TestCase
             {
                 Assert::assertEquals([
                     [
-                        'name'  => 'Patrick Brouwers',
+                        'name' => 'Patrick Brouwers',
                         'email' => 'patrick@maatwebsite.nl',
                     ],
                     [
-                        'name'  => 'Taylor Otwell',
+                        'name' => 'Taylor Otwell',
                         'email' => 'taylor@laravel.com',
                     ],
                 ], $array);

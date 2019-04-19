@@ -22,8 +22,8 @@ class FromQueryTest extends TestCase
         parent::setUp();
 
         $this->loadLaravelMigrations(['--database' => 'testing']);
-        $this->withFactories(__DIR__ . '/../Data/Stubs/Database/Factories');
-        $this->loadMigrationsFrom(dirname(__DIR__) . '/Data/Stubs/Database/Migrations');
+        $this->withFactories(__DIR__.'/../Data/Stubs/Database/Factories');
+        $this->loadMigrationsFrom(dirname(__DIR__).'/Data/Stubs/Database/Migrations');
 
         $group = factory(Group::class)->create([
             'name' => 'Group 1',
@@ -53,7 +53,7 @@ class FromQueryTest extends TestCase
 
         $this->assertTrue($response);
 
-        $contents = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-query-store.xlsx', 'xlsx');
+        $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-store.xlsx', 'xlsx');
         $allUsers = $export->query()->get()->map(function (User $user) {
             return array_values($user->toArray());
         })->toArray();
@@ -70,7 +70,7 @@ class FromQueryTest extends TestCase
 
         $export->queue('from-query-store.xlsx');
 
-        $contents = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-query-store.xlsx', 'xlsx');
+        $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-store.xlsx', 'xlsx');
 
         $allUsers = $export->query()->get()->map(function ($row) use ($export) {
             return $export->map($row);
@@ -97,7 +97,7 @@ class FromQueryTest extends TestCase
         $this->assertCount(2, DB::getQueryLog());
         DB::connection()->disableQueryLog();
 
-        $contents = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-query-with-eager-loads.xlsx', 'xlsx');
+        $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-with-eager-loads.xlsx', 'xlsx');
 
         $allUsers = $export->query()->get()->map(function (User $user) use ($export) {
             return $export->map($user);
@@ -122,7 +122,7 @@ class FromQueryTest extends TestCase
         $this->assertCount(2, DB::getQueryLog());
         DB::connection()->disableQueryLog();
 
-        $contents = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-query-with-eager-loads.xlsx', 'xlsx');
+        $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-with-eager-loads.xlsx', 'xlsx');
 
         $allUsers = $export->query()->get()->map(function (User $user) use ($export) {
             return $export->map($user);
@@ -142,7 +142,7 @@ class FromQueryTest extends TestCase
 
         $this->assertTrue($response);
 
-        $contents = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-query-without-eloquent.xlsx', 'xlsx');
+        $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-without-eloquent.xlsx', 'xlsx');
 
         $allUsers = $export->query()->get()->map(function ($row) {
             return array_values((array) $row);
@@ -160,7 +160,7 @@ class FromQueryTest extends TestCase
 
         $export->queue('from-query-without-eloquent.xlsx');
 
-        $contents = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-query-without-eloquent.xlsx', 'xlsx');
+        $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-without-eloquent.xlsx', 'xlsx');
 
         $allUsers = $export->query()->get()->map(function ($row) {
             return array_values((array) $row);
@@ -180,7 +180,7 @@ class FromQueryTest extends TestCase
 
         $this->assertTrue($response);
 
-        $contents = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-query-with-nested-arrays.xlsx', 'xlsx');
+        $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-with-nested-arrays.xlsx', 'xlsx');
 
         $this->assertEquals($this->format_nested_arrays_expected_data($export->query()->get()), $contents);
     }
@@ -194,7 +194,7 @@ class FromQueryTest extends TestCase
 
         $export->queue('from-query-with-nested-arrays.xlsx');
 
-        $contents = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-query-with-nested-arrays.xlsx', 'xlsx');
+        $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-with-nested-arrays.xlsx', 'xlsx');
 
         $this->assertEquals($this->format_nested_arrays_expected_data($export->query()->get()), $contents);
     }
@@ -208,7 +208,7 @@ class FromQueryTest extends TestCase
             foreach ($group->users as $key => $user) {
                 if ($key === 0) {
                     $group_row[1] = $user->email;
-                    $expected[]   = $group_row;
+                    $expected[] = $group_row;
                     continue;
                 }
 

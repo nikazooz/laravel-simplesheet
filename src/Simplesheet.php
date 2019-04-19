@@ -3,17 +3,12 @@
 namespace Nikazooz\Simplesheet;
 
 use Box\Spout\Common\Type;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Files\Filesystem;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Nikazooz\Simplesheet\Helpers\FileTypeDetector;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException;
 
 class Simplesheet implements Exporter, Importer
 {
@@ -32,7 +27,7 @@ class Simplesheet implements Exporter, Importer
      */
     protected $queuedWriter;
 
-     /**
+    /**
      * @var \Nikazooz\Simplesheet\Reader
      */
     protected $reader;
@@ -74,7 +69,7 @@ class Simplesheet implements Exporter, Importer
     public function download($export, string $fileName, string $writerType = null, array $headers = [])
     {
         return $this->responseFactory->download(
-           $this->export($export, $fileName, $writerType)->getLocalPath(),
+            $this->export($export, $fileName, $writerType)->getLocalPath(),
             $fileName,
             $headers
         )->deleteFileAfterSend(true);

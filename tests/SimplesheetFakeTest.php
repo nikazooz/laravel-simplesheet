@@ -134,7 +134,7 @@ class SimplesheetFakeTest extends TestCase
     {
         SimplesheetFacade::fake();
 
-        SimplesheetFacade::import($this->givenImport(), $this->givenUploadedFile(__DIR__ . '/Data/Disks/Local/import.xlsx'));
+        SimplesheetFacade::import($this->givenImport(), $this->givenUploadedFile(__DIR__.'/Data/Disks/Local/import.xlsx'));
 
         SimplesheetFacade::assertImported('import.xlsx');
         SimplesheetFacade::assertImported('import.xlsx', function (ToModel $import) {

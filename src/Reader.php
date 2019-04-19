@@ -3,12 +3,9 @@
 namespace Nikazooz\Simplesheet;
 
 use Throwable;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Box\Spout\Reader\ReaderInterface;
-use Nikazooz\Simplesheet\HasEventBus;
-use Nikazooz\Simplesheet\Simplesheet;
 use Nikazooz\Simplesheet\Imports\Sheet;
 use Nikazooz\Simplesheet\Jobs\QueueImport;
 use Illuminate\Contracts\Queue\ShouldQueue;

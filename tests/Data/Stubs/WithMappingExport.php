@@ -30,9 +30,9 @@ class WithMappingExport implements FromCollection, WithMapping
     public function map($row): array
     {
         return [
-            'mapped-' . $row[0],
-            'mapped-' . $row[1],
-            'mapped-' . $row[2],
+            'mapped-'.$row[0],
+            'mapped-'.$row[1],
+            'mapped-'.$row[2],
         ];
     }
 }

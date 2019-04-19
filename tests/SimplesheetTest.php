@@ -10,7 +10,6 @@ use Nikazooz\Simplesheet\Simplesheet;
 use Nikazooz\Simplesheet\Concerns\ToArray;
 use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
-use Nikazooz\Simplesheet\Events\BeforeWriting;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\EmptyExport;
 use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
@@ -58,7 +57,7 @@ class SimplesheetTest extends TestCase
         $this->assertEquals('attachment; filename=filename.xlsx', str_replace('"', '', $response->headers->get('Content-Disposition')));
     }
 
-     /**
+    /**
      * @test
      */
     public function can_store_an_export_object_on_default_disk()
@@ -68,7 +67,7 @@ class SimplesheetTest extends TestCase
         $response = $this->SUT->store($export, 'filename.xlsx');
 
         $this->assertTrue($response);
-        $this->assertFileExists(__DIR__ . '/Data/Disks/Local/filename.xlsx');
+        $this->assertFileExists(__DIR__.'/Data/Disks/Local/filename.xlsx');
     }
 
     /**
@@ -81,7 +80,7 @@ class SimplesheetTest extends TestCase
         $response = $this->SUT->store($export, 'filename.xlsx', 'test');
 
         $this->assertTrue($response);
-        $this->assertFileExists(__DIR__ . '/Data/Disks/Test/filename.xlsx');
+        $this->assertFileExists(__DIR__.'/Data/Disks/Test/filename.xlsx');
     }
 
     /**
@@ -117,8 +116,8 @@ class SimplesheetTest extends TestCase
         $response = $this->SUT->store($export, 'filename.csv');
 
         $this->assertTrue($response);
-        $this->assertFileExists(__DIR__ . '/Data/Disks/Local/filename.csv');
-        $contents = file_get_contents(__DIR__ . '/Data/Disks/Local/filename.csv');
+        $this->assertFileExists(__DIR__.'/Data/Disks/Local/filename.csv');
+        $contents = file_get_contents(__DIR__.'/Data/Disks/Local/filename.csv');
         $this->assertContains('A1,B1', $contents);
         $this->assertContains('A2,"B2 Test"', $contents);
     }
@@ -133,7 +132,7 @@ class SimplesheetTest extends TestCase
         $response = $this->SUT->store($export, 'filename.tsv');
 
         $this->assertTrue($response);
-        $this->assertFileExists(__DIR__ . '/Data/Disks/Local/filename.tsv');
+        $this->assertFileExists(__DIR__.'/Data/Disks/Local/filename.tsv');
     }
 
     /**
@@ -172,7 +171,7 @@ class SimplesheetTest extends TestCase
 
         $this->SUT->store($export, 'filename.csv');
 
-        $contents = file_get_contents(__DIR__ . '/Data/Disks/Local/filename.csv');
+        $contents = file_get_contents(__DIR__.'/Data/Disks/Local/filename.csv');
 
         $this->assertContains('sep=;', $contents);
         $this->assertContains('A1;B1', $contents);
@@ -332,7 +331,7 @@ class SimplesheetTest extends TestCase
             }
         };
 
-        $this->SUT->import($import, $this->givenUploadedFile(__DIR__ . '/Data/Disks/Local/import.xlsx'), null, 'xlsx');
+        $this->SUT->import($import, $this->givenUploadedFile(__DIR__.'/Data/Disks/Local/import.xlsx'), null, 'xlsx');
     }
 
     /**
@@ -353,7 +352,7 @@ class SimplesheetTest extends TestCase
             }
         };
 
-        $this->SUT->import($import, __DIR__ . '/Data/Disks/Local/import.xlsx');
+        $this->SUT->import($import, __DIR__.'/Data/Disks/Local/import.xlsx');
     }
 
     /**
@@ -418,7 +417,7 @@ class SimplesheetTest extends TestCase
 
         $this->SUT->import(
             $import,
-            $this->givenUploadedFile(__DIR__ . '/Data/Disks/Local/import.xlsx', 'import'),
+            $this->givenUploadedFile(__DIR__.'/Data/Disks/Local/import.xlsx', 'import'),
             null,
             Simplesheet::XLSX
         );

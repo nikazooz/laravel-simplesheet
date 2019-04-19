@@ -3,8 +3,8 @@
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Support\Responsable;
 use Nikazooz\Simplesheet\Tests\TestCase;
+use Illuminate\Contracts\Support\Responsable;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -42,7 +42,7 @@ class ExportableTest extends TestCase
         $export->store();
     }
 
-     /**
+    /**
      * @test
      */
     public function needs_to_have_a_file_name_when_queuing()

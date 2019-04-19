@@ -45,7 +45,7 @@ class FileTypeDetector
             return $fileName->getClientOriginalExtension();
         }
 
-        $pathInfo  = pathinfo($fileName);
+        $pathInfo = pathinfo($fileName);
 
         return $pathInfo['extension'] ?? '';
     }
@@ -61,7 +61,7 @@ class FileTypeDetector
     {
         $type = static::detect($filePath, $type);
 
-        if (!$type) {
+        if (! $type) {
             throw new NoTypeDetectedException();
         }
 

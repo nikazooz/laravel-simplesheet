@@ -3,16 +3,13 @@
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
 use PHPUnit\Framework\Assert;
-use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Concerns\ToArray;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\SkipsUnknownSheets;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\SheetWith100Rows;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\SheetForUsersFromView;
 
 class WithMultipleSheetsTest extends TestCase
 {
@@ -23,7 +20,7 @@ class WithMultipleSheetsTest extends TestCase
     {
         parent::setUp();
 
-        $this->withFactories(__DIR__ . '/../Data/Stubs/Database/Factories');
+        $this->withFactories(__DIR__.'/../Data/Stubs/Database/Factories');
     }
 
     /**
@@ -49,9 +46,9 @@ class WithMultipleSheetsTest extends TestCase
 
         $export->store('from-view.xlsx');
 
-        $this->assertCount(100, $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-view.xlsx', 'xlsx', 0));
-        $this->assertCount(100, $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-view.xlsx', 'xlsx', 1));
-        $this->assertCount(100, $this->readAsArray(__DIR__ . '/../Data/Disks/Local/from-view.xlsx', 'xlsx', 2));
+        $this->assertCount(100, $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-view.xlsx', 'xlsx', 0));
+        $this->assertCount(100, $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-view.xlsx', 'xlsx', 1));
+        $this->assertCount(100, $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-view.xlsx', 'xlsx', 2));
     }
 
     /**
@@ -301,7 +298,7 @@ class WithMultipleSheetsTest extends TestCase
             public function __construct()
             {
                 $this->sheets = [
-                    0        => new class implements ToArray {
+                    0 => new class implements ToArray {
                         public $called = false;
 
                         public function array(array $array)
@@ -366,7 +363,7 @@ class WithMultipleSheetsTest extends TestCase
                             ], $array);
                         }
                     },
-                    1        => new class implements ToArray {
+                    1 => new class implements ToArray {
                         public $called = false;
 
                         public function array(array $array)

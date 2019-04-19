@@ -4,7 +4,6 @@ namespace Nikazooz\Simplesheet\Imports;
 
 use Box\Spout\Reader\SheetInterface;
 use Nikazooz\Simplesheet\Concerns\ToModel;
-use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Nikazooz\Simplesheet\Concerns\WithBatchInserts;
 
 class ModelImporter

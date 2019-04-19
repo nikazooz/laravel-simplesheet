@@ -4,17 +4,13 @@ namespace Nikazooz\Simplesheet\Tests\Concerns;
 
 use Throwable;
 use PHPUnit\Framework\Assert;
-use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Concerns\ToModel;
-use Nikazooz\Simplesheet\Validators\Failure;
 use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\SkipsErrors;
 use Nikazooz\Simplesheet\Concerns\SkipsOnError;
-use Nikazooz\Simplesheet\Concerns\WithValidation;
-use Nikazooz\Simplesheet\Concerns\WithBatchInserts;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 
 class SkipsOnErrorTest extends TestCase
@@ -73,13 +69,13 @@ class SkipsOnErrorTest extends TestCase
             'email' => 'patrick@maatwebsite.nl',
         ]);
 
-         // Should have skipped inserting
+        // Should have skipped inserting
         $this->assertDatabaseMissing('users', [
             'email' => 'taylor@laravel.com',
         ]);
     }
 
-     /**
+    /**
      * @test
      */
     public function can_skip_errors_and_collect_all_errors_at_the_end()

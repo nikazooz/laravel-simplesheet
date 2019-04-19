@@ -6,7 +6,6 @@ use Nikazooz\Simplesheet\Writer;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Nikazooz\Simplesheet\Files\TemporaryFile;
-use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
 
 class QueueExport implements ShouldQueue
 {

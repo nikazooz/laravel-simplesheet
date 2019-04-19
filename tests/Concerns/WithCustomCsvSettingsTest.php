@@ -59,7 +59,7 @@ class WithCustomCsvSettingsTest extends TestCase
 
         $this->SUT->store($export, 'custom-csv.csv');
 
-        $contents = file_get_contents(__DIR__ . '/../Data/Disks/Local/custom-csv.csv');
+        $contents = file_get_contents(__DIR__.'/../Data/Disks/Local/custom-csv.csv');
 
         $this->assertStringContainsString('sep=;', $contents);
         $this->assertStringContainsString('A1;B1', $contents);

@@ -41,7 +41,7 @@ class SimplesheetFake implements Exporter
     {
         $this->downloads[$fileName] = $export;
 
-        return new BinaryFileResponse(__DIR__ . '/fake_file');
+        return new BinaryFileResponse(__DIR__.'/fake_file');
     }
 
     /**
@@ -135,7 +135,7 @@ class SimplesheetFake implements Exporter
 
         $filePath = ($file instanceof UploadedFile) ? $file->getFilename() : $file;
 
-        $this->queued[$diskName ?? 'default'][$filePath]   = $import;
+        $this->queued[$diskName ?? 'default'][$filePath] = $import;
         $this->imported[$diskName ?? 'default'][$filePath] = $import;
 
         return new PendingDispatch(new class {

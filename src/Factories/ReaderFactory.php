@@ -24,7 +24,7 @@ class ReaderFactory
         return static::configureReader(static::makeUnconfiguredReader($type), $import);
     }
 
-     /**
+    /**
      * @param  string  $type
      * @return \Box\Spout\Reader\ReaderInterface
      */
@@ -39,14 +39,14 @@ class ReaderFactory
         return SpoutReaderFactory::create($type)->setShouldPreserveEmptyRows(true);
     }
 
-     /**
+    /**
      * @param  \Box\Spout\Reader\ReaderInterface  $reader
      * @param  object  $import
      * @return \Box\Spout\Reader\ReaderInterface
      */
     protected static function configureReader(ReaderInterface $reader, $import): ReaderInterface
     {
-         if ($import instanceof WithCustomCsvSettings) {
+        if ($import instanceof WithCustomCsvSettings) {
             static::applyCsvSettings($import->getCsvSettings());
         }
 

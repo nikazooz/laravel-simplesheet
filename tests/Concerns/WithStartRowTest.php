@@ -57,12 +57,12 @@ class WithStartRowTest extends TestCase
         $import->import('import-users-with-different-heading-row.xlsx');
 
         $this->assertDatabaseHas('users', [
-            'name'  => 'Patrick Brouwers',
+            'name' => 'Patrick Brouwers',
             'email' => 'patrick@maatwebsite.nl',
         ]);
 
         $this->assertDatabaseHas('users', [
-            'name'  => 'Taylor Otwell',
+            'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
         ]);
     }

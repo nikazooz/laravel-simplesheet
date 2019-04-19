@@ -6,7 +6,6 @@ use Nikazooz\Simplesheet\Row;
 use Box\Spout\Reader\SheetInterface;
 use Nikazooz\Simplesheet\Concerns\WithStartRow;
 use Nikazooz\Simplesheet\Concerns\WithHeadingRow;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class HeadingRowExtractor
 {
@@ -49,7 +48,7 @@ class HeadingRowExtractor
      */
     public static function extract(SheetInterface $sheet, $importable): array
     {
-        if (!$importable instanceof WithHeadingRow) {
+        if (! $importable instanceof WithHeadingRow) {
             return [];
         }
 

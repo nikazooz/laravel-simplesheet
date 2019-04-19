@@ -55,7 +55,7 @@ class ImportableTest extends TestCase
             }
         };
 
-        $import->import($this->givenUploadedFile(__DIR__ . '/../Data/Disks/Local/import.xlsx'));
+        $import->import($this->givenUploadedFile(__DIR__.'/../Data/Disks/Local/import.xlsx'));
     }
 
     /**

@@ -141,7 +141,7 @@ class SimplesheetTest extends TestCase
      */
     public function can_store_csv_export_with_custom_settings()
     {
-        $export = new class implements WithEvents, FromCollection {
+        $export = new class implements WithEvents, FromCollection, WithCustomCsvSettings {
             use RegistersEventListeners;
 
             /**
@@ -156,15 +156,17 @@ class SimplesheetTest extends TestCase
             }
 
             /**
-             * @param \Nikazooz\Simplesheet\Events\BeforeWriting $event
+             * @return array
              */
-            public static function beforeWriting(BeforeWriting $event)
+            public function getCsvSettings(): array
             {
-                $event->writer->setLineEnding("\r\n");
-                $event->writer->setEnclosure('"');
-                $event->writer->setDelimiter(';');
-                $event->writer->setIncludeSeparatorLine(true);
-                $event->writer->setExcelCompatibility(false);
+                return [
+                    'line_ending' => "\r\n",
+                    'enclosure' => '"',
+                    'delimiter' => ';',
+                    'include_separator_line' => true,
+                    'excel_compatibility' => false,
+                ];
             }
         };
 

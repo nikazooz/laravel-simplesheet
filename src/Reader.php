@@ -13,24 +13,20 @@ use Nikazooz\Simplesheet\Imports\Sheet;
 use Nikazooz\Simplesheet\Jobs\QueueImport;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Nikazooz\Simplesheet\Events\AfterImport;
-use Box\Spout\Reader\CSV\Reader as CsvReader;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\BeforeImport;
 use Nikazooz\Simplesheet\Events\ImportFailed;
 use Nikazooz\Simplesheet\Files\TemporaryFile;
 use Nikazooz\Simplesheet\Factories\ReaderFactory;
-use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 use Nikazooz\Simplesheet\Concerns\SkipsUnknownSheets;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
 use Nikazooz\Simplesheet\Events\BeforeTransactionCommit;
 use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
 
 class Reader
 {
-    use HasEventBus, MapsCsvSettings;
+    use HasEventBus;
 
     /**
      * @var TemporaryFileFactory
@@ -46,8 +42,6 @@ class Reader
     public function __construct(TemporaryFileFactory $temporaryFileFactory, array $csvSettings = [])
     {
         $this->temporaryFileFactory = $temporaryFileFactory;
-
-        $this->applyCsvSettings($csvSettings);
     }
 
     /**
@@ -268,21 +262,7 @@ class Reader
             $this->registerListeners($import->registerEvents());
         }
 
-        if (Simplesheet::TSV === $readerType) {
-            $this->delimiter = "\t";
-        }
-
-        if ($import instanceof WithCustomCsvSettings) {
-            $this->applyCsvSettings($import->getCsvSettings());
-        }
-
-        $reader = ReaderFactory::create($readerType);
-
-        if ($reader instanceof CsvReader) {
-            $reader->setFieldDelimiter($this->delimiter);
-            $reader->setFieldEnclosure($this->enclosure);
-            $reader->setEncoding($this->inputEncoding);
-        }
+        $reader = ReaderFactory::make($readerType, $import);
 
         $reader->open($temporaryFile->getLocalPath());
 

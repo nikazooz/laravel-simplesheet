@@ -3,31 +3,22 @@
 namespace Nikazooz\Simplesheet;
 
 use Illuminate\Support\Str;
-use Box\Spout\Writer\WriterInterface;
 use Nikazooz\Simplesheet\Writers\Sheet;
-use Illuminate\Contracts\Support\Arrayable;
-use Nikazooz\Simplesheet\Writers\CsvWriter;
-use Nikazooz\Simplesheet\Concerns\FromArray;
-use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\BeforeExport;
 use Nikazooz\Simplesheet\Files\TemporaryFile;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
-use Nikazooz\Simplesheet\Concerns\FromIterator;
-use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Factories\WriterFactory;
-use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
 use Nikazooz\Simplesheet\Files\RemoteTemporaryFile;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
-use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
 
 class Writer
 {
-    use HasEventBus, MapsCsvSettings;
+    use HasEventBus;
 
     /**
-     * @var TemporaryFileFactory
+     * @var \Nikazooz\Simplesheet\Files\TemporaryFileFactory
      */
     protected $temporaryFileFactory;
 
@@ -44,17 +35,14 @@ class Writer
     /**
      * New Writer instance.
      *
-     * @param  TemporaryFileFactory  $temporaryFileFactory
+     * @param  \Nikazooz\Simplesheet\Files\TemporaryFileFactory  $temporaryFileFactory
      * @param  int  $chunkSize
-     * @param  array  $csvSettings
      * @return void
      */
-    public function __construct(TemporaryFileFactory $temporaryFileFactory, int $chunkSize, array $csvSettings = [])
+    public function __construct(TemporaryFileFactory $temporaryFileFactory, int $chunkSize)
     {
         $this->chunkSize = $chunkSize;
         $this->temporaryFileFactory = $temporaryFileFactory;
-
-        $this->applyCsvSettings($csvSettings);
     }
 
     /**
@@ -89,16 +77,16 @@ class Writer
 
         $this->raise(new BeforeExport($this, $export));
 
-        $this->spoutWriter = WriterFactory::create($writerType);
+        $this->spoutWriter = WriterFactory::make($writerType, $export);
 
         return $this;
     }
 
     /**
      * @param  object  $export
-     * @param  TemporaryFile  $temporaryFile
+     * @param  \Nikazooz\Simplesheet\Files\TemporaryFile  $temporaryFile
      * @param  string  $writerType
-     * @return TemporaryFile
+     * @return \Nikazooz\Simplesheet\Files\TemporaryFile
      */
     private function write($export, TemporaryFile $temporaryFile, string $writerType)
     {
@@ -106,11 +94,6 @@ class Writer
 
         $this->raise(new BeforeWriting($this, $export));
 
-        if ($export instanceof WithCustomCsvSettings) {
-            $this->applyCsvSettings($export->getCsvSettings());
-        }
-
-        $this->configureCsvWriter();
         $this->spoutWriter->openToFile($temporaryFile->getLocalPath());
 
         foreach ($this->getSheetExports($export) as $sheetIndex => $sheetExport) {
@@ -147,21 +130,6 @@ class Writer
     }
 
     /**
-     * @return void
-     */
-    protected function configureCsvWriter()
-    {
-        if ($this->spoutWriter instanceof CsvWriter) {
-            $this->spoutWriter->setFieldDelimiter($this->delimiter);
-            $this->spoutWriter->setFieldEnclosure($this->enclosure);
-            $this->spoutWriter->setLineEnding($this->lineEnding);
-            $this->spoutWriter->setShouldAddBOM($this->useBom);
-            $this->spoutWriter->setIncludeSeparatorLine($this->includeSeparatorLine);
-            $this->spoutWriter->setExcelCompatibility($this->excelCompatibility);
-        }
-    }
-
-    /**
      * @param  int|null  $sheetIndex
      * @return \Nikazooz\Simplesheet\Writers\Sheet
      *
@@ -182,60 +150,5 @@ class Writer
         if (! $this->spoutWriter) {
             throw new \Exception('Writer must be opened first!');
         }
-    }
-
-    /**
-     * @param  string  $delimiter
-     * @return \Nikazooz\Simplesheet\Writer
-     */
-    public function setDelimiter(string $delimiter)
-    {
-        $this->delimiter = $delimiter;
-
-        return $this;
-    }
-
-    /**
-     * @param  string  $enclosure
-     * @return \Nikazooz\Simplesheet\Writer
-     */
-    public function setEnclosure(string $enclosure)
-    {
-        $this->enclosure = $enclosure;
-
-        return $this;
-    }
-
-    /**
-     * @param  string  $lineEnding
-     * @return \Nikazooz\Simplesheet\Writer
-     */
-    public function setLineEnding(string $lineEnding)
-    {
-        $this->lineEnding = $lineEnding;
-
-        return $this;
-    }
-
-    /**
-     * @param  bool  $includeSeparatorLine
-     * @return \Nikazooz\Simplesheet\Writer
-     */
-    public function setIncludeSeparatorLine(bool $includeSeparatorLine)
-    {
-        $this->includeSeparatorLine = $includeSeparatorLine;
-
-        return $this;
-    }
-
-    /**
-     * @param  bool  $excelCompatibility
-     * @return \Nikazooz\Simplesheet\Writer
-     */
-    public function setExcelCompatibility(bool $excelCompatibility)
-    {
-        $this->excelCompatibility = $excelCompatibility;
-
-        return $this;
     }
 }

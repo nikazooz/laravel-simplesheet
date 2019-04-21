@@ -52,6 +52,11 @@ trait MapsCsvSettings
     protected static $inputEncoding = 'UTF-8';
 
     /**
+     * @var callable|null
+     */
+    protected static $csvConfigResolver = null;
+
+    /**
      * @param  array  $config
      * @return void
      */
@@ -66,5 +71,30 @@ trait MapsCsvSettings
         static::$escapeCharacter = Arr::get($config, 'escape_character', static::$escapeCharacter);
         static::$contiguous = Arr::get($config, 'contiguous', static::$contiguous);
         static::$inputEncoding = Arr::get($config, 'input_encoding', static::$inputEncoding);
+    }
+
+    /**
+     * Set CSV config resolver callback.
+     *
+     * @param  callable  $resolver
+     * @return void
+     */
+    public static function csvConfig(callable $resolver)
+    {
+        static::$csvConfigResolver = $resolver;
+    }
+
+    /**
+     * Get CSV config for writer.
+     *
+     * @return array
+     */
+    protected static function getCsvConfig()
+    {
+        $resolver = static::$csvConfigResolver ?? function () {
+            return [];
+        };
+
+        return $resolver();
     }
 }

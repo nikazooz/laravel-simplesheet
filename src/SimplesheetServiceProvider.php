@@ -5,6 +5,8 @@ namespace Nikazooz\Simplesheet;
 use Illuminate\Support\ServiceProvider;
 use Nikazooz\Simplesheet\Files\Filesystem;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Nikazooz\Simplesheet\Factories\ReaderFactory;
+use Nikazooz\Simplesheet\Factories\WriterFactory;
 use Laravel\Lumen\Application as LumenApplication;
 use Nikazooz\Simplesheet\Helpers\FileTypeDetector;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
@@ -39,39 +41,35 @@ class SimplesheetServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom($this->getConfigFile(), 'simplesheet');
 
-        $this->app->bind(TemporaryFileFactory::class, function () {
+        $this->app->bind(TemporaryFileFactory::class, function ($app) {
             return new TemporaryFileFactory(
-                $this->app['config']->get('simplesheet.temporary_files.local_path', storage_path('framework/laravel-simplesheet')),
-                $this->app['config']->get('simplesheet.temporary_files.remote_disk')
+                $app['config']->get('simplesheet.temporary_files.local_path', storage_path('framework/laravel-simplesheet')),
+                $app['config']->get('simplesheet.temporary_files.remote_disk')
             );
         });
 
-        $this->app->bind(Filesystem::class, function () {
-            return new Filesystem($this->app->make('filesystem'));
+        $this->app->bind(Filesystem::class, function ($app) {
+            return new Filesystem($app->make('filesystem'));
         });
 
-        $this->app->bind(Writer::class, function () {
+        $this->app->bind(Writer::class, function ($app) {
             return new Writer(
-                $this->app->make(TemporaryFileFactory::class),
-                $this->app['config']->get('simplesheet.exports.chunk_size', 100),
-                $this->app['config']->get('simplesheet.exports.csv', [])
+                $app->make(TemporaryFileFactory::class),
+                $app['config']->get('simplesheet.exports.chunk_size', 100)
             );
         });
 
-        $this->app->bind(Reader::class, function () {
-            return new Reader(
-                $this->app->make(TemporaryFileFactory::class),
-                $this->app['config']->get('simplesheet.imports.csv', [])
-            );
+        $this->app->bind(Reader::class, function ($app) {
+            return new Reader($app->make(TemporaryFileFactory::class));
         });
 
-        $this->app->bind('simplesheet', function () {
+        $this->app->bind('simplesheet', function ($app) {
             return new Simplesheet(
-                $this->app->make(Writer::class),
-                $this->app->make(QueuedWriter::class),
-                $this->app->make(Reader::class),
-                $this->app->make(Filesystem::class),
-                $this->app->make(ResponseFactory::class)
+                $app->make(Writer::class),
+                $app->make(QueuedWriter::class),
+                $app->make(Reader::class),
+                $app->make(Filesystem::class),
+                $app->make(ResponseFactory::class)
             );
         });
 
@@ -79,9 +77,17 @@ class SimplesheetServiceProvider extends ServiceProvider
         $this->app->alias('simplesheet', Exporter::class);
         $this->app->alias('simplesheet', Importer::class);
 
-        FileTypeDetector::setExtensionMap(
-            $this->app['config']->get('simplesheet.extension_detector', [])
-        );
+        FileTypeDetector::extensionMapResolver(function () {
+            return $this->app['config']->get('simplesheet.extension_detector', []);
+        });
+
+        WriterFactory::csvConfig(function () {
+            return $this->app['config']->get('simplesheet.exports.csv', []);
+        });
+
+        ReaderFactory::csvConfig(function () {
+            return $this->app['config']->get('simplesheet.imports.csv', []);
+        });
     }
 
     /**

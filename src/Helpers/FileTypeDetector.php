@@ -10,7 +10,7 @@ class FileTypeDetector
     /**
      * @var array
      */
-    protected static $extensionMap = [];
+    protected static $extensionMapResolver = null;
 
     /**
      * @param UploadedFile|string $filePath
@@ -25,7 +25,7 @@ class FileTypeDetector
             return $type;
         }
 
-        $supportedExtensions = static::$extensionMap;
+        $supportedExtensions = static::getExtensionMap();
         $extension = strtolower(trim(static::getRawExtension($filePath)));
 
         if ($extension === '' || ! array_key_exists($extension, $supportedExtensions)) {
@@ -68,8 +68,28 @@ class FileTypeDetector
         return $type;
     }
 
-    public static function setExtensionMap(array $extensionMap)
+    /**
+     * Set extension map resolver callback.
+     *
+     * @param  callable  $resolver
+     * @return void
+     */
+    public static function extensionMapResolver(callable $resolver)
     {
-        static::$extensionMap = $extensionMap;
+        static::$extensionMapResolver = $resolver;
+    }
+
+    /**
+     * Resolve extension map.
+     *
+     * @return array
+     */
+    public static function getExtensionMap()
+    {
+        $resolver = static::$extensionMapResolver ?? function () {
+            return [];
+        };
+
+        return $resolver();
     }
 }

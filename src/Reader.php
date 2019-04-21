@@ -32,11 +32,9 @@ class Reader
 
     /**
      * @param  \Nikazooz\Simplesheet\Files\TemporaryFileFactory  $temporaryFileFactory
-     * @param  \Illuminate\Contracts\Filesystem\Factory  $filesystem
-     * @param  array  $csvSettings
      * @return void
      */
-    public function __construct(TemporaryFileFactory $temporaryFileFactory, array $csvSettings = [])
+    public function __construct(TemporaryFileFactory $temporaryFileFactory)
     {
         $this->temporaryFileFactory = $temporaryFileFactory;
     }

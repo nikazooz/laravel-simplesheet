@@ -40,7 +40,7 @@ class WriterFactory
     {
         $writer = (new CsvWriter())->setGlobalFunctionsHelper(new GlobalFunctionsHelper());
 
-        static::applyCsvSettings(config('simplesheet.exports.csv', []));
+        static::applyCsvSettings(static::getCsvConfig());
 
         if (Simplesheet::TSV === $type) {
             $writer->setFieldDelimiter("\t");

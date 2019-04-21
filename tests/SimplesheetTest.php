@@ -68,6 +68,9 @@ class SimplesheetTest extends TestCase
 
         $this->assertTrue($response);
         $this->assertFileExists(__DIR__.'/Data/Disks/Local/filename.xlsx');
+
+        // Cleanup
+        unlink(__DIR__ . '/Data/Disks/Local/filename.xlsx');
     }
 
     /**
@@ -81,6 +84,9 @@ class SimplesheetTest extends TestCase
 
         $this->assertTrue($response);
         $this->assertFileExists(__DIR__.'/Data/Disks/Test/filename.xlsx');
+
+        // Cleanup
+        unlink(__DIR__ . '/Data/Disks/Test/filename.xlsx');
     }
 
     /**
@@ -120,6 +126,9 @@ class SimplesheetTest extends TestCase
         $contents = file_get_contents(__DIR__.'/Data/Disks/Local/filename.csv');
         $this->assertContains('A1,B1', $contents);
         $this->assertContains('A2,"B2 Test"', $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/Data/Disks/Local/filename.csv');
     }
 
     /**
@@ -133,6 +142,9 @@ class SimplesheetTest extends TestCase
 
         $this->assertTrue($response);
         $this->assertFileExists(__DIR__.'/Data/Disks/Local/filename.tsv');
+
+        // Cleanup
+        unlink(__DIR__.'/Data/Disks/Local/filename.tsv');
     }
 
     /**
@@ -176,6 +188,9 @@ class SimplesheetTest extends TestCase
         $this->assertContains('sep=;', $contents);
         $this->assertContains('A1;B1', $contents);
         $this->assertContains('A2;"B2 Test"', $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/Data/Disks/Local/filename.csv');
     }
 
     /**

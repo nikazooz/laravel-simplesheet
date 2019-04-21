@@ -45,5 +45,8 @@ class FromIteratorTest extends TestCase
         $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-iterator-store.xlsx', 'xlsx');
 
         $this->assertEquals($export->array(), $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/from-iterator-store.xlsx');
     }
 }

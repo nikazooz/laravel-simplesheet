@@ -3,6 +3,7 @@
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
 use Illuminate\Http\Request;
+use Nikazooz\Simplesheet\Simplesheet;
 use Nikazooz\Simplesheet\Tests\TestCase;
 use Illuminate\Contracts\Support\Responsable;
 use Nikazooz\Simplesheet\Concerns\Exportable;
@@ -88,5 +89,25 @@ class ExportableTest extends TestCase
         $response = $export->toResponse(new Request());
 
         $this->assertInstanceOf(BinaryFileResponse::class, $response);
+    }
+
+    /**
+     * @test
+     */
+    public function has_customized_header()
+    {
+        $export = new class {
+            use Exportable;
+        };
+
+        $response = $export->download(
+            'name.csv',
+            Simplesheet::CSV,
+            [
+                'Content-Type' => 'text/csv',
+            ]
+        );
+
+        $this->assertEquals('text/csv', $response->headers->get('Content-Type'));
     }
 }

@@ -34,5 +34,8 @@ class WithMappingTest extends TestCase
         ];
 
         $this->assertEquals($expected, $actual);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/with-mapping-store.xlsx');
     }
 }

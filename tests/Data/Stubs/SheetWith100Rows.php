@@ -5,15 +5,28 @@ namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 use Nikazooz\Simplesheet\Writer;
 use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Tests\TestCase;
+use Nikazooz\Simplesheet\Concerns\WithTitle;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Concerns\RegistersEventListeners;
 
-class SheetWith100Rows implements FromCollection, WithEvents
+class SheetWith100Rows implements FromCollection, WithEvents, WithTitle
 {
     use Exportable, RegistersEventListeners;
+
+    /**
+     * @var string
+     */
+    private $title;
+    /**
+     * @param string $title
+     */
+    public function __construct(string $title)
+    {
+        $this->title = $title;
+    }
 
     /**
      * @return Collection
@@ -31,6 +44,14 @@ class SheetWith100Rows implements FromCollection, WithEvents
         }
 
         return $collection;
+    }
+
+    /**
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->title;
     }
 
     /**

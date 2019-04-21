@@ -77,8 +77,12 @@ class Sheet
         }
 
         // Empty headings array meens we should skip adding headings
-        if ($sheetExport instanceof WithHeadings && ($headings = $sheetExport->headings())) {
-            $this->appendRow($headings);
+        if ($sheetExport instanceof WithHeadings && $sheetExport->headings()) {
+            $headings = ArrayHelper::ensureMultipleRows($sheetExport->headings());
+
+            foreach ($headings as $heading) {
+                $this->appendRow($heading);
+            }
         }
 
         if ($sheetExport instanceof FromQuery) {

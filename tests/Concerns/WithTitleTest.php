@@ -21,5 +21,8 @@ class WithTitleTest extends TestCase
         $spreadsheet = $this->read(__DIR__.'/../Data/Disks/Local/with-title-store.xlsx', 'xlsx');
 
         $this->assertEquals('given-title', $this->getSheetByIndex($spreadsheet)->getName());
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/with-title-store.xlsx');
     }
 }

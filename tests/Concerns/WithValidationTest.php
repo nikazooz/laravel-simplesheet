@@ -79,6 +79,171 @@ class WithValidationTest extends TestCase
     /**
      * @test
      */
+    public function can_validate_rows_with_closure_validation_rules()
+    {
+        $import = new class implements ToModel, WithValidation {
+            use Importable;
+
+            /**
+             * @param array $row
+             *
+             * @return Model|null
+             */
+            public function model(array $row)
+            {
+                return new User([
+                    'name' => $row[0],
+                    'email' => $row[1],
+                    'password' => 'secret',
+                ]);
+            }
+
+            /**
+             * @return array
+             */
+            public function rules(): array
+            {
+                return [
+                    '1' => function ($attribute, $value, $onFail) {
+                        if ($value !== 'patrick@maatwebsite.nl') {
+                            $onFail(sprintf('Value in column 1 is not an allowed e-mail.'));
+                        }
+                    },
+                ];
+            }
+        };
+
+        try {
+            $import->import('import-users.xlsx');
+        } catch (ValidationException $e) {
+            $this->validateFailure($e, 2, '1', [
+                'Value in column 1 is not an allowed e-mail.',
+            ]);
+
+            $this->assertEquals([
+                [
+                    'There was an error on row 2. Value in column 1 is not an allowed e-mail.',
+                ],
+            ], $e->errors());
+        }
+
+        $this->assertInstanceOf(ValidationException::class, $e ?? null);
+    }
+
+    /**
+     * @test
+     */
+    public function can_validate_rows_with_custom_validation_rule_objects()
+    {
+        $import = new class implements ToModel, WithValidation {
+            use Importable;
+
+            /**
+             * @param array $row
+             *
+             * @return Model|null
+             */
+            public function model(array $row)
+            {
+                return new User([
+                    'name' => $row[0],
+                    'email' => $row[1],
+                    'password' => 'secret',
+                ]);
+            }
+            /**
+             * @return array
+             */
+            public function rules(): array
+            {
+                return [
+                    '1' => new class implements \Illuminate\Contracts\Validation\Rule {
+                        /**
+                         * @param  string $attribute
+                         * @param  mixed  $value
+                         *
+                         * @return bool
+                         */
+                        public function passes($attribute, $value)
+                        {
+                            return $value === 'patrick@maatwebsite.nl';
+                        }
+                        /**
+                         * Get the validation error message.
+                         *
+                         * @return string|array
+                         */
+                        public function message()
+                        {
+                            return 'Value is not an allowed e-mail.';
+                        }
+                    },
+                ];
+            }
+        };
+        try {
+            $import->import('import-users.xlsx');
+        } catch (ValidationException $e) {
+            $this->validateFailure($e, 2, '1', [
+                'Value is not an allowed e-mail.',
+            ]);
+
+            $this->assertEquals([
+                [
+                    'There was an error on row 2. Value is not an allowed e-mail.',
+                ],
+            ], $e->errors());
+        }
+
+        $this->assertInstanceOf(ValidationException::class, $e ?? null);
+    }
+    /**
+     * @test
+     */
+    public function can_validate_rows_with_conditionality()
+    {
+        $import = new class implements ToModel, WithValidation {
+            use Importable;
+
+            /**
+             * @param array $row
+             *
+             * @return Model|null
+             */
+            public function model(array $row)
+            {
+                return new User([
+                    'name' => $row[0],
+                    'email' => $row[1],
+                    'password' => 'secret',
+                ]);
+            }
+
+            /**
+             * @return array
+             */
+            public function rules(): array
+            {
+                return [
+                    'conditional_required_column' => 'required_if:1,patrick@maatwebsite.nl',
+                ];
+            }
+        };
+
+        try {
+            $import->import('import-users.xlsx');
+        } catch (ValidationException $e) {
+            $this->validateFailure($e, 1, 'conditional_required_column', [
+                'The conditional_required_column field is required when 1.1 is patrick@maatwebsite.nl.',
+            ]);
+        }
+
+        $this->assertInstanceOf(ValidationException::class, $e ?? null);
+    }
+
+    /**
+     * @test
+     */
     public function can_validate_with_custom_attributes()
     {
         $import = new class implements ToModel, WithValidation {

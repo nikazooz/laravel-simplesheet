@@ -47,7 +47,7 @@ class FromQueryTest extends TestCase
      */
     public function can_export_from_query()
     {
-        $export = new FromUsersQueryExport;
+        $export = new FromUsersQueryExport();
 
         $response = $export->store('from-query-store.xlsx');
 
@@ -59,6 +59,9 @@ class FromQueryTest extends TestCase
         })->toArray();
 
         $this->assertEquals($allUsers, $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/from-query-store.xlsx');
     }
 
     /**
@@ -66,7 +69,7 @@ class FromQueryTest extends TestCase
      */
     public function can_export_from_relation_query_queued()
     {
-        $export = new FromGroupUsersQueuedQueryExport;
+        $export = new FromGroupUsersQueuedQueryExport();
 
         $export->queue('from-query-store.xlsx');
 
@@ -77,6 +80,9 @@ class FromQueryTest extends TestCase
         })->toArray();
 
         $this->assertEquals($allUsers, $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/from-query-store.xlsx');
     }
 
     /**
@@ -104,6 +110,9 @@ class FromQueryTest extends TestCase
         })->toArray();
 
         $this->assertEquals($allUsers, $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/from-query-with-eager-loads.xlsx');
     }
 
     /**
@@ -129,6 +138,9 @@ class FromQueryTest extends TestCase
         })->toArray();
 
         $this->assertEquals($allUsers, $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/from-query-with-eager-loads.xlsx');
     }
 
     /**
@@ -149,6 +161,9 @@ class FromQueryTest extends TestCase
         })->all();
 
         $this->assertEquals($allUsers, $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/from-query-without-eloquent.xlsx');
     }
 
     /**
@@ -167,6 +182,9 @@ class FromQueryTest extends TestCase
         })->all();
 
         $this->assertEquals($allUsers, $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/from-query-without-eloquent.xlsx');
     }
 
     /**
@@ -183,6 +201,9 @@ class FromQueryTest extends TestCase
         $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-with-nested-arrays.xlsx', 'xlsx');
 
         $this->assertEquals($this->format_nested_arrays_expected_data($export->query()->get()), $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/from-query-with-nested-arrays.xlsx');
     }
 
     /**
@@ -197,6 +218,9 @@ class FromQueryTest extends TestCase
         $contents = $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-query-with-nested-arrays.xlsx', 'xlsx');
 
         $this->assertEquals($this->format_nested_arrays_expected_data($export->query()->get()), $contents);
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/from-query-with-nested-arrays.xlsx');
     }
 
     protected function format_nested_arrays_expected_data($groups)

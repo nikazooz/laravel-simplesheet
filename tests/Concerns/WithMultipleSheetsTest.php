@@ -44,11 +44,14 @@ class WithMultipleSheetsTest extends TestCase
             }
         };
 
-        $export->store('from-view.xlsx');
+        $export->store('multiple-sheets-collection-store.xlsx');
 
-        $this->assertCount(100, $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-view.xlsx', 'xlsx', 0));
-        $this->assertCount(100, $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-view.xlsx', 'xlsx', 1));
-        $this->assertCount(100, $this->readAsArray(__DIR__.'/../Data/Disks/Local/from-view.xlsx', 'xlsx', 2));
+        $this->assertCount(100, $this->readAsArray(__DIR__.'/../Data/Disks/Local/multiple-sheets-collection-store.xlsx', 'xlsx', 0));
+        $this->assertCount(100, $this->readAsArray(__DIR__.'/../Data/Disks/Local/multiple-sheets-collection-store.xlsx', 'xlsx', 1));
+        $this->assertCount(100, $this->readAsArray(__DIR__.'/../Data/Disks/Local/multiple-sheets-collection-store.xlsx', 'xlsx', 2));
+
+        // Cleanup
+        unlink(__DIR__.'/../Data/Disks/Local/multiple-sheets-collection-store.xlsx');
     }
 
     /**

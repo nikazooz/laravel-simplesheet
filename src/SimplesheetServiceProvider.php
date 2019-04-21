@@ -9,6 +9,8 @@ use Nikazooz\Simplesheet\Factories\ReaderFactory;
 use Nikazooz\Simplesheet\Factories\WriterFactory;
 use Laravel\Lumen\Application as LumenApplication;
 use Nikazooz\Simplesheet\Helpers\FileTypeDetector;
+use Nikazooz\Simplesheet\Console\ExportMakeCommand;
+use Nikazooz\Simplesheet\Console\ImportMakeCommand;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 
 class SimplesheetServiceProvider extends ServiceProvider
@@ -76,6 +78,11 @@ class SimplesheetServiceProvider extends ServiceProvider
         $this->app->alias('simplesheet', Simplesheet::class);
         $this->app->alias('simplesheet', Exporter::class);
         $this->app->alias('simplesheet', Importer::class);
+
+        $this->commands([
+            ExportMakeCommand::class,
+            ImportMakeCommand::class,
+        ]);
 
         FileTypeDetector::extensionMapResolver(function () {
             return $this->app['config']->get('simplesheet.extension_detector', []);

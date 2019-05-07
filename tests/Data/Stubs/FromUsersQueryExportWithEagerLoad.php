@@ -13,7 +13,7 @@ class FromUsersQueryExportWithEagerLoad implements FromQuery, WithMapping
     use Exportable;
 
     /**
-     * @return Builder
+     * @return \Illuminate\Database\Query\Builder
      */
     public function query()
     {
@@ -25,8 +25,7 @@ class FromUsersQueryExportWithEagerLoad implements FromQuery, WithMapping
     }
 
     /**
-     * @param mixed $row
-     *
+     * @param  mixed  $row
      * @return array
      */
     public function map($row): array

@@ -11,7 +11,7 @@ class ShouldQueueExport implements WithMultipleSheets, ShouldQueue
     use Exportable;
 
     /**
-     * @return SheetWith100Rows[]
+     * @return \Nikazooz\Simplesheet\Tests\Data\Stubs\SheetWith100Rows[]
      */
     public function sheets(): array
     {

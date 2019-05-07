@@ -35,9 +35,8 @@ class WithBatchInsertsTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -84,9 +83,8 @@ class WithBatchInsertsTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -122,9 +120,8 @@ class WithBatchInsertsTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|Model[]|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Model[]|null
              */
             public function model(array $row)
             {
@@ -171,8 +168,7 @@ class WithBatchInsertsTest extends TestCase
 
             /**
              * @param array $row
-             *
-             * @return Model|Model[]|null
+             * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Model[]|null
              */
             public function model(array $row)
             {

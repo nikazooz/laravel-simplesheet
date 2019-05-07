@@ -21,8 +21,7 @@ class FromNestedArraysQueryExport implements FromQuery, WithMapping
     }
 
     /**
-     * @param Group $row
-     *
+     * @param  \Nikazooz\Simplesheet\Tests\Data\Stubs\Database\Group  $row
      * @return array
      */
     public function map($row): array

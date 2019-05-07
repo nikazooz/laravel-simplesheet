@@ -16,7 +16,8 @@ class AfterQueueExportJob implements ShouldQueue
     private $filePath;
 
     /**
-     * @param string $filePath
+     * @param  string  $filePath
+     * @return void
      */
     public function __construct(string $filePath)
     {

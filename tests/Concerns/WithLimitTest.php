@@ -33,9 +33,8 @@ class WithLimitTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model
              */
             public function model(array $row): Model
             {
@@ -85,7 +84,7 @@ class WithLimitTest extends TestCase
             use Importable;
 
             /**
-             * @param array $array
+             * @param  array  $array
              */
             public function array(array $array)
             {

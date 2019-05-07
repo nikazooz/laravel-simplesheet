@@ -84,9 +84,8 @@ class SkipsOnErrorTest extends TestCase
             use Importable, SkipsErrors;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {

@@ -10,7 +10,8 @@ class BeforeExportListener
     private $assertions;
 
     /**
-     * @param callable $assertions
+     * @param  callable  $assertions
+     * @return void
      */
     public function __construct(callable $assertions)
     {

@@ -31,7 +31,7 @@ class WithCustomCsvSettingsTest extends TestCase
     {
         $export = new class implements FromCollection, WithCustomCsvSettings {
             /**
-             * @return Collection
+             * @return \Illuminate\Support\Collection
              */
             public function collection()
             {
@@ -87,7 +87,7 @@ class WithCustomCsvSettingsTest extends TestCase
             }
 
             /**
-             * @param array $array
+             * @param  array  $array
              */
             public function array(array $array)
             {
@@ -118,7 +118,7 @@ class WithCustomCsvSettingsTest extends TestCase
             }
 
             /**
-             * @param array $array
+             * @param  array  $array
              */
             public function array(array $array)
             {

@@ -20,8 +20,10 @@ class SheetWith100Rows implements FromCollection, WithEvents, WithTitle
      * @var string
      */
     private $title;
+
     /**
-     * @param string $title
+     * @param  string  $title
+     * @return void
      */
     public function __construct(string $title)
     {
@@ -29,7 +31,7 @@ class SheetWith100Rows implements FromCollection, WithEvents, WithTitle
     }
 
     /**
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function collection()
     {

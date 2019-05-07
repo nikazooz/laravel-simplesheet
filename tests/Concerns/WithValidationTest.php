@@ -35,9 +35,8 @@ class WithValidationTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -85,9 +84,8 @@ class WithValidationTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -139,9 +137,8 @@ class WithValidationTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -159,9 +156,8 @@ class WithValidationTest extends TestCase
                 return [
                     '1' => new class implements \Illuminate\Contracts\Validation\Rule {
                         /**
-                         * @param  string $attribute
+                         * @param  string  $attribute
                          * @param  mixed  $value
-                         *
                          * @return bool
                          */
                         public function passes($attribute, $value)
@@ -206,9 +202,8 @@ class WithValidationTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -250,9 +245,8 @@ class WithValidationTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -302,9 +296,8 @@ class WithValidationTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -356,9 +349,8 @@ class WithValidationTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -400,9 +392,8 @@ class WithValidationTest extends TestCase
             use Importable;
 
             /**
-             * @param array $row
-             *
-             * @return Model|null
+             * @param  array  $row
+             * @return \Illuminate\Database\Eloquent\Model|null
              */
             public function model(array $row)
             {
@@ -444,7 +435,7 @@ class WithValidationTest extends TestCase
     }
 
     /**
-     * @param  ValidationException  $e
+     * @param  \Nikazooz\Simplesheet\Validators\ValidationException  $e
      * @param  int  $row
      * @param  string  $attribute
      * @param  array  $messages

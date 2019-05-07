@@ -17,7 +17,8 @@ class AfterQueueImportJob implements ShouldQueue
     private $totalRows;
 
     /**
-     * @param int $totalRows
+     * @param  int  $totalRows
+     * @return void
      */
     public function __construct(int $totalRows)
     {

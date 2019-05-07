@@ -32,7 +32,7 @@ class WithMultipleSheetsTest extends TestCase
             use Exportable;
 
             /**
-             * @return SheetWith100Rows[]
+             * @return \Nikazooz\Simplesheet\Tests\Data\Stubs\SheetWith100Rows[]
              */
             public function sheets() : array
             {
@@ -64,6 +64,9 @@ class WithMultipleSheetsTest extends TestCase
         $import = new class implements WithMultipleSheets {
             use Importable;
 
+            /**
+             * @return array
+             */
             public function sheets(): array
             {
                 return [
@@ -86,6 +89,9 @@ class WithMultipleSheetsTest extends TestCase
         $import = new class implements WithMultipleSheets {
             use Importable;
 
+            /**
+             * @return array
+             */
             public function sheets(): array
             {
                 return [
@@ -108,6 +114,9 @@ class WithMultipleSheetsTest extends TestCase
 
             public $unknown;
 
+            /**
+             * @return array
+             */
             public function sheets(): array
             {
                 return [
@@ -117,7 +126,7 @@ class WithMultipleSheetsTest extends TestCase
             }
 
             /**
-             * @param string|int $sheetName
+             * @param  string|int  $sheetName
              */
             public function onUnknownSheet($sheetName)
             {
@@ -143,7 +152,7 @@ class WithMultipleSheetsTest extends TestCase
                 return [
                     'Some Random Sheet Name' => new class implements SkipsUnknownSheets {
                         /**
-                         * @param string|int $sheetName
+                         * @param  string|int  $sheetName
                          */
                         public function onUnknownSheet($sheetName)
                         {
@@ -176,7 +185,7 @@ class WithMultipleSheetsTest extends TestCase
             }
 
             /**
-             * @param string|int $sheetName
+             * @param  string|int  $sheetName
              */
             public function onUnknownSheet($sheetName)
             {
@@ -328,6 +337,9 @@ class WithMultipleSheetsTest extends TestCase
                 ];
             }
 
+            /**
+             * @return array
+             */
             public function sheets(): array
             {
                 return $this->sheets;
@@ -381,6 +393,9 @@ class WithMultipleSheetsTest extends TestCase
                 ];
             }
 
+            /**
+             * @return array
+             */
             public function sheets(): array
             {
                 return $this->sheets;

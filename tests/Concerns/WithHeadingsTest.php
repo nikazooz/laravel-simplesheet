@@ -26,7 +26,7 @@ class WithHeadingsTest extends TestCase
             use Exportable;
 
             /**
-             * @return Collection
+             * @return \Illuminate\Support\Collection
              */
             public function collection()
             {
@@ -69,7 +69,7 @@ class WithHeadingsTest extends TestCase
             use Exportable;
 
             /**
-             * @return Collection
+             * @return \Illuminate\Support\Collection
              */
             public function collection()
             {

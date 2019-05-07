@@ -112,8 +112,7 @@ class RowValidator
     }
 
     /**
-     * @param string|object|callable|array $rules
-     *
+     * @param  string|object|callable|array  $rules
      * @return string|array
      */
     private function formatRule($rules)

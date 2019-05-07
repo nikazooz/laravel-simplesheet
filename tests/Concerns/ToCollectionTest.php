@@ -21,7 +21,7 @@ class ToCollectionTest extends TestCase
             public $called = false;
 
             /**
-             * @param Collection $collection
+             * @param  \Illuminate\Support\Collection  $collection
              */
             public function collection(Collection $collection)
             {
@@ -50,7 +50,7 @@ class ToCollectionTest extends TestCase
             public $called = 0;
 
             /**
-             * @param Collection $collection
+             * @param  \Illuminate\Support\Collection  $collection
              */
             public function collection(Collection $collection)
             {

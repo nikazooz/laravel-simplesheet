@@ -12,7 +12,7 @@ class WithHeadingExport implements FromCollection, WithHeadings
     use Exportable;
 
     /**
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function collection()
     {

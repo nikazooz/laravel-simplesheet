@@ -9,7 +9,6 @@ interface Importer
 {
     /**
      * @param  object  $import
-     *
      * @param  string|null  $disk
      * @param  string|null  $readerType
      * @return \Illuminate\Foundation\Bus\PendingDispatch|Reader

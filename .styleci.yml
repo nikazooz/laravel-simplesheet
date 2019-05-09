@@ -1,0 +1,9 @@
+preset: laravel
+
+risky: false
+
+finder:
+  not-name:
+    - "*.md"
+  not-path:
+    - ".github"

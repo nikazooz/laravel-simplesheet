@@ -56,7 +56,7 @@ class SkipsOnFailureTest extends TestCase
             public function rules(): array
             {
                 return [
-                    '1' => Rule::in(['patrick@maatwebsite.nl']),
+                    '1' => Rule::in(['john@example.com']),
                 ];
             }
 
@@ -70,7 +70,7 @@ class SkipsOnFailureTest extends TestCase
                 Assert::assertEquals(2, $failure->row());
                 Assert::assertEquals('1', $failure->attribute());
                 Assert::assertEquals(['The selected 1 is invalid.'], $failure->errors());
-                Assert::assertEquals(['Taylor Otwell', 'taylor@laravel.com'], $failure->values());
+                Assert::assertEquals(['Jane Smith', 'jane@example.com'], $failure->values());
 
                 $this->failures += \count($failures);
             }
@@ -82,12 +82,12 @@ class SkipsOnFailureTest extends TestCase
 
         // Shouldn't have rollbacked other imported rows.
         $this->assertDatabaseHas('users', [
-            'email' => 'patrick@maatwebsite.nl',
+            'email' => 'john@example.com',
         ]);
 
         // Should have skipped inserting
         $this->assertDatabaseMissing('users', [
-            'email' => 'taylor@laravel.com',
+            'email' => 'jane@example.com',
         ]);
     }
 
@@ -120,7 +120,7 @@ class SkipsOnFailureTest extends TestCase
             public function rules(): array
             {
                 return [
-                    '1' => Rule::in(['patrick@maatwebsite.nl']),
+                    '1' => Rule::in(['john@example.com']),
                 ];
             }
 
@@ -153,12 +153,12 @@ class SkipsOnFailureTest extends TestCase
 
         // Shouldn't have rollbacked/skipped the rest of the batch.
         $this->assertDatabaseHas('users', [
-            'email' => 'patrick@maatwebsite.nl',
+            'email' => 'john@example.com',
         ]);
 
         // Should have skipped inserting
         $this->assertDatabaseMissing('users', [
-            'email' => 'taylor@laravel.com',
+            'email' => 'jane@example.com',
         ]);
     }
 
@@ -189,7 +189,7 @@ class SkipsOnFailureTest extends TestCase
             public function rules(): array
             {
                 return [
-                    '1' => Rule::in(['patrick@maatwebsite.nl']),
+                    '1' => Rule::in(['john@example.com']),
                 ];
             }
         };
@@ -207,12 +207,12 @@ class SkipsOnFailureTest extends TestCase
 
         // Shouldn't have rollbacked other imported rows.
         $this->assertDatabaseHas('users', [
-            'email' => 'patrick@maatwebsite.nl',
+            'email' => 'john@example.com',
         ]);
 
         // Should have skipped inserting
         $this->assertDatabaseMissing('users', [
-            'email' => 'taylor@laravel.com',
+            'email' => 'jane@example.com',
         ]);
     }
 }

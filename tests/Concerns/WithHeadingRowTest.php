@@ -48,13 +48,13 @@ class WithHeadingRowTest extends TestCase
         $import->import('import-users-with-headings.xlsx');
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Patrick Brouwers',
-            'email' => 'patrick@maatwebsite.nl',
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
         ]);
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
+            'name' => 'Jane Smith',
+            'email' => 'jane@example.com',
         ]);
     }
 
@@ -91,13 +91,13 @@ class WithHeadingRowTest extends TestCase
         $import->import('import-users-with-different-heading-row.xlsx');
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Patrick Brouwers',
-            'email' => 'patrick@maatwebsite.nl',
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
         ]);
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
+            'name' => 'Jane Smith',
+            'email' => 'jane@example.com',
         ]);
     }
 
@@ -116,12 +116,12 @@ class WithHeadingRowTest extends TestCase
             {
                 Assert::assertEquals([
                     [
-                        'name' => 'Patrick Brouwers',
-                        'email' => 'patrick@maatwebsite.nl',
+                        'name' => 'John Doe',
+                        'email' => 'john@example.com',
                     ],
                     [
-                        'name' => 'Taylor Otwell',
-                        'email' => 'taylor@laravel.com',
+                        'name' => 'Jane Smith',
+                        'email' => 'jane@example.com',
                     ],
                 ], $array);
             }

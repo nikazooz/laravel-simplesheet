@@ -54,7 +54,7 @@ class SkipsOnErrorTest extends TestCase
             public function onError(Throwable $e)
             {
                 Assert::assertInstanceOf(QueryException::class, $e);
-                Assert::stringContains($e->getMessage(), 'patrick@maatwebsite.nl');
+                Assert::stringContains($e->getMessage(), 'john@example.com');
 
                 $this->errors++;
             }
@@ -66,12 +66,12 @@ class SkipsOnErrorTest extends TestCase
 
         // Shouldn't have rollbacked other imported rows.
         $this->assertDatabaseHas('users', [
-            'email' => 'patrick@maatwebsite.nl',
+            'email' => 'john@example.com',
         ]);
 
         // Should have skipped inserting
         $this->assertDatabaseMissing('users', [
-            'email' => 'taylor@laravel.com',
+            'email' => 'jane@example.com',
         ]);
     }
 
@@ -105,16 +105,16 @@ class SkipsOnErrorTest extends TestCase
         $e = $import->errors()->first();
 
         $this->assertInstanceOf(QueryException::class, $e);
-        $this->stringContains($e->getMessage(), 'patrick@maatwebsite.nl');
+        $this->stringContains($e->getMessage(), 'john@example.com');
 
         // Shouldn't have rollbacked other imported rows.
         $this->assertDatabaseHas('users', [
-            'email' => 'patrick@maatwebsite.nl',
+            'email' => 'john@example.com',
         ]);
 
         // Should have skipped inserting
         $this->assertDatabaseMissing('users', [
-            'email' => 'taylor@laravel.com',
+            'email' => 'jane@example.com',
         ]);
     }
 }

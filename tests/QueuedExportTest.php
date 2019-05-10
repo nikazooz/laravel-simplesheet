@@ -103,7 +103,7 @@ class QueuedExportTest extends TestCase
         $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-export.xlsx', 'xlsx');
 
         $this->assertEquals([
-            ['Patrick', 'Brouwers'],
+            ['John', 'Doe'],
         ], $actual);
     }
 }

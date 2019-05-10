@@ -61,7 +61,7 @@ class HeadingRowImportTest extends TestCase
 
         $this->assertEquals([
             [
-                ['patrick_brouwers', 'patrick_at_maatwebsitenl'],
+                ['john_doe', 'john_at_examplecom'],
             ],
         ], $headings);
     }
@@ -113,7 +113,7 @@ class HeadingRowImportTest extends TestCase
             return 'custom2-'.$value;
         });
 
-        config()->set('excel.imports.heading_row.formatter', 'custom2');
+        config()->set('simplesheet.imports.heading_row.formatter', 'custom2');
 
         $import = new HeadingRowImport();
 

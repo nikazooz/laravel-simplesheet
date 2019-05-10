@@ -54,13 +54,13 @@ class ToModelTest extends TestCase
         DB::connection()->disableQueryLog();
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Patrick Brouwers',
-            'email' => 'patrick@maatwebsite.nl',
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
         ]);
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
+            'name' => 'Jane Smith',
+            'email' => 'jane@example.com',
         ]);
     }
 

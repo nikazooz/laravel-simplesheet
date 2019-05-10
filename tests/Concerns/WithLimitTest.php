@@ -65,13 +65,13 @@ class WithLimitTest extends TestCase
         $import->import('import-users-with-different-heading-row.xlsx');
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Patrick Brouwers',
-            'email' => 'patrick@maatwebsite.nl',
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
         ]);
 
         $this->assertDatabaseMissing('users', [
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
+            'name' => 'Jane Smith',
+            'email' => 'jane@example.com',
         ]);
     }
 
@@ -90,8 +90,8 @@ class WithLimitTest extends TestCase
             {
                 Assert::assertEquals([
                     [
-                        'Patrick Brouwers',
-                        'patrick@maatwebsite.nl',
+                        'John Doe',
+                        'john@example.com',
                     ],
                 ], $array);
             }

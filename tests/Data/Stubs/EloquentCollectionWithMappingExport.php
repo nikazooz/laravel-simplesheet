@@ -19,8 +19,8 @@ class EloquentCollectionWithMappingExport implements FromCollection, WithMapping
     {
         return collect([
             new User([
-                'firstname' => 'Patrick',
-                'lastname' => 'Brouwers',
+                'firstname' => 'John',
+                'lastname' => 'Doe',
             ]),
         ]);
     }

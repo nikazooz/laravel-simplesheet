@@ -148,6 +148,7 @@ class WithValidationTest extends TestCase
                     'password' => 'secret',
                 ]);
             }
+
             /**
              * @return array
              */
@@ -164,6 +165,7 @@ class WithValidationTest extends TestCase
                         {
                             return $value === 'john@example.com';
                         }
+
                         /**
                          * Get the validation error message.
                          *
@@ -193,6 +195,7 @@ class WithValidationTest extends TestCase
 
         $this->assertInstanceOf(ValidationException::class, $e ?? null);
     }
+
     /**
      * @test
      */

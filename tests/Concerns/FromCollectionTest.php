@@ -24,7 +24,7 @@ class FromCollectionTest extends TestCase
         $this->assertEquals($export->collection()->toArray(), $contents);
 
         // Cleanup
-        unlink(__DIR__ . '/../Data/Disks/Local/from-collection-store.xlsx');
+        unlink(__DIR__.'/../Data/Disks/Local/from-collection-store.xlsx');
     }
 
     /**
@@ -39,7 +39,7 @@ class FromCollectionTest extends TestCase
         $this->assertTrue($response);
 
         $reader = $this->read(
-            __DIR__ . '/../Data/Disks/Local/multiple-sheets-collection-store.xlsx',
+            __DIR__.'/../Data/Disks/Local/multiple-sheets-collection-store.xlsx',
             'xlsx'
         );
 
@@ -51,6 +51,6 @@ class FromCollectionTest extends TestCase
         }
 
         // Cleanup
-        unlink(__DIR__ . '/../Data/Disks/Local/multiple-sheets-collection-store.xlsx');
+        unlink(__DIR__.'/../Data/Disks/Local/multiple-sheets-collection-store.xlsx');
     }
 }

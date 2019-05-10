@@ -6,7 +6,6 @@ use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Nikazooz\Simplesheet\Concerns\WithHeadings;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\WithHeadingExport;
 
 class WithHeadingsTest extends TestCase
 {
@@ -14,7 +13,7 @@ class WithHeadingsTest extends TestCase
     {
         parent::tearDown();
 
-        unlink(__DIR__ . '/../Data/Disks/Local/with-heading-store.xlsx');
+        unlink(__DIR__.'/../Data/Disks/Local/with-heading-store.xlsx');
     }
 
     /**
@@ -49,7 +48,7 @@ class WithHeadingsTest extends TestCase
 
         $this->assertTrue($response);
 
-        $actual = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/with-heading-store.xlsx', 'xlsx');
+        $actual = $this->readAsArray(__DIR__.'/../Data/Disks/Local/with-heading-store.xlsx', 'xlsx');
 
         $expected = [
             ['A', 'B', 'C'],
@@ -95,7 +94,7 @@ class WithHeadingsTest extends TestCase
 
         $this->assertTrue($response);
 
-        $actual = $this->readAsArray(__DIR__ . '/../Data/Disks/Local/with-heading-store.xlsx', 'xlsx');
+        $actual = $this->readAsArray(__DIR__.'/../Data/Disks/Local/with-heading-store.xlsx', 'xlsx');
 
         $expected = [
             ['A', 'B', 'C'],

@@ -43,7 +43,7 @@ class ImportMakeCommand extends GeneratorCommand
 
         $stub = $stub ?? '/stubs/import.collection.stub';
 
-        return __DIR__ . $stub;
+        return __DIR__.$stub;
     }
 
     /**
@@ -55,7 +55,7 @@ class ImportMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Imports';
+        return $rootNamespace.'\Imports';
     }
 
     /**
@@ -74,7 +74,9 @@ class ImportMakeCommand extends GeneratorCommand
         }
 
         return str_replace(
-            array_keys($replace), array_values($replace), parent::buildClass($name)
+            array_keys($replace),
+            array_values($replace),
+            parent::buildClass($name)
         );
     }
 

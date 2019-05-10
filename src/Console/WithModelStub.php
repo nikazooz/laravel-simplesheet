@@ -39,8 +39,8 @@ trait WithModelStub
 
         $model = trim(str_replace('/', '\\', $model), '\\');
 
-        if (!Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
-            $model = $rootNamespace . $model;
+        if (! Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
+            $model = $rootNamespace.$model;
         }
 
         return $model;

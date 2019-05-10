@@ -2,7 +2,6 @@
 
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
-use Illuminate\Database\Query\Builder;
 use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Nikazooz\Simplesheet\Concerns\WithMapping;

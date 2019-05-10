@@ -70,7 +70,7 @@ class SimplesheetTest extends TestCase
         $this->assertFileExists(__DIR__.'/Data/Disks/Local/filename.xlsx');
 
         // Cleanup
-        unlink(__DIR__ . '/Data/Disks/Local/filename.xlsx');
+        unlink(__DIR__.'/Data/Disks/Local/filename.xlsx');
     }
 
     /**
@@ -86,7 +86,7 @@ class SimplesheetTest extends TestCase
         $this->assertFileExists(__DIR__.'/Data/Disks/Test/filename.xlsx');
 
         // Cleanup
-        unlink(__DIR__ . '/Data/Disks/Test/filename.xlsx');
+        unlink(__DIR__.'/Data/Disks/Test/filename.xlsx');
     }
 
     /**

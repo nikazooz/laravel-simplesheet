@@ -69,10 +69,10 @@ class QueuedExportTest extends TestCase
         $export = new QueuedExport();
 
         $export->queue('queued-export.xlsx')->chain([
-            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Local/queued-export.xlsx'),
+            new AfterQueueExportJob(__DIR__.'/Data/Disks/Local/queued-export.xlsx'),
         ]);
 
-        $array = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-export.xlsx', Simplesheet::XLSX);
+        $array = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-export.xlsx', Simplesheet::XLSX);
 
         $this->assertCount(100, $array);
     }

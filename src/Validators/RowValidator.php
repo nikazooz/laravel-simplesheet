@@ -7,7 +7,6 @@ use Illuminate\Contracts\Validation\Factory;
 use Nikazooz\Simplesheet\Concerns\SkipsOnFailure;
 use Nikazooz\Simplesheet\Concerns\WithValidation;
 use Nikazooz\Simplesheet\Exceptions\RowSkippedException;
-use Nikazooz\Simplesheet\Validators\ValidationException;
 use Illuminate\Validation\ValidationException as IlluminateValidationException;
 
 class RowValidator
@@ -130,9 +129,9 @@ class RowValidator
         }
 
         if (Str::contains($rules, 'required_if') && preg_match('/(.*):(.*),(.*)/', $rules, $matches)) {
-            $column = Str::startsWith($matches[2], '*.') ? $matches[2] : '*.' . $matches[2];
+            $column = Str::startsWith($matches[2], '*.') ? $matches[2] : '*.'.$matches[2];
 
-            return $matches[1] . ':' . $column . ',' . $matches[3];
+            return $matches[1].':'.$column.','.$matches[3];
         }
 
         return $rules;

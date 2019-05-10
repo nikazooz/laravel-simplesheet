@@ -47,7 +47,7 @@ class ExportMakeCommand extends GeneratorCommand
 
         $stub = $stub ?? '/stubs/export.plain.stub';
 
-        return __DIR__ . $stub;
+        return __DIR__.$stub;
     }
 
     /**
@@ -59,7 +59,7 @@ class ExportMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Exports';
+        return $rootNamespace.'\Exports';
     }
 
     /**
@@ -78,7 +78,9 @@ class ExportMakeCommand extends GeneratorCommand
         }
 
         return str_replace(
-            array_keys($replace), array_values($replace), parent::buildClass($name)
+            array_keys($replace),
+            array_values($replace),
+            parent::buildClass($name)
         );
     }
 

@@ -12,6 +12,8 @@ use Nikazooz\Simplesheet\Helpers\FileTypeDetector;
 use Nikazooz\Simplesheet\Console\ExportMakeCommand;
 use Nikazooz\Simplesheet\Console\ImportMakeCommand;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
+use Nikazooz\Simplesheet\Transactions\TransactionHandler;
+use Nikazooz\Simplesheet\Transactions\TransactionManager;
 
 class SimplesheetServiceProvider extends ServiceProvider
 {
@@ -43,6 +45,14 @@ class SimplesheetServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom($this->getConfigFile(), 'simplesheet');
 
+        $this->app->bind(TransactionManager::class, function ($app) {
+            return new TransactionManager($app);
+        });
+
+        $this->app->bind(TransactionHandler::class, function ($app) {
+            return $app->make(TransactionManager::class)->driver();
+        });
+
         $this->app->bind(TemporaryFileFactory::class, function ($app) {
             return new TemporaryFileFactory(
                 $app['config']->get('simplesheet.temporary_files.local_path', storage_path('framework/laravel-simplesheet')),
@@ -59,10 +69,6 @@ class SimplesheetServiceProvider extends ServiceProvider
                 $app->make(TemporaryFileFactory::class),
                 $app['config']->get('simplesheet.exports.chunk_size', 100)
             );
-        });
-
-        $this->app->bind(Reader::class, function ($app) {
-            return new Reader($app->make(TemporaryFileFactory::class));
         });
 
         $this->app->bind('simplesheet', function ($app) {
@@ -109,6 +115,10 @@ class SimplesheetServiceProvider extends ServiceProvider
             Simplesheet::class,
             Exporter::class,
             Importer::class,
+            TransactionHandler::class,
+            TransactionManager::class,
+            ExportMakeCommand::class,
+            ImportMakeCommand::class,
         ];
     }
 

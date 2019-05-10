@@ -19,6 +19,7 @@ use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 use Nikazooz\Simplesheet\Concerns\SkipsUnknownSheets;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
 use Nikazooz\Simplesheet\Events\BeforeTransactionCommit;
+use Nikazooz\Simplesheet\Transactions\TransactionHandler;
 use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
 
 class Reader
@@ -26,17 +27,24 @@ class Reader
     use HasEventBus;
 
     /**
-     * @var TemporaryFileFactory
+     * @var \Nikazooz\Simplesheet\Files\TemporaryFileFactory
      */
     protected $temporaryFileFactory;
 
     /**
+     * @var \Nikazooz\Simplesheet\Transactions\TransactionHandler
+     */
+    protected $transaction;
+
+    /**
      * @param  \Nikazooz\Simplesheet\Files\TemporaryFileFactory  $temporaryFileFactory
+     * @param  \Nikazooz\Simplesheet\Transactions\TransactionHandler  $transaction
      * @return void
      */
-    public function __construct(TemporaryFileFactory $temporaryFileFactory)
+    public function __construct(TemporaryFileFactory $temporaryFileFactory, TransactionHandler $transaction)
     {
         $this->temporaryFileFactory = $temporaryFileFactory;
+        $this->transaction = $transaction;
     }
 
     /**
@@ -73,7 +81,7 @@ class Reader
 
             $this->beforeReading($import, $reader);
 
-            DB::transaction(function () use ($reader, $import) {
+            ($this->transaction)(function () use ($reader, $import) {
                 foreach ($this->sheetImports as $index => $sheetImport) {
                     if ($sheet = $this->getSheet($reader, $import, $sheetImport, $index)) {
                         $sheet->import($sheetImport, $sheet->getStartRow($sheetImport));

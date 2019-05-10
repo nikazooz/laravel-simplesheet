@@ -2,7 +2,7 @@
   "name": "nikazooz/laravel-simplesheet",
   "description": "Simple, powerful and memory-efficient spreadsheet exports and imports in Laravel",
   "license": "MIT",
-  "keywords": ["laravel", "php", "box", "spout", "phpexcel", "spreadsheet", "excel", "csv", "export", "import", "batch", "simplesheet"],
+  "keywords": ["laravel", "php", "box", "spout", "spreadsheet", "excel", "csv", "export", "import", "batch", "simplesheet"],
   "authors": [
     {
       "name": "Nenad Živanović",

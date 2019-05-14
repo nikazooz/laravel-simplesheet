@@ -94,7 +94,7 @@ class ExportableTest extends TestCase
     /**
      * @test
      */
-    public function has_customized_header()
+    public function can_have_customized_header()
     {
         $export = new class {
             use Exportable;
@@ -107,6 +107,25 @@ class ExportableTest extends TestCase
                 'Content-Type' => 'text/csv',
             ]
         );
+
+        $this->assertEquals('text/csv', $response->headers->get('Content-Type'));
+    }
+
+    /**
+     * @test
+     */
+    public function can_set_custom_headers_in_export_class()
+    {
+        $export = new class {
+            use Exportable;
+
+            protected $fileName = 'name.csv';
+            protected $writerType = Simplesheet::CSV;
+            protected $headers = [
+                'Content-Type' => 'text/csv',
+            ];
+        };
+        $response = $export->toResponse(request());
 
         $this->assertEquals('text/csv', $response->headers->get('Content-Type'));
     }

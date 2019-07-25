@@ -41,6 +41,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertDownloaded('downloaded-filename.csv', function (FromCollection $export) {
             return $export->collection()->contains('foo');
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertDownloaded('/\w{10}-\w{8}\.csv/');
     }
 
     /**
@@ -58,6 +60,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertStored('stored-filename.csv', 's3', function (FromCollection $export) {
             return $export->collection()->contains('foo');
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertStored('/\w{6}-\w{8}\.csv/', 's3');
     }
 
     /**
@@ -75,6 +79,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertStored('stored-filename.csv', function (FromCollection $export) {
             return $export->collection()->contains('foo');
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertStored('/\w{6}-\w{8}\.csv/');
     }
 
     /**
@@ -92,6 +98,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertQueued('queued-filename.csv', 's3', function (FromCollection $export) {
             return $export->collection()->contains('foo');
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertStored('/\w{6}-\w{8}\.csv/', 's3');
     }
 
     /**
@@ -110,6 +118,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertQueued('queued-filename.csv', 's3', function (FromCollection $export) {
             return $export->collection()->contains('foo');
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertQueued('/\w{6}-\w{8}\.csv/', 's3');
     }
 
     /**
@@ -125,6 +135,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertImported('stored-filename.csv', 's3', function (ToModel $import) {
             return $import->model([]) instanceof User;
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertImported('/\w{6}-\w{8}\.csv/', 's3');
     }
 
     /**
@@ -140,6 +152,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertImported('import.xlsx', function (ToModel $import) {
             return $import->model([]) instanceof User;
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertImported('/\w{6}\.xlsx/');
     }
 
     /**
@@ -158,6 +172,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertQueued('queued-filename.csv', 's3', function (ToModel $import) {
             return $import->model([]) instanceof User;
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertQueued('/\w{6}-\w{8}\.csv/', 's3');
     }
 
     /**
@@ -176,6 +192,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertQueued('queued-filename.csv', 's3', function (ToModel $import) {
             return $import->model([]) instanceof User;
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertQueued('/\w{6}-\w{8}\.csv/', 's3');
     }
 
     /**
@@ -193,6 +211,8 @@ class SimplesheetFakeTest extends TestCase
         SimplesheetFacade::assertQueued('queued-filename.csv', function (FromCollection $export) {
             return $export->collection()->contains('foo');
         });
+        SimplesheetFacade::matchByRegex();
+        SimplesheetFacade::assertQueued('/\w{6}-\w{8}\.csv/');
     }
 
     /**

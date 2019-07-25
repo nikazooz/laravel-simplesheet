@@ -59,7 +59,7 @@ class Reader
     public function read($import, $file, string $readerType, string $disk = null)
     {
         if ($import instanceof ShouldQueue) {
-            return QueueImport::dispatch($import, $this->getTemporaryFile($file, $disk), $readerType);
+            return QueueImport::dispatch($import, $this->getTemporaryFile($import, $file, $disk), $readerType);
         }
 
         return $this->readNow($import, $file, $readerType);
@@ -73,7 +73,7 @@ class Reader
      */
     public function readNow($import, $file, string $readerType, string $disk = null)
     {
-        $temporaryFile = $this->getTemporaryFile($file, $disk);
+        $temporaryFile = $this->getTemporaryFile($import, $file, $disk);
 
         try {
             $reader = $this->getReader($import, $temporaryFile, $readerType);
@@ -116,7 +116,7 @@ class Reader
      */
     public function toArray($import, $file, string $readerType, string $disk = null): array
     {
-        $temporaryFile = $this->getTemporaryFile($file, $disk);
+        $temporaryFile = $this->getTemporaryFile($import, $file, $disk);
         $reader = $this->getReader($import, $temporaryFile, $readerType);
         $this->beforeReading($import, $reader);
 
@@ -148,7 +148,7 @@ class Reader
      */
     public function toCollection($import, $file, string $readerType, string $disk = null): Collection
     {
-        $temporaryFile = $this->getTemporaryFile($file, $disk);
+        $temporaryFile = $this->getTemporaryFile($import, $file, $disk);
         $reader = $this->getReader($import, $temporaryFile, $readerType);
         $this->beforeReading($import, $reader);
 
@@ -168,19 +168,26 @@ class Reader
     }
 
     /**
+     * @param  object  $import
      * @param  mixed  $file
      * @param  string|null  $disk
      * @return \Nikazooz\Simplesheet\Files\TemporaryFile
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    protected function getTemporaryFile($file, string $disk = null): TemporaryFile
+    protected function getTemporaryFile($import, $file, string $disk = null): TemporaryFile
     {
         if ($file instanceof TemporaryFile) {
             return $file;
         }
 
-        return $this->temporaryFileFactory->make()->copyFrom($file, $disk);
+        $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+
+        $temporaryFile = $import instanceof ShouldQueue
+            ? $this->temporaryFileFactory->make($fileExtension)
+            : $this->temporaryFileFactory->makeLocal(null, $fileExtension);
+
+        return $temporaryFile->copyFrom($file, $disk);
     }
 
     /**

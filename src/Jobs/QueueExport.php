@@ -2,6 +2,7 @@
 
 namespace Nikazooz\Simplesheet\Jobs;
 
+use Throwable;
 use Nikazooz\Simplesheet\Writer;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -40,11 +41,22 @@ class QueueExport implements ShouldQueue
     }
 
     /**
-     * @param  \Nikazooz\Simplesheet\Writer $writer
+     * @param  \Nikazooz\Simplesheet\Writer  $writer
      * @return void
      */
     public function handle(Writer $writer)
     {
         $writer->export($this->export, $this->writerType, $this->temporaryFile->sync());
+    }
+
+    /**
+     * @param  \Throwable  $e
+     * @return  void
+     */
+    public function failed(Throwable $e)
+    {
+        if (method_exists($this->export, 'failed')) {
+            $this->export->failed($e);
+        }
     }
 }

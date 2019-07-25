@@ -2,6 +2,7 @@
 
 namespace Nikazooz\Simplesheet\Tests;
 
+use Throwable;
 use Illuminate\Support\Facades\Queue;
 use Nikazooz\Simplesheet\Simplesheet;
 use Illuminate\Queue\Events\JobProcessing;
@@ -10,6 +11,7 @@ use Nikazooz\Simplesheet\Files\RemoteTemporaryFile;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\QueuedExport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\ShouldQueueExport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\AfterQueueExportJob;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\QueuedExportWithFailedHook;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\EloquentCollectionWithMappingExport;
 
 class QueuedExportTest extends TestCase
@@ -105,5 +107,20 @@ class QueuedExportTest extends TestCase
         $this->assertEquals([
             ['John', 'Doe'],
         ], $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function can_catch_failures()
+    {
+        $export = new QueuedExportWithFailedHook();
+
+        try {
+            $export->queue('queued-export.xlsx');
+        } catch (Throwable $e) {
+        }
+
+        $this->assertTrue(app('queue-has-failed'));
     }
 }

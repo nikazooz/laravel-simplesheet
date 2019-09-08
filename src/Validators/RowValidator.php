@@ -104,7 +104,7 @@ class RowValidator
     private function formatKey(array $elements): array
     {
         return collect($elements)->mapWithKeys(function ($rule, $attribute) {
-            $attribute = starts_with($attribute, '*.') ? $attribute : '*.'.$attribute;
+            $attribute = Str::startsWith($attribute, '*.') ? $attribute : '*.'.$attribute;
 
             return [$attribute => $this->formatRule($rule)];
         })->all();

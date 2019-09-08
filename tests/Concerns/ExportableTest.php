@@ -8,6 +8,7 @@ use Nikazooz\Simplesheet\Tests\TestCase;
 use Illuminate\Contracts\Support\Responsable;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
 
 class ExportableTest extends TestCase
 {
@@ -28,17 +29,15 @@ class ExportableTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
-     * @expectedExceptionMessage A filepath needs to be passed in order to store the export
      */
     public function needs_to_have_a_file_name_when_storing()
     {
-        $this->expectException(\Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException::class);
-        $this->expectExceptionMessage('A filepath needs to be passed in order to store the export');
-
         $export = new class {
             use Exportable;
         };
+
+        $this->expectException(NoFilePathGivenException::class);
+        $this->expectExceptionMessage('A filepath needs to be passed in order to store the export');
 
         $export->store();
     }

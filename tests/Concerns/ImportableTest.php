@@ -8,6 +8,7 @@ use Nikazooz\Simplesheet\Simplesheet;
 use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Concerns\ToArray;
 use Nikazooz\Simplesheet\Concerns\Importable;
+use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
 
 class ImportableTest extends TestCase
 {
@@ -61,14 +62,15 @@ class ImportableTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
-     * @expectedExceptionMessage A filepath needs to be passed in order to perform the import.
      */
     public function throws_exception_when_no_file_path_is_passed()
     {
         $import = new class {
             use Importable;
         };
+
+        $this->expectException(NoFilePathGivenException::class);
+        $this->expectExceptionMessage('A filepath needs to be passed in order to perform the import.');
 
         $import->import();
     }

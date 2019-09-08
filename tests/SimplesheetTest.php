@@ -124,8 +124,8 @@ class SimplesheetTest extends TestCase
         $this->assertTrue($response);
         $this->assertFileExists(__DIR__.'/Data/Disks/Local/filename.csv');
         $contents = file_get_contents(__DIR__.'/Data/Disks/Local/filename.csv');
-        $this->assertContains('A1,B1', $contents);
-        $this->assertContains('A2,"B2 Test"', $contents);
+        $this->assertStringContainsString('A1,B1', $contents);
+        $this->assertStringContainsString('A2,"B2 Test"', $contents);
 
         // Cleanup
         unlink(__DIR__.'/Data/Disks/Local/filename.csv');
@@ -185,9 +185,9 @@ class SimplesheetTest extends TestCase
 
         $contents = file_get_contents(__DIR__.'/Data/Disks/Local/filename.csv');
 
-        $this->assertContains('sep=;', $contents);
-        $this->assertContains('A1;B1', $contents);
-        $this->assertContains('A2;"B2 Test"', $contents);
+        $this->assertStringContainsString('sep=;', $contents);
+        $this->assertStringContainsString('A1;B1', $contents);
+        $this->assertStringContainsString('A2;"B2 Test"', $contents);
 
         // Cleanup
         unlink(__DIR__.'/Data/Disks/Local/filename.csv');

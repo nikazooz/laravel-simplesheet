@@ -9,6 +9,7 @@ use Nikazooz\Simplesheet\Concerns\Exportable;
 use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\SkipsUnknownSheets;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
+use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\SheetWith100Rows;
 
 class WithMultipleSheetsTest extends TestCase
@@ -56,8 +57,6 @@ class WithMultipleSheetsTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Nikazooz\Simplesheet\Exceptions\SheetNotFoundException
-     * @expectedExceptionMessage Your requested sheet index: 9999 is out of bounds. The actual number of sheets is 2.
      */
     public function unknown_sheet_index_will_throw_sheet_not_found_exception()
     {
@@ -76,13 +75,14 @@ class WithMultipleSheetsTest extends TestCase
             }
         };
 
+        $this->expectException(SheetNotFoundException::class);
+        $this->expectExceptionMessage('Your requested sheet index: 9999 is out of bounds. The actual number of sheets is 2.');
+
         $import->import('import-multiple-sheets.xlsx');
     }
 
     /**
      * @test
-     * @expectedException \Nikazooz\Simplesheet\Exceptions\SheetNotFoundException
-     * @expectedExceptionMessage Your requested sheet name [Some Random Sheet Name] is out of bounds.
      */
     public function unknown_sheet_name_will_throw_sheet_not_found_exception()
     {
@@ -100,6 +100,9 @@ class WithMultipleSheetsTest extends TestCase
                 ];
             }
         };
+
+        $this->expectException(SheetNotFoundException::class);
+        $this->expectExceptionMessage('Your requested sheet name [Some Random Sheet Name] is out of bounds.');
 
         $import->import('import-multiple-sheets.xlsx');
     }

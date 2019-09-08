@@ -34,7 +34,7 @@ class WriterFactory
     }
 
     /**
-     * @return \Nikazooz\Simplesheet\Writers\CSVWriter
+     * @return \Nikazooz\Simplesheet\Writers\CsvWriter
      */
     protected static function makeCsvWriter($type, $export): WriterInterface
     {

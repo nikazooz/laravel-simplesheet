@@ -2,13 +2,13 @@
 
 namespace Nikazooz\Simplesheet\Factories;
 
-use Box\Spout\Writer\WriterInterface;
-use Nikazooz\Simplesheet\Simplesheet;
-use Nikazooz\Simplesheet\Writers\CsvWriter;
 use Box\Spout\Common\Helper\GlobalFunctionsHelper;
+use Box\Spout\Writer\WriterFactory as SpoutWriterFactory;
+use Box\Spout\Writer\WriterInterface;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
 use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
-use Box\Spout\Writer\WriterFactory as SpoutWriterFactory;
+use Nikazooz\Simplesheet\Simplesheet;
+use Nikazooz\Simplesheet\Writers\CsvWriter;
 
 class WriterFactory
 {

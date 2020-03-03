@@ -2,11 +2,11 @@
 
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
-use Nikazooz\Simplesheet\Concerns\FromQuery;
-use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Concerns\Exportable;
+use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Concerns\WithMapping;
+use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 
 class FromUsersQueryExportWithMapping implements FromQuery, WithMapping, WithEvents

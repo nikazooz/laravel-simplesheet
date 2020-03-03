@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Helpers;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Nikazooz\Simplesheet\Exceptions\NoTypeDetectedException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileTypeDetector
 {

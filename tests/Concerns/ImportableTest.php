@@ -2,13 +2,13 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use PHPUnit\Framework\Assert;
+use Nikazooz\Simplesheet\Concerns\Importable;
+use Nikazooz\Simplesheet\Concerns\ToArray;
+use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
 use Nikazooz\Simplesheet\Importer;
 use Nikazooz\Simplesheet\Simplesheet;
 use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Concerns\ToArray;
-use Nikazooz\Simplesheet\Concerns\Importable;
-use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
+use PHPUnit\Framework\Assert;
 
 class ImportableTest extends TestCase
 {

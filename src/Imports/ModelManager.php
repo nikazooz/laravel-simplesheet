@@ -2,14 +2,14 @@
 
 namespace Nikazooz\Simplesheet\Imports;
 
-use Throwable;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Nikazooz\Simplesheet\Concerns\ToModel;
+use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Concerns\SkipsOnError;
+use Nikazooz\Simplesheet\Concerns\ToModel;
 use Nikazooz\Simplesheet\Concerns\WithValidation;
-use Nikazooz\Simplesheet\Validators\RowValidator;
 use Nikazooz\Simplesheet\Exceptions\RowSkippedException;
+use Nikazooz\Simplesheet\Validators\RowValidator;
+use Throwable;
 
 class ModelManager
 {

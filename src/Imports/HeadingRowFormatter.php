@@ -2,9 +2,9 @@
 
 namespace Nikazooz\Simplesheet\Imports;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Support\Collection;
 
 class HeadingRowFormatter
 {

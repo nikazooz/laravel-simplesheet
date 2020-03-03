@@ -2,11 +2,11 @@
 
 namespace Nikazooz\Simplesheet\Concerns;
 
-use InvalidArgumentException;
-use Illuminate\Support\Collection;
-use Nikazooz\Simplesheet\Importer;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Collection;
+use InvalidArgumentException;
 use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
+use Nikazooz\Simplesheet\Importer;
 
 trait Importable
 {

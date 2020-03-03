@@ -2,15 +2,15 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
-use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Concerns\ToModel;
+use Illuminate\Validation\Rule;
 use Nikazooz\Simplesheet\Concerns\Importable;
+use Nikazooz\Simplesheet\Concerns\ToModel;
+use Nikazooz\Simplesheet\Concerns\WithBatchInserts;
 use Nikazooz\Simplesheet\Concerns\WithHeadingRow;
 use Nikazooz\Simplesheet\Concerns\WithValidation;
-use Nikazooz\Simplesheet\Concerns\WithBatchInserts;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
+use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Validators\ValidationException;
 
 class WithValidationTest extends TestCase

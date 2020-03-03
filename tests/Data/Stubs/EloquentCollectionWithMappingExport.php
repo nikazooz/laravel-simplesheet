@@ -4,8 +4,8 @@ namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
 use Illuminate\Database\Eloquent\Collection;
 use Nikazooz\Simplesheet\Concerns\Exportable;
-use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 
 class EloquentCollectionWithMappingExport implements FromCollection, WithMapping

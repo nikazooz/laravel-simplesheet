@@ -2,11 +2,11 @@
 
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
-use Nikazooz\Simplesheet\Events\AfterSheet;
-use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
+use Nikazooz\Simplesheet\Events\AfterSheet;
 use Nikazooz\Simplesheet\Events\BeforeExport;
+use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Events\BeforeWriting;
 
 class ExportWithEvents implements WithEvents

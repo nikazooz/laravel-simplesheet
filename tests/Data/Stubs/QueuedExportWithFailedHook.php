@@ -3,12 +3,12 @@
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
 use Exception;
-use PHPUnit\Framework\Assert;
 use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Concerns\Exportable;
-use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
+use PHPUnit\Framework\Assert;
 
 class QueuedExportWithFailedHook implements FromCollection, WithMapping
 {

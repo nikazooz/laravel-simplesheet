@@ -2,9 +2,9 @@
 
 namespace Nikazooz\Simplesheet;
 
+use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 use Nikazooz\Simplesheet\Jobs\QueueExport;
 use Nikazooz\Simplesheet\Jobs\StoreQueuedExport;
-use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 
 class QueuedWriter
 {

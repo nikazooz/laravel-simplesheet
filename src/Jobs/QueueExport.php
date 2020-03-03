@@ -2,11 +2,11 @@
 
 namespace Nikazooz\Simplesheet\Jobs;
 
-use Throwable;
-use Nikazooz\Simplesheet\Writer;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Nikazooz\Simplesheet\Files\TemporaryFile;
+use Nikazooz\Simplesheet\Writer;
+use Throwable;
 
 class QueueExport implements ShouldQueue
 {

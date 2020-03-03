@@ -28,7 +28,7 @@ $rules = [
     'no_unused_imports' => true,
     'not_operator_with_successor_space' => true,
     'object_operator_without_whitespace' => true,
-    'ordered_imports' => ['sortAlgorithm' => 'length'],
+    'ordered_imports' => ['sortAlgorithm' => 'alpha'],
     'phpdoc_indent' => true,
     'phpdoc_inline_tag' => true,
     'phpdoc_no_access' => true,

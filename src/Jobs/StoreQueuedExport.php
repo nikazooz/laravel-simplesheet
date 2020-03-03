@@ -3,8 +3,8 @@
 namespace Nikazooz\Simplesheet\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Nikazooz\Simplesheet\Files\Filesystem;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Nikazooz\Simplesheet\Files\Filesystem;
 use Nikazooz\Simplesheet\Files\TemporaryFile;
 
 class StoreQueuedExport implements ShouldQueue

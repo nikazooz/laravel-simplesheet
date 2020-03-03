@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Exceptions;
 
-use Throwable;
 use InvalidArgumentException;
+use Throwable;
 
 class NoFilenameGivenException extends InvalidArgumentException implements Throwable
 {

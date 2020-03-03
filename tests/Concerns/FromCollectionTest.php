@@ -2,9 +2,9 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\QueuedExport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\SheetWith100Rows;
+use Nikazooz\Simplesheet\Tests\TestCase;
 
 class FromCollectionTest extends TestCase
 {

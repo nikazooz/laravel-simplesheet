@@ -2,16 +2,16 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use Throwable;
-use PHPUnit\Framework\Assert;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
-use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Concerns\ToModel;
 use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\SkipsErrors;
 use Nikazooz\Simplesheet\Concerns\SkipsOnError;
+use Nikazooz\Simplesheet\Concerns\ToModel;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
+use Nikazooz\Simplesheet\Tests\TestCase;
+use PHPUnit\Framework\Assert;
+use Throwable;
 
 class SkipsOnErrorTest extends TestCase
 {

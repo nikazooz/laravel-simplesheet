@@ -2,15 +2,15 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use PHPUnit\Framework\Assert;
 use Illuminate\Database\Eloquent\Model;
-use Nikazooz\Simplesheet\Tests\TestCase;
+use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\ToArray;
 use Nikazooz\Simplesheet\Concerns\ToModel;
 use Nikazooz\Simplesheet\Concerns\WithLimit;
-use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\WithStartRow;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
+use Nikazooz\Simplesheet\Tests\TestCase;
+use PHPUnit\Framework\Assert;
 
 class WithLimitTest extends TestCase
 {

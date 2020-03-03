@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Tests;
 
-use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\AfterQueueExportJob;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryExport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryExportWithMapping;
 

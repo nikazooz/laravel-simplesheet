@@ -2,9 +2,9 @@
 
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
-use Nikazooz\Simplesheet\Concerns\ToModel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Nikazooz\Simplesheet\Concerns\Importable;
+use Nikazooz\Simplesheet\Concerns\ToModel;
 use Nikazooz\Simplesheet\Concerns\WithBatchInserts;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\Group;
 

@@ -2,23 +2,23 @@
 
 namespace Nikazooz\Simplesheet\Writers;
 
-use Illuminate\Support\Collection;
-use Box\Spout\Writer\WriterInterface;
-use Nikazooz\Simplesheet\HasEventBus;
-use Illuminate\Contracts\Support\Arrayable;
-use Nikazooz\Simplesheet\Events\AfterSheet;
-use Nikazooz\Simplesheet\Concerns\FromArray;
-use Nikazooz\Simplesheet\Concerns\FromQuery;
-use Nikazooz\Simplesheet\Concerns\WithTitle;
-use Nikazooz\Simplesheet\Events\BeforeSheet;
-use Nikazooz\Simplesheet\Concerns\WithEvents;
-use Nikazooz\Simplesheet\Helpers\ArrayHelper;
-use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Box\Spout\Writer\AbstractMultiSheetsWriter;
-use Nikazooz\Simplesheet\Concerns\FromIterator;
-use Nikazooz\Simplesheet\Concerns\WithHeadings;
+use Box\Spout\Writer\WriterInterface;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
+use Nikazooz\Simplesheet\Concerns\FromArray;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Concerns\FromIterator;
+use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\WithCustomChunkSize;
+use Nikazooz\Simplesheet\Concerns\WithEvents;
+use Nikazooz\Simplesheet\Concerns\WithHeadings;
+use Nikazooz\Simplesheet\Concerns\WithMapping;
+use Nikazooz\Simplesheet\Concerns\WithTitle;
+use Nikazooz\Simplesheet\Events\AfterSheet;
+use Nikazooz\Simplesheet\Events\BeforeSheet;
+use Nikazooz\Simplesheet\HasEventBus;
+use Nikazooz\Simplesheet\Helpers\ArrayHelper;
 
 class Sheet
 {

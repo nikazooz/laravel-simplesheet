@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Exceptions;
 
-use Throwable;
 use InvalidArgumentException;
+use Throwable;
 
 class NoFilePathGivenException extends InvalidArgumentException implements Throwable
 {

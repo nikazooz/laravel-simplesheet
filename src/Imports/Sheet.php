@@ -2,18 +2,18 @@
 
 namespace Nikazooz\Simplesheet\Imports;
 
-use Illuminate\Support\Collection;
-use Box\Spout\Reader\SheetInterface;
 use Box\Spout\Reader\ReaderInterface;
-use Nikazooz\Simplesheet\HasEventBus;
-use Nikazooz\Simplesheet\Concerns\ToArray;
-use Nikazooz\Simplesheet\Concerns\ToModel;
-use Nikazooz\Simplesheet\Events\AfterSheet;
+use Box\Spout\Reader\SheetInterface;
+use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Concerns\OnEachRow;
-use Nikazooz\Simplesheet\Events\BeforeSheet;
-use Nikazooz\Simplesheet\Concerns\WithEvents;
+use Nikazooz\Simplesheet\Concerns\ToArray;
 use Nikazooz\Simplesheet\Concerns\ToCollection;
+use Nikazooz\Simplesheet\Concerns\ToModel;
+use Nikazooz\Simplesheet\Concerns\WithEvents;
+use Nikazooz\Simplesheet\Events\AfterSheet;
+use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
+use Nikazooz\Simplesheet\HasEventBus;
 
 class Sheet
 {

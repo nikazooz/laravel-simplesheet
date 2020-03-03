@@ -3,11 +3,11 @@
 namespace Nikazooz\Simplesheet;
 
 use Box\Spout\Common\Type;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Files\Filesystem;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\PendingDispatch;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Nikazooz\Simplesheet\Helpers\FileTypeDetector;
 
 class Simplesheet implements Exporter, Importer

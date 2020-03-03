@@ -3,8 +3,8 @@
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
 use Nikazooz\Simplesheet\Concerns\Importable;
-use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Concerns\RegistersEventListeners;
+use Nikazooz\Simplesheet\Concerns\WithEvents;
 
 class ImportWithRegistersEventListeners implements WithEvents
 {

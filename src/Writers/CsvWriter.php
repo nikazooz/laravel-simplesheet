@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Writers;
 
-use Box\Spout\Writer\CSV\Writer;
 use Box\Spout\Common\Exception\IOException;
+use Box\Spout\Writer\CSV\Writer;
 
 class CsvWriter extends Writer
 {

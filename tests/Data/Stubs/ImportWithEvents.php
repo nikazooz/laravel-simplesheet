@@ -2,12 +2,12 @@
 
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
-use Nikazooz\Simplesheet\Events\AfterSheet;
-use Nikazooz\Simplesheet\Events\AfterImport;
-use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
+use Nikazooz\Simplesheet\Events\AfterImport;
+use Nikazooz\Simplesheet\Events\AfterSheet;
 use Nikazooz\Simplesheet\Events\BeforeImport;
+use Nikazooz\Simplesheet\Events\BeforeSheet;
 
 class ImportWithEvents implements WithEvents
 {

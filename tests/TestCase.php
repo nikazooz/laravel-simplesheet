@@ -2,14 +2,14 @@
 
 namespace Nikazooz\Simplesheet\Tests;
 
-use Illuminate\Http\Testing\File;
 use Box\Spout\Reader\ReaderFactory;
-use Illuminate\Contracts\Queue\Job;
 use Box\Spout\Reader\ReaderInterface;
-use Orchestra\Database\ConsoleServiceProvider;
-use PHPUnit\Framework\Constraint\StringContains;
+use Illuminate\Contracts\Queue\Job;
+use Illuminate\Http\Testing\File;
 use Nikazooz\Simplesheet\SimplesheetServiceProvider;
+use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use PHPUnit\Framework\Constraint\StringContains;
 
 class TestCase extends OrchestraTestCase
 {

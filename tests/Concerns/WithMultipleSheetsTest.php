@@ -2,15 +2,15 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use PHPUnit\Framework\Assert;
-use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Concerns\ToArray;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\SkipsUnknownSheets;
+use Nikazooz\Simplesheet\Concerns\ToArray;
 use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
 use Nikazooz\Simplesheet\Exceptions\SheetNotFoundException;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\SheetWith100Rows;
+use Nikazooz\Simplesheet\Tests\TestCase;
+use PHPUnit\Framework\Assert;
 
 class WithMultipleSheetsTest extends TestCase
 {
@@ -35,7 +35,7 @@ class WithMultipleSheetsTest extends TestCase
             /**
              * @return \Nikazooz\Simplesheet\Tests\Data\Stubs\SheetWith100Rows[]
              */
-            public function sheets() : array
+            public function sheets(): array
             {
                 return [
                     new SheetWith100Rows('A'),

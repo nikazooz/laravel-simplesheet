@@ -2,9 +2,9 @@
 
 namespace Nikazooz\Simplesheet\Facades;
 
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Foundation\Bus\PendingDispatch;
 use Nikazooz\Simplesheet\Fakes\SimplesheetFake;
 use Nikazooz\Simplesheet\Simplesheet as BaseSimplesheet;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

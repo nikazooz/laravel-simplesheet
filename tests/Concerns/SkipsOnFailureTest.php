@@ -2,18 +2,18 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use PHPUnit\Framework\Assert;
-use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
-use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Concerns\ToModel;
-use Nikazooz\Simplesheet\Validators\Failure;
+use Illuminate\Validation\Rule;
 use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\SkipsFailures;
 use Nikazooz\Simplesheet\Concerns\SkipsOnFailure;
-use Nikazooz\Simplesheet\Concerns\WithValidation;
+use Nikazooz\Simplesheet\Concerns\ToModel;
 use Nikazooz\Simplesheet\Concerns\WithBatchInserts;
+use Nikazooz\Simplesheet\Concerns\WithValidation;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
+use Nikazooz\Simplesheet\Tests\TestCase;
+use Nikazooz\Simplesheet\Validators\Failure;
+use PHPUnit\Framework\Assert;
 
 class SkipsOnFailureTest extends TestCase
 {

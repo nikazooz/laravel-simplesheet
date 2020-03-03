@@ -4,8 +4,8 @@ namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
 use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Concerns\Exportable;
-use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Concerns\WithMapping;
 
 class WithMappingExport implements FromCollection, WithMapping
 {

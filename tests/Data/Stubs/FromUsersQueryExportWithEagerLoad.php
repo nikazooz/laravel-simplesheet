@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
-use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\Exportable;
+use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\WithMapping;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 

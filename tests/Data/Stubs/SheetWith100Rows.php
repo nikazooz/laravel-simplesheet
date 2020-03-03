@@ -2,15 +2,15 @@
 
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
-use Nikazooz\Simplesheet\Writer;
 use Illuminate\Support\Collection;
-use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Concerns\WithTitle;
 use Nikazooz\Simplesheet\Concerns\Exportable;
-use Nikazooz\Simplesheet\Concerns\WithEvents;
-use Nikazooz\Simplesheet\Events\BeforeWriting;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Concerns\RegistersEventListeners;
+use Nikazooz\Simplesheet\Concerns\WithEvents;
+use Nikazooz\Simplesheet\Concerns\WithTitle;
+use Nikazooz\Simplesheet\Events\BeforeWriting;
+use Nikazooz\Simplesheet\Tests\TestCase;
+use Nikazooz\Simplesheet\Writer;
 
 class SheetWith100Rows implements FromCollection, WithEvents, WithTitle
 {

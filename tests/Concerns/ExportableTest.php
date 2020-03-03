@@ -2,13 +2,13 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
+use Nikazooz\Simplesheet\Concerns\Exportable;
+use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
 use Nikazooz\Simplesheet\Simplesheet;
 use Nikazooz\Simplesheet\Tests\TestCase;
-use Illuminate\Contracts\Support\Responsable;
-use Nikazooz\Simplesheet\Concerns\Exportable;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
 
 class ExportableTest extends TestCase
 {

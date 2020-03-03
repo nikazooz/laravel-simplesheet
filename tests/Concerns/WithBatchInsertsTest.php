@@ -2,14 +2,14 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Concerns\ToModel;
+use Illuminate\Support\Facades\DB;
 use Nikazooz\Simplesheet\Concerns\Importable;
+use Nikazooz\Simplesheet\Concerns\ToModel;
 use Nikazooz\Simplesheet\Concerns\WithBatchInserts;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\Group;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
+use Nikazooz\Simplesheet\Tests\TestCase;
 
 class WithBatchInsertsTest extends TestCase
 {

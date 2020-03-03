@@ -4,8 +4,8 @@ namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
 use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Concerns\Exportable;
-use Nikazooz\Simplesheet\Concerns\WithHeadings;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Concerns\WithHeadings;
 
 class WithHeadingExport implements FromCollection, WithHeadings
 {
@@ -17,8 +17,8 @@ class WithHeadingExport implements FromCollection, WithHeadings
     public function collection()
     {
         return collect([
-           ['A1', 'B1', 'C1'],
-           ['A2', 'B2', 'C2'],
+            ['A1', 'B1', 'C1'],
+            ['A2', 'B2', 'C2'],
         ]);
     }
 

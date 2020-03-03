@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet;
 
-use Illuminate\Support\Collection;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Collection;
 
 interface Importer
 {

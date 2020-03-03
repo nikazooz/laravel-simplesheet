@@ -2,10 +2,10 @@
 
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\Builder;
-use Nikazooz\Simplesheet\Concerns\FromQuery;
+use Illuminate\Support\Facades\DB;
 use Nikazooz\Simplesheet\Concerns\Exportable;
+use Nikazooz\Simplesheet\Concerns\FromQuery;
 use Nikazooz\Simplesheet\Concerns\WithCustomChunkSize;
 
 class FromNonEloquentQueryExport implements FromQuery, WithCustomChunkSize

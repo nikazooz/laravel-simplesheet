@@ -2,13 +2,13 @@
 
 namespace Nikazooz\Simplesheet\Jobs;
 
-use Throwable;
-use Nikazooz\Simplesheet\Reader;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Events\ImportFailed;
 use Nikazooz\Simplesheet\Files\TemporaryFile;
+use Nikazooz\Simplesheet\Reader;
+use Throwable;
 
 class QueueImport implements ShouldQueue
 {

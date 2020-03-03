@@ -3,14 +3,14 @@
 namespace Nikazooz\Simplesheet\Fakes;
 
 use Illuminate\Bus\Queueable;
-use PHPUnit\Framework\Assert;
-use Illuminate\Support\Collection;
-use Nikazooz\Simplesheet\Exporter;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\PendingDispatch;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Queue;
+use Nikazooz\Simplesheet\Exporter;
+use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SimplesheetFake implements Exporter
 {

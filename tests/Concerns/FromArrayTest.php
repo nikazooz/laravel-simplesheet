@@ -2,9 +2,9 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Concerns\FromArray;
 use Nikazooz\Simplesheet\Concerns\Exportable;
+use Nikazooz\Simplesheet\Concerns\FromArray;
+use Nikazooz\Simplesheet\Tests\TestCase;
 
 class FromArrayTest extends TestCase
 {

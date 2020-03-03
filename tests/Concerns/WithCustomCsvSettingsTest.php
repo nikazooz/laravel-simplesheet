@@ -2,13 +2,13 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use PHPUnit\Framework\Assert;
 use Illuminate\Support\Collection;
+use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Concerns\ToArray;
+use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
 use Nikazooz\Simplesheet\Simplesheet;
 use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Concerns\ToArray;
-use Nikazooz\Simplesheet\Concerns\FromCollection;
-use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
+use PHPUnit\Framework\Assert;
 
 class WithCustomCsvSettingsTest extends TestCase
 {

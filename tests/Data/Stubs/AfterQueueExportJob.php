@@ -3,8 +3,8 @@
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
 use Illuminate\Bus\Queueable;
-use Nikazooz\Simplesheet\Tests\TestCase;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Nikazooz\Simplesheet\Tests\TestCase;
 
 class AfterQueueExportJob implements ShouldQueue
 {

@@ -2,13 +2,13 @@
 
 namespace Nikazooz\Simplesheet\Concerns;
 
-use Nikazooz\Simplesheet\Events\AfterSheet;
 use Nikazooz\Simplesheet\Events\AfterImport;
-use Nikazooz\Simplesheet\Events\BeforeSheet;
+use Nikazooz\Simplesheet\Events\AfterSheet;
 use Nikazooz\Simplesheet\Events\BeforeExport;
 use Nikazooz\Simplesheet\Events\BeforeImport;
-use Nikazooz\Simplesheet\Events\BeforeWriting;
+use Nikazooz\Simplesheet\Events\BeforeSheet;
 use Nikazooz\Simplesheet\Events\BeforeTransactionCommit;
+use Nikazooz\Simplesheet\Events\BeforeWriting;
 
 trait RegistersEventListeners
 {

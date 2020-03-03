@@ -2,11 +2,11 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use PHPUnit\Framework\Assert;
 use Illuminate\Support\Collection;
-use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Concerns\ToCollection;
+use Nikazooz\Simplesheet\Tests\TestCase;
+use PHPUnit\Framework\Assert;
 
 class ToCollectionTest extends TestCase
 {

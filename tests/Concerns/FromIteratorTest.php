@@ -2,11 +2,11 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use Iterator;
 use ArrayIterator;
-use Nikazooz\Simplesheet\Tests\TestCase;
+use Iterator;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Nikazooz\Simplesheet\Concerns\FromIterator;
+use Nikazooz\Simplesheet\Tests\TestCase;
 
 class FromIteratorTest extends TestCase
 {

@@ -3,14 +3,14 @@
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
 use Illuminate\Support\Facades\DB;
-use Nikazooz\Simplesheet\Tests\TestCase;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\Group;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryExport;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\FromNonEloquentQueryExport;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\FromNestedArraysQueryExport;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\FromGroupUsersQueuedQueryExport;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\FromNestedArraysQueryExport;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\FromNonEloquentQueryExport;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryExport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryExportWithEagerLoad;
+use Nikazooz\Simplesheet\Tests\TestCase;
 
 class FromQueryTest extends TestCase
 {

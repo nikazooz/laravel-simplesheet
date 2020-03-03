@@ -2,10 +2,10 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Concerns\Exportable;
-use Nikazooz\Simplesheet\Concerns\WithHeadings;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Concerns\WithHeadings;
+use Nikazooz\Simplesheet\Tests\TestCase;
 
 class WithHeadingsTest extends TestCase
 {

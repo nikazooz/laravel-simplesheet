@@ -2,12 +2,12 @@
 
 namespace Nikazooz\Simplesheet\Validators;
 
-use Illuminate\Support\Str;
 use Illuminate\Contracts\Validation\Factory;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException as IlluminateValidationException;
 use Nikazooz\Simplesheet\Concerns\SkipsOnFailure;
 use Nikazooz\Simplesheet\Concerns\WithValidation;
 use Nikazooz\Simplesheet\Exceptions\RowSkippedException;
-use Illuminate\Validation\ValidationException as IlluminateValidationException;
 
 class RowValidator
 {

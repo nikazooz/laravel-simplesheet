@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Tests\Concerns;
 
-use Nikazooz\Simplesheet\Tests\TestCase;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\WithMappingExport;
+use Nikazooz\Simplesheet\Tests\TestCase;
 
 class WithMappingTest extends TestCase
 {

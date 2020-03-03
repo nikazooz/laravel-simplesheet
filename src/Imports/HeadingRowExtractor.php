@@ -2,10 +2,10 @@
 
 namespace Nikazooz\Simplesheet\Imports;
 
-use Nikazooz\Simplesheet\Row;
 use Box\Spout\Reader\SheetInterface;
-use Nikazooz\Simplesheet\Concerns\WithStartRow;
 use Nikazooz\Simplesheet\Concerns\WithHeadingRow;
+use Nikazooz\Simplesheet\Concerns\WithStartRow;
+use Nikazooz\Simplesheet\Row;
 
 class HeadingRowExtractor
 {

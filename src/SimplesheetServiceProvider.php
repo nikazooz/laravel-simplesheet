@@ -2,16 +2,16 @@
 
 namespace Nikazooz\Simplesheet;
 
-use Illuminate\Support\ServiceProvider;
-use Nikazooz\Simplesheet\Files\Filesystem;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Nikazooz\Simplesheet\Factories\ReaderFactory;
-use Nikazooz\Simplesheet\Factories\WriterFactory;
+use Illuminate\Support\ServiceProvider;
 use Laravel\Lumen\Application as LumenApplication;
-use Nikazooz\Simplesheet\Helpers\FileTypeDetector;
 use Nikazooz\Simplesheet\Console\ExportMakeCommand;
 use Nikazooz\Simplesheet\Console\ImportMakeCommand;
+use Nikazooz\Simplesheet\Factories\ReaderFactory;
+use Nikazooz\Simplesheet\Factories\WriterFactory;
+use Nikazooz\Simplesheet\Files\Filesystem;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
+use Nikazooz\Simplesheet\Helpers\FileTypeDetector;
 use Nikazooz\Simplesheet\Transactions\TransactionHandler;
 use Nikazooz\Simplesheet\Transactions\TransactionManager;
 

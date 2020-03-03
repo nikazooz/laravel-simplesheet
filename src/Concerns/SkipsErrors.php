@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Concerns;
 
-use Throwable;
 use Illuminate\Support\Collection;
+use Throwable;
 
 trait SkipsErrors
 {

@@ -2,8 +2,8 @@
 
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
-use Nikazooz\Simplesheet\Concerns\WithTitle;
 use Nikazooz\Simplesheet\Concerns\Exportable;
+use Nikazooz\Simplesheet\Concerns\WithTitle;
 
 class WithTitleExport implements WithTitle
 {

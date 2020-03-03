@@ -2,14 +2,14 @@
 
 namespace Nikazooz\Simplesheet\Tests;
 
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Queue\Events\JobProcessing;
-use Nikazooz\Simplesheet\Jobs\QueueImport;
-use Nikazooz\Simplesheet\Concerns\Importable;
 use Illuminate\Foundation\Bus\PendingDispatch;
+use Illuminate\Queue\Events\JobProcessing;
+use Illuminate\Support\Facades\Queue;
+use Nikazooz\Simplesheet\Concerns\Importable;
 use Nikazooz\Simplesheet\Files\RemoteTemporaryFile;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\QueuedImport;
+use Nikazooz\Simplesheet\Jobs\QueueImport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\AfterQueueImportJob;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\QueuedImport;
 
 class QueuedImportTest extends TestCase
 {

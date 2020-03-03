@@ -2,16 +2,16 @@
 
 namespace Nikazooz\Simplesheet\Tests;
 
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Nikazooz\Simplesheet\Concerns\ToModel;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\PendingDispatch;
-use Nikazooz\Simplesheet\Fakes\SimplesheetFake;
+use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
+use Nikazooz\Simplesheet\Concerns\ToModel;
+use Nikazooz\Simplesheet\Facades\Simplesheet as SimplesheetFacade;
+use Nikazooz\Simplesheet\Fakes\SimplesheetFake;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Nikazooz\Simplesheet\Facades\Simplesheet as SimplesheetFacade;
 
 class SimplesheetFakeTest extends TestCase
 {

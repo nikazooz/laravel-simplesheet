@@ -2,9 +2,9 @@
 
 namespace Nikazooz\Simplesheet\Concerns;
 
-use Nikazooz\Simplesheet\Exporter;
 use Nikazooz\Simplesheet\Exceptions\NoFilenameGivenException;
 use Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException;
+use Nikazooz\Simplesheet\Exporter;
 
 trait Exportable
 {

@@ -7,6 +7,7 @@ use Box\Spout\Reader\ReaderFactory;
 use Illuminate\Contracts\Queue\Job;
 use Box\Spout\Reader\ReaderInterface;
 use Orchestra\Database\ConsoleServiceProvider;
+use PHPUnit\Framework\Constraint\StringContains;
 use Nikazooz\Simplesheet\SimplesheetServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -124,5 +125,19 @@ class TestCase extends OrchestraTestCase
         $class = $job->resolveName();
 
         return $dict[$property] ?? $dict["\0*\0$property"] ?? $dict["\0$class\0$property"];
+    }
+
+    /**
+     * @param string $needle
+     * @param string $haystack
+     * @param string $message
+     */
+    protected function assertStringContains(string $needle, string $haystack, string $message = '')
+    {
+        if (method_exists($this, 'assertStringContainsString')) {
+            $this->assertStringContainsString($needle, $haystack, $message);
+        } else {
+            static::assertThat($haystack, new StringContains($needle, false), $message);
+        }
     }
 }

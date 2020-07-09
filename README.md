@@ -3,13 +3,13 @@
 Wrapper around [Box Spout](http://opensource.box.com/spout/) with the goal of simplifying exports and imports in [Laravel](https://laravel.com).
 
 <h4 align="center">
-  <a href="https://nikazooz.github.io/laravel-simplesheet/1.0/exports/">Quickstart</a>
+  <a href="https://nikazooz.github.io/laravel-simplesheet/1.x/exports/">Quickstart</a>
   <span> · </span>
-  <a href="https://nikazooz.github.io/laravel-simplesheet/1.0/getting-started/">Documentation</a>
+  <a href="https://nikazooz.github.io/laravel-simplesheet/1.x/getting-started/">Documentation</a>
   <span> · </span>
-  <a href="https://nikazooz.github.io/laravel-simplesheet/1.0/getting-started/contributing.html">Contributing</a>
+  <a href="https://nikazooz.github.io/laravel-simplesheet/1.x/getting-started/contributing.html">Contributing</a>
   <span> · </span>
-  <a href="https://nikazooz.github.io/laravel-simplesheet/1.0/getting-started/support.html">Support</a>
+  <a href="https://nikazooz.github.io/laravel-simplesheet/1.x/getting-started/support.html">Support</a>
 </h4>
 
 
@@ -25,7 +25,7 @@ Laravel Excel is an amazing package and I highly recommend it. One problem I've 
 
 ## ✨ Features
 
-- **Easily export** from different sources: an array, Laravel Collection or query, to different [supported formats](https://nikazooz.github.io/laravel-simplesheet/1.0/exports/export-formats.html)
+- **Easily export** from different sources: an array, Laravel Collection or query, to different [supported formats](https://nikazooz.github.io/laravel-simplesheet/1.x/exports/export-formats.html)
 
 - **Supercharged imports** import of workbooks and worksheets to Eloquent models with batch inserts! Have large files? Your entire import can happen in the background. If you like, you can even handle each row youself!
 

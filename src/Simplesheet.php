@@ -124,7 +124,7 @@ class Simplesheet implements Exporter, Importer
      * @param  object  $export
      * @param  string  $fileName
      * @param  string|null  $writerType
-     * @return string
+     * @return \Nikazooz\Simplesheet\Files\TemporaryFile
      *
      * @throws \Nikazooz\Simplesheet\NoTypeDetectedException
      */

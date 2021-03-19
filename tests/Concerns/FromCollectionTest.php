@@ -46,7 +46,9 @@ class FromCollectionTest extends TestCase
         foreach ($export->sheets() as $sheetIndex => $sheet) {
             $worksheet = $this->getSheetByIndex($reader, $sheetIndex);
 
-            $this->assertEquals($sheet->collection()->toArray(), array_values(iterator_to_array($worksheet->getRowIterator())));
+            $this->assertEquals($sheet->collection()->toArray(), array_values(array_map(function ($row) {
+                return $row->toArray();
+            }, iterator_to_array($worksheet->getRowIterator()))));
             $this->assertEquals($sheet->title(), $worksheet->getName());
         }
 

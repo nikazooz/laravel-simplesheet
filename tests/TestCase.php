@@ -2,7 +2,7 @@
 
 namespace Nikazooz\Simplesheet\Tests;
 
-use Box\Spout\Reader\ReaderFactory;
+use Box\Spout\Reader\Common\Creator\ReaderFactory;
 use Box\Spout\Reader\ReaderInterface;
 use Closure;
 use Illuminate\Contracts\Queue\Job;
@@ -24,7 +24,7 @@ class TestCase extends OrchestraTestCase
      */
     public function read(string $filePath, string $writerType): ReaderInterface
     {
-        $reader = ReaderFactory::create($writerType);
+        $reader = ReaderFactory::createFromType($writerType);
 
         $reader->open($filePath);
 
@@ -43,7 +43,9 @@ class TestCase extends OrchestraTestCase
 
         $sheet = $this->getSheetByIndex($reader, $sheetIndex);
 
-        return array_values(iterator_to_array($sheet->getRowIterator()));
+        return array_values(array_map(function ($row) {
+            return $row->toArray();
+        }, iterator_to_array($sheet->getRowIterator())));
     }
 
     /**

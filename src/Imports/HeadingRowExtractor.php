@@ -64,7 +64,7 @@ class HeadingRowExtractor
                 break;
             }
 
-            $rows[] = $row;
+            $rows[] = $row->toArray();
         }
 
         $headingRow = head($rows);

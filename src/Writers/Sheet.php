@@ -2,8 +2,11 @@
 
 namespace Nikazooz\Simplesheet\Writers;
 
+use Box\Spout\Common\Entity\Cell;
+use Box\Spout\Common\Entity\Row;
 use Box\Spout\Writer\AbstractMultiSheetsWriter;
 use Box\Spout\Writer\WriterInterface;
+use Box\Spout\Writer\WriterMultiSheetsAbstract;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Concerns\FromArray;
@@ -170,7 +173,7 @@ class Sheet
     {
         // When dealing with eloquent models, we'll skip the relations
         // as we won't be able to display them anyway.
-        if (method_exists($row, 'attributesToArray')) {
+        if (is_object($row) && method_exists($row, 'attributesToArray')) {
             return $row->attributesToArray();
         }
 
@@ -194,7 +197,11 @@ class Sheet
      */
     public function appendRow($row)
     {
-        $this->spoutWriter->addRow($row);
+        $cells = array_map(function ($value) {
+            return new Cell($value);
+        }, $row);
+
+        $this->spoutWriter->addRow(new Row($cells, null));
     }
 
     /**
@@ -234,7 +241,7 @@ class Sheet
      */
     protected function multipleSheetsAreSupported()
     {
-        return $this->spoutWriter instanceof AbstractMultiSheetsWriter;
+        return $this->spoutWriter instanceof WriterMultiSheetsAbstract;
     }
 
     /**

@@ -23,7 +23,7 @@ class QueuedExportTest extends TestCase
         $this->expectQueuedExport(function () {
             $export = new QueuedExport();
             $export->queue('queued-export.xlsx');
-        }, __DIR__ . '/Data/Disks/Local/queued-export.xlsx');
+        }, __DIR__.'/Data/Disks/Local/queued-export.xlsx');
     }
 
     /**
@@ -34,7 +34,7 @@ class QueuedExportTest extends TestCase
         $this->expectQueuedExport(function () {
             $export = new QueuedExport();
             $export->queue('queued-export.xlsx', 'test');
-        }, __DIR__ . '/Data/Disks/Test/queued-export.xlsx');
+        }, __DIR__.'/Data/Disks/Test/queued-export.xlsx');
     }
 
     /**
@@ -69,10 +69,10 @@ class QueuedExportTest extends TestCase
             $export = new QueuedExport();
             $export->queue('queued-export.xlsx');
 
-            $array = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-export.xlsx', Simplesheet::XLSX);
+            $array = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-export.xlsx', Simplesheet::XLSX);
 
             $this->assertCount(100, $array);
-        }, __DIR__ . '/Data/Disks/Local/queued-export.xlsx');
+        }, __DIR__.'/Data/Disks/Local/queued-export.xlsx');
     }
 
     /**
@@ -83,7 +83,7 @@ class QueuedExportTest extends TestCase
         $this->expectQueuedExport(function () {
             $export = new ShouldQueueExport();
             $export->store('queued-export.xlsx', 'test');
-        }, __DIR__ . '/Data/Disks/Test/queued-export.xlsx');
+        }, __DIR__.'/Data/Disks/Test/queued-export.xlsx');
     }
 
     /**
@@ -95,12 +95,12 @@ class QueuedExportTest extends TestCase
             $export = new EloquentCollectionWithMappingExport();
             $export->queue('queued-export.xlsx');
 
-            $actual = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-export.xlsx', 'xlsx');
+            $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-export.xlsx', 'xlsx');
 
             $this->assertEquals([
                 ['John', 'Doe'],
             ], $actual);
-        } ,__DIR__ . '/Data/Disks/Local/queued-export.xlsx');
+        } ,__DIR__.'/Data/Disks/Local/queued-export.xlsx');
     }
 
     /**

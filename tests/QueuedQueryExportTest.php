@@ -30,12 +30,12 @@ class QueuedQueryExportTest extends TestCase
             $export = new FromUsersQueryExport();
             $export->queue('queued-query-export.xlsx');
 
-            $actual = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-query-export.xlsx', 'xlsx');
+            $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-query-export.xlsx', 'xlsx');
 
             $this->assertCount(100, $actual);
             // 6 of the 7 columns in export, excluding the "hidden" password column.
             $this->assertCount(6, $actual[0]);
-        }, __DIR__ . '/Data/Disks/Local/queued-query-export.xlsx');
+        }, __DIR__.'/Data/Disks/Local/queued-query-export.xlsx');
     }
 
     /**
@@ -47,12 +47,12 @@ class QueuedQueryExportTest extends TestCase
             $export = new FromUsersQueryExportWithMapping();
             $export->queue('queued-query-export-with-mapping.xlsx');
 
-            $actual = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-query-export-with-mapping.xlsx', 'xlsx');
+            $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-query-export-with-mapping.xlsx', 'xlsx');
 
             $this->assertCount(100, $actual);
             // Only 1 column when using map()
             $this->assertCount(1, $actual[0]);
             $this->assertEquals(User::value('name'), $actual[0][0]);
-        }, __DIR__ . '/Data/Disks/Local/queued-query-export-with-mapping.xlsx');
+        }, __DIR__.'/Data/Disks/Local/queued-query-export-with-mapping.xlsx');
     }
 }

@@ -1,0 +1,76 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    types: [ready_for_review, synchronize, opened]
+
+jobs:
+  tests:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        php: [7.1, 7.2, 7.3, 7.4]
+        laravel: [8, 7, 6, 5.8, 5.7, 5.6, 5.5]
+        dependency-version: [prefer-stable]
+        os: [ubuntu-latest]
+        include:
+          - laravel: 8
+            testbench: 6.*
+          - laravel: 7
+            testbench: 5.*
+          - laravel: 6
+            testbench: 4.*
+          - laravel: 5.8
+            testbench: 3.8.*
+          - laravel: 5.7
+            testbench: 3.7.*
+          - laravel: 5.6
+            testbench: 3.6.*
+          - laravel: 5.5
+            testbench: 3.5.*
+        exclude:
+          - laravel: 8
+            php: 7.2
+          - laravel: 8
+            php: 7.1
+          - laravel: 7
+            php: 7.1
+          - laravel: 6
+            php: 7.1
+
+    name: PHP${{ matrix.php }} - L${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, mysql, pdo_mysql, bcmath, intl, gd, exif, iconv
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}.*" "orchestra/testbench:${{ matrix.testbench }}"  --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Install legacy factories
+        run: |
+          composer require "laravel/legacy-factories" --no-interaction
+        if: "matrix.laravel >= 8"
+
+      - name: Execute tests
+        run: vendor/bin/phpunit --testdox --configuration phpunit.xml.dist

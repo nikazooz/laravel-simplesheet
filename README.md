@@ -49,6 +49,6 @@ This software is open source and licensed under the [MIT license](https://choose
 
 Versions will be supported for a limited amount of time.
 
-| Version | Laravel Version | Php Version | Support                |
-| ------- | --------------- | ----------- | ---------------------- |
-| 1.*     | 5.5 - 8.*       | ^7.1        | Bug and security fixes |
+| Version | Laravel Version | Php Version | Box Spout | Support                |
+| ------- | --------------- | ----------- | --------- | ---------------------- |
+| 1.*     | 5.5 - 8.*       | ^7.1        | ^2.7      | Bug and security fixes |

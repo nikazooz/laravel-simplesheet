@@ -20,22 +20,22 @@ jobs:
             testbench: 6
           - laravel: 7
             testbench: 5
-            remove: "laravel/legacy-factories:^1.0"
+            remove: "laravel/legacy-factories"
           - laravel: 6
             testbench: 4
-            remove: "laravel/legacy-factories:^1.0"
+            remove: "laravel/legacy-factories"
           - laravel: 5.8
             testbench: 3.8
-            remove: "laravel/legacy-factories:^1.0"
+            remove: "laravel/legacy-factories"
           - laravel: 5.7
             testbench: 3.7
-            remove: "laravel/legacy-factories:^1.0"
+            remove: "laravel/legacy-factories"
           - laravel: 5.6
             testbench: 3.6
-            remove: "laravel/legacy-factories:^1.0"
+            remove: "laravel/legacy-factories"
           - laravel: 5.5
             testbench: 3.5
-            remove: "laravel/legacy-factories:^1.0"
+            remove: "laravel/legacy-factories"
         exclude:
           - laravel: 8
             php: 7.2
@@ -69,7 +69,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer remove "${{ matrix.remove }}"
+          composer remove "${{ matrix.remove }}" --no-update
           composer require "laravel/framework:${{ matrix.laravel }}.*" "orchestra/testbench:${{ matrix.testbench }}.*" --no-interaction --no-update --dev
           composer update --prefer-stable --prefer-dist --no-interaction --no-suggest
 

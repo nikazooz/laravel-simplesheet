@@ -3,7 +3,6 @@
 namespace Nikazooz\Simplesheet\Tests\Data\Stubs;
 
 use Exception;
-use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Concerns\Exportable;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Concerns\WithMapping;

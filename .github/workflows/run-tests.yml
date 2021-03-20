@@ -8,47 +8,48 @@ on:
     types: [ready_for_review, synchronize, opened]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  tests:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    runs-on: ${{ matrix.os }}
+
     strategy:
-      fail-fast: true
       matrix:
-        php: [7.4, 7.3, 7.2, 7.1]
+        php: [7.1, 7.2, 7.3, 7.4, 8.0]
         laravel: [8, 7, 6, 5.8, 5.7, 5.6, 5.5]
+        dependency-version: [prefer-stable]
+        os: [ubuntu-latest]
         include:
           - laravel: 8
-            testbench: 6
+            testbench: 6.*
           - laravel: 7
-            testbench: 5
-            remove: "laravel/legacy-factories"
+            testbench: 5.*
           - laravel: 6
-            testbench: 4
-            remove: "laravel/legacy-factories"
+            testbench: 4.*
           - laravel: 5.8
-            testbench: 3.8
-            remove: "laravel/legacy-factories"
-          - laravel: 5.7
-            testbench: 3.7
-            remove: "laravel/legacy-factories"
-          - laravel: 5.6
-            testbench: 3.6
-            remove: "laravel/legacy-factories"
-          - laravel: 5.5
-            testbench: 3.5
-            remove: "laravel/legacy-factories"
+            testbench: 3.8.*
         exclude:
           - laravel: 8
             php: 7.2
           - laravel: 8
             php: 7.1
           - laravel: 7
-            php: 7.2
+            php: 8.0
           - laravel: 7
             php: 7.1
           - laravel: 6
+            php: 8.0
+          - laravel: 6
             php: 7.1
+          - laravel: 5.8
+            php: 8.0
+          - laravel: 5.7
+            php: 8.0
+          - laravel: 5.6
+            php: 8.0
+          - laravel: 5.5
+            php: 8.0
 
-    name: PHP:${{ matrix.php }} - Laravel:${{ matrix.laravel }}
+    name: PHP${{ matrix.php }} - L${{ matrix.laravel }}
 
     steps:
       - name: Checkout code
@@ -64,14 +65,18 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, mysql, pdo_mysql, bcmath, intl, gd, exif, iconv
           coverage: none
 
       - name: Install dependencies
         run: |
-          composer remove "${{ matrix.remove }}" --no-update --ignore-platform-reqs
-          composer require "laravel/framework:${{ matrix.laravel }}.*" "orchestra/testbench:${{ matrix.testbench }}.*" --no-interaction --no-update --dev
-          composer update --prefer-stable --prefer-dist --no-interaction --no-suggest
+          composer require "laravel/framework:${{ matrix.laravel }}.*" "orchestra/testbench:${{ matrix.testbench }}"  --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
-      - name: Run Tests
-        run: vendor/bin/phpunit --configuration phpunit.xml.dist
+      - name: Install legacy factories
+        run: |
+          composer require "laravel/legacy-factories" --no-interaction
+        if: "matrix.laravel >= 8"
+
+      - name: Execute tests
+        run: vendor/bin/phpunit --testdox --configuration phpunit.xml.dist

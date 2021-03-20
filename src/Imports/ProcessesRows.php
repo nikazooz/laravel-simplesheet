@@ -47,7 +47,7 @@ trait ProcessesRows
                 break;
             }
 
-            yield $rowNumber => $row;
+            yield $rowNumber => $row->toArray();
         }
     }
 

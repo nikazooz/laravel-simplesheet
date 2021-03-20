@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        php: [7.1, 7.2, 7.3, 7.4]
+        php: [7.2, 7.3, 7.4, 8.0]
         laravel: [8, 7, 6, 5.8, 5.7, 5.6, 5.5]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
@@ -36,12 +36,14 @@ jobs:
         exclude:
           - laravel: 8
             php: 7.2
-          - laravel: 8
-            php: 7.1
-          - laravel: 7
-            php: 7.1
-          - laravel: 6
-            php: 7.1
+          - laravel: 5.8
+            php: 8.0
+          - laravel: 5.7
+            php: 8.0
+          - laravel: 5.6
+            php: 8.0
+          - laravel: 5.5
+            php: 8.0
 
     name: PHP${{ matrix.php }} - L${{ matrix.laravel }}
 

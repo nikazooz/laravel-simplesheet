@@ -3,8 +3,8 @@
 namespace Nikazooz\Simplesheet\Factories;
 
 use Box\Spout\Common\Type;
+use Box\Spout\Reader\Common\Creator\ReaderFactory as SpoutReaderFactory;
 use Box\Spout\Reader\CSV\Reader as CsvReader;
-use Box\Spout\Reader\ReaderFactory as SpoutReaderFactory;
 use Box\Spout\Reader\ReaderInterface;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
 use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
@@ -31,12 +31,12 @@ class ReaderFactory
     protected static function makeUnconfiguredReader($type)
     {
         if (Simplesheet::TSV === $type) {
-            return SpoutReaderFactory::create(Type::CSV)
+            return SpoutReaderFactory::createFromType(Type::CSV)
                 ->setFieldDelimiter("\t")
                 ->setShouldPreserveEmptyRows(true);
         }
 
-        return SpoutReaderFactory::create($type)->setShouldPreserveEmptyRows(true);
+        return SpoutReaderFactory::createFromType($type)->setShouldPreserveEmptyRows(true);
     }
 
     /**

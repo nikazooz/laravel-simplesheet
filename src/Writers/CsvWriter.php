@@ -2,7 +2,9 @@
 
 namespace Nikazooz\Simplesheet\Writers;
 
+use Box\Spout\Common\Entity\Row;
 use Box\Spout\Common\Exception\IOException;
+use Box\Spout\Writer\Common\Entity\Options;
 use Box\Spout\Writer\CSV\Writer;
 
 class CsvWriter extends Writer
@@ -75,7 +77,7 @@ class CsvWriter extends Writer
         if ($this->includeSeparatorLine) {
             $this->globalFunctionsHelper->fputs(
                 $this->filePointer,
-                'sep='.$this->fieldDelimiter.$this->lineEnding
+                'sep='.$this->getFieldDelimiter().$this->lineEnding
             );
         }
     }
@@ -83,34 +85,32 @@ class CsvWriter extends Writer
     /**
      * Adds data to the currently opened writer.
      *
-     * @param  array $dataRow Array containing data to be written.
-     *          Example $dataRow = ['data1', 1234, null, '', 'data5'];
+     * @param  \Box\Spout\Common\Entity\Row $row
      * @param \Box\Spout\Writer\Style\Style $style Ignored here since CSV does not support styling.
      * @return void
      * @throws \Box\Spout\Common\Exception\IOException If unable to write data
      */
-    protected function addRowToWriter(array $dataRow, $style)
+    protected function addRowToWriter(Row $row)
     {
         if (PHP_EOL !== $this->lineEnding) {
-            return $this->customAddRowToWriter($dataRow);
+            return $this->customAddRowToWriter($row);
         }
 
-        parent::addRowToWriter($dataRow, $style);
+        parent::addRowToWriter($row);
     }
 
     /**
      * Adds data to the currently opened writer.
      *
-     * @param  array $dataRow Array containing data to be written.
-     *          Example $dataRow = ['data1', 1234, null, '', 'data5'];
+     * @param  \Box\Spout\Common\Entity\Row $row
      * @return void
      * @throws \Box\Spout\Common\Exception\IOException If unable to write data
      */
-    protected function customAddRowToWriter($dataRow)
+    protected function customAddRowToWriter(Row $row)
     {
         $wasWriteSuccessful = $this->globalFunctionsHelper->fputs(
             $this->filePointer,
-            $this->prepareRowForWriting($dataRow)
+            $this->prepareRowForWriting($row)
         );
 
         if ($wasWriteSuccessful === false) {
@@ -124,14 +124,14 @@ class CsvWriter extends Writer
     }
 
     /**
-     * @param  array  $row
+     * @param  \Box\Spout\Common\Entity\Row $row
      * @return string
      */
-    protected function prepareRowForWriting($row)
+    protected function prepareRowForWriting(Row $row)
     {
-        return implode($this->fieldDelimiter, array_map(function ($cell) {
+        return implode($this->getFieldDelimiter(), array_map(function ($cell) {
             return $this->encloseString($cell);
-        }, $row)).$this->lineEnding;
+        }, $row->toArray())).$this->lineEnding;
     }
 
     /**
@@ -145,9 +145,19 @@ class CsvWriter extends Writer
         }
 
         return vsprintf('%s%s%s', [
-            $this->fieldEnclosure,
+            $this->getFieldEnclosure(),
             addslashes($str),
-            $this->fieldEnclosure,
+            $this->getFieldEnclosure(),
         ]);
+    }
+
+    protected function getFieldDelimiter()
+    {
+        return $this->optionsManager->getOption(Options::FIELD_DELIMITER);
+    }
+
+    protected function getFieldEnclosure()
+    {
+        return $this->optionsManager->getOption(Options::FIELD_ENCLOSURE);
     }
 }

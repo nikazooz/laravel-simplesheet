@@ -52,3 +52,4 @@ Versions will be supported for a limited amount of time.
 | Version | Laravel Version | Php Version | Box Spout | Support                |
 | ------- | --------------- | ----------- | --------- | ---------------------- |
 | 1.*     | 5.5 - 8.*       | ^7.1        | ^2.7      | Bug and security fixes |
+| 2.*     | 5.5 - 8.*       | >=7.2       | ^3.2      | New features           |

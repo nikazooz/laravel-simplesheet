@@ -57,7 +57,7 @@ trait Exportable
      * @param  string|null  $filePath
      * @param  string|null  $disk
      * @param  string|null  $writerType
-     * @return \Illuminate\Foundation\Bus\PendingDispatch
+     * @return mixed
      *
      * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
      */

@@ -11,7 +11,8 @@ class TransactionManager extends Manager
      */
     public function getDefaultDriver()
     {
-        return $this->app['config']->get('simplesheet.transactions.handler');
+
+        return $this->getContainer()['config']->get('simplesheet.transactions.handler');
     }
 
     /**
@@ -28,7 +29,16 @@ class TransactionManager extends Manager
     public function createDbDriver()
     {
         return new DbTransactionHandler(
-            $this->app->get('db.connection')
+            $this->getContainer()->get('db.connection')
         );
+    }
+
+    protected function getContainer()
+    {
+        if (isset($this->container)) {
+            return $this->container;
+        }
+
+        return $this->app;
     }
 }

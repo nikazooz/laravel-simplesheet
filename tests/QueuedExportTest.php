@@ -100,7 +100,7 @@ class QueuedExportTest extends TestCase
             $this->assertEquals([
                 ['John', 'Doe'],
             ], $actual);
-        } ,__DIR__.'/Data/Disks/Local/queued-export.xlsx');
+        }, __DIR__.'/Data/Disks/Local/queued-export.xlsx');
     }
 
     /**

@@ -49,6 +49,6 @@ This software is open source and licensed under the [MIT license](https://choose
 
 Versions will be supported for a limited amount of time.
 
-| Version | Laravel Version | Php Version | Support      |
-| ------- | --------------- | ----------- | ------------ |
-| 1.*     | >=5.5           | ^7.1        | New features |
+| Version | Laravel Version | Php Version | Support                |
+| ------- | --------------- | ----------- | ---------------------- |
+| 1.*     | 5.5 - 8.*       | ^7.1        | Bug and security fixes |

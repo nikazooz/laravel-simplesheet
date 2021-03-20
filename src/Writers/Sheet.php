@@ -4,7 +4,6 @@ namespace Nikazooz\Simplesheet\Writers;
 
 use Box\Spout\Common\Entity\Cell;
 use Box\Spout\Common\Entity\Row;
-use Box\Spout\Writer\AbstractMultiSheetsWriter;
 use Box\Spout\Writer\WriterInterface;
 use Box\Spout\Writer\WriterMultiSheetsAbstract;
 use Illuminate\Contracts\Support\Arrayable;

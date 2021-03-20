@@ -3,8 +3,8 @@
 namespace Nikazooz\Simplesheet\Factories;
 
 use Box\Spout\Common\Type;
-use Box\Spout\Reader\CSV\Reader as CsvReader;
 use Box\Spout\Reader\Common\Creator\ReaderFactory as SpoutReaderFactory;
+use Box\Spout\Reader\CSV\Reader as CsvReader;
 use Box\Spout\Reader\ReaderInterface;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
 use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;

@@ -4,8 +4,12 @@ namespace Nikazooz\Simplesheet\Tests;
 
 use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Reader\ReaderInterface;
+use Closure;
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Http\Testing\File;
+use Illuminate\Queue\Events\JobProcessing;
+use Illuminate\Support\Facades\Queue;
+use Nikazooz\Simplesheet\Jobs\QueueExport;
 use Nikazooz\Simplesheet\SimplesheetServiceProvider;
 use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
@@ -139,5 +143,26 @@ class TestCase extends OrchestraTestCase
         } else {
             static::assertThat($haystack, new StringContains($needle, false), $message);
         }
+    }
+
+    /**
+     * @param \Closure $callback do the work that queues the export
+     * @param string $filePath
+     * @return void
+     */
+    protected function expectQueuedExport(Closure $callback, string $filePath)
+    {
+        $queued = false;
+
+        Queue::before(function (JobProcessing $event) use (&$queued) {
+            if ($event->job->resolveName() === QueueExport::class) {
+                $queued = true;
+            }
+        });
+
+        $callback();
+
+        $this->assertTrue($queued, 'Export has not been queued');
+        $this->assertFileExists($filePath);
     }
 }

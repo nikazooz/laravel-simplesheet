@@ -2,7 +2,6 @@
 
 namespace Nikazooz\Simplesheet\Tests;
 
-use Nikazooz\Simplesheet\Tests\Data\Stubs\AfterQueueExportJob;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryExport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryExportWithMapping;
@@ -27,18 +26,16 @@ class QueuedQueryExportTest extends TestCase
      */
     public function can_queue_an_export()
     {
-        $export = new FromUsersQueryExport();
+        $this->expectQueuedExport(function () {
+            $export = new FromUsersQueryExport();
+            $export->queue('queued-query-export.xlsx');
 
-        $export->queue('queued-query-export.xlsx')->chain([
-            new AfterQueueExportJob(__DIR__.'/Data/Disks/Local/queued-query-export.xlsx'),
-        ]);
+            $actual = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-query-export.xlsx', 'xlsx');
 
-        $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-query-export.xlsx', 'xlsx');
-
-        $this->assertCount(100, $actual);
-
-        // 6 of the 7 columns in export, excluding the "hidden" password column.
-        $this->assertCount(6, $actual[0]);
+            $this->assertCount(100, $actual);
+            // 6 of the 7 columns in export, excluding the "hidden" password column.
+            $this->assertCount(6, $actual[0]);
+        }, __DIR__ . '/Data/Disks/Local/queued-query-export.xlsx');
     }
 
     /**
@@ -46,18 +43,16 @@ class QueuedQueryExportTest extends TestCase
      */
     public function can_queue_an_export_with_mapping()
     {
-        $export = new FromUsersQueryExportWithMapping();
+        $this->expectQueuedExport(function () {
+            $export = new FromUsersQueryExportWithMapping();
+            $export->queue('queued-query-export-with-mapping.xlsx');
 
-        $export->queue('queued-query-export-with-mapping.xlsx')->chain([
-            new AfterQueueExportJob(__DIR__.'/Data/Disks/Local/queued-query-export-with-mapping.xlsx'),
-        ]);
+            $actual = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-query-export-with-mapping.xlsx', 'xlsx');
 
-        $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-query-export-with-mapping.xlsx', 'xlsx');
-
-        $this->assertCount(100, $actual);
-
-        // Only 1 column when using map()
-        $this->assertCount(1, $actual[0]);
-        $this->assertEquals(User::value('name'), $actual[0][0]);
+            $this->assertCount(100, $actual);
+            // Only 1 column when using map()
+            $this->assertCount(1, $actual[0]);
+            $this->assertEquals(User::value('name'), $actual[0][0]);
+        }, __DIR__ . '/Data/Disks/Local/queued-query-export-with-mapping.xlsx');
     }
 }

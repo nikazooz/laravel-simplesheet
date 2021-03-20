@@ -11,7 +11,6 @@ class TransactionManager extends Manager
      */
     public function getDefaultDriver()
     {
-
         return $this->getContainer()['config']->get('simplesheet.transactions.handler');
     }
 

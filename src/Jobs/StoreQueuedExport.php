@@ -27,7 +27,7 @@ class StoreQueuedExport implements ShouldQueue
     private $disk;
 
     /**
-     * @var string|null
+     * @var array
      */
     private $diskOptions = [];
 

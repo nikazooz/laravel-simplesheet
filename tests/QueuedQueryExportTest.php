@@ -30,10 +30,10 @@ class QueuedQueryExportTest extends TestCase
         $export = new FromUsersQueryExport();
 
         $export->queue('queued-query-export.xlsx')->chain([
-            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Local/queued-query-export.xlsx'),
+            new AfterQueueExportJob(__DIR__.'/Data/Disks/Local/queued-query-export.xlsx'),
         ]);
 
-        $actual = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-query-export.xlsx', 'xlsx');
+        $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-query-export.xlsx', 'xlsx');
 
         $this->assertCount(100, $actual);
 
@@ -49,10 +49,10 @@ class QueuedQueryExportTest extends TestCase
         $export = new FromUsersQueryExportWithMapping();
 
         $export->queue('queued-query-export-with-mapping.xlsx')->chain([
-            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Local/queued-query-export-with-mapping.xlsx'),
+            new AfterQueueExportJob(__DIR__.'/Data/Disks/Local/queued-query-export-with-mapping.xlsx'),
         ]);
 
-        $actual = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-query-export-with-mapping.xlsx', 'xlsx');
+        $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-query-export-with-mapping.xlsx', 'xlsx');
 
         $this->assertCount(100, $actual);
 

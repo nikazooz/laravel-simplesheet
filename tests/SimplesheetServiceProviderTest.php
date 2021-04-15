@@ -4,7 +4,7 @@ namespace Nikazooz\Simplesheet\Tests;
 
 use Nikazooz\Simplesheet\Simplesheet;
 
-class SpreadsheetServiceProviderTest extends TestCase
+class SimplesheetServiceProviderTest extends TestCase
 {
     /**
      * @test

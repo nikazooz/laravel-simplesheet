@@ -12,11 +12,16 @@ use Illuminate\Support\Facades\Queue;
 use Nikazooz\Simplesheet\Jobs\QueueExport;
 use Nikazooz\Simplesheet\SimplesheetServiceProvider;
 use Orchestra\Database\ConsoleServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 use PHPUnit\Framework\Constraint\StringContains;
 
 class TestCase extends OrchestraTestCase
 {
+  
+    use RefreshDatabase;
+
+
     /**
      * @param  string  $filePath
      * @param  string  $writerType
@@ -100,11 +105,12 @@ class TestCase extends OrchestraTestCase
         ];
     }
 
+ 
     /**
      * @param  \Illuminate\Foundation\Application  $app
      * @return void
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetup($app) 
     {
         $app['config']->set('filesystems.disks.local.root', __DIR__.'/Data/Disks/Local');
         $app['config']->set('filesystems.disks.test', [
@@ -116,6 +122,7 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('database.connections.testing', [
             'driver' => 'sqlite',
             'database' => ':memory:',
+            'prefix'   => '',
         ]);
     }
 

@@ -5,7 +5,7 @@ namespace Nikazooz\Simplesheet\Factories;
 use Box\Spout\Common\Creator\HelperFactory;
 use Box\Spout\Common\Helper\GlobalFunctionsHelper;
 use Box\Spout\Reader\CSV\Manager\OptionsManager;
-use Box\Spout\Writer\Common\Creator\WriterFactory as SpoutWriterFactory;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory as SpoutWriterFactory;
 use Box\Spout\Writer\WriterInterface;
 use Nikazooz\Simplesheet\Concerns\MapsCsvSettings;
 use Nikazooz\Simplesheet\Concerns\WithCustomCsvSettings;
@@ -32,7 +32,7 @@ class WriterFactory
             return static::makeCsvWriter($type, $export);
         }
 
-        return SpoutWriterFactory::createFromType($type);
+        return SpoutWriterFactory::createWriter($type);
     }
 
     /**

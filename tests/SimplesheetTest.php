@@ -16,6 +16,7 @@ use Nikazooz\Simplesheet\Simplesheet;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\EmptyExport;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Orchestra\Testbench\TestCase as TestCase;
 
 class SimplesheetTest extends TestCase
 {
@@ -124,8 +125,8 @@ class SimplesheetTest extends TestCase
         $this->assertTrue($response);
         $this->assertFileExists(__DIR__.'/Data/Disks/Local/filename.csv');
         $contents = file_get_contents(__DIR__.'/Data/Disks/Local/filename.csv');
-        $this->assertStringContains('A1,B1', $contents);
-        $this->assertStringContains('A2,"B2 Test"', $contents);
+        $this->assertStringContainsString('A1,B1', $contents);
+        $this->assertStringContainsString('A2,"B2 Test"', $contents);
 
         // Cleanup
         unlink(__DIR__.'/Data/Disks/Local/filename.csv');
@@ -185,9 +186,9 @@ class SimplesheetTest extends TestCase
 
         $contents = file_get_contents(__DIR__.'/Data/Disks/Local/filename.csv');
 
-        $this->assertStringContains('sep=;', $contents);
-        $this->assertStringContains('A1;B1', $contents);
-        $this->assertStringContains('A2;"B2 Test"', $contents);
+        $this->assertStringContainsString('sep=;', $contents);
+        $this->assertStringContainsString('A1;B1', $contents);
+        $this->assertStringContainsString('A2;"B2 Test"', $contents);
 
         // Cleanup
         unlink(__DIR__.'/Data/Disks/Local/filename.csv');

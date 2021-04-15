@@ -2,6 +2,7 @@
 
 namespace Nikazooz\Simplesheet;
 
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
 use Nikazooz\Simplesheet\Jobs\QueueExport;
 use Nikazooz\Simplesheet\Jobs\StoreQueuedExport;
@@ -32,10 +33,13 @@ class QueuedWriter
      */
     public function store($export, string $filePath, string $disk = null, string $writerType = null, $diskOptions = [])
     {
-        $temporaryFile = $this->temporaryFileFactory->make();
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        $temporaryFile = $this->temporaryFileFactory->make($extension);
 
-        return QueueExport::withChain([
-            new StoreQueuedExport($temporaryFile, $filePath, $disk, $diskOptions),
-        ])->dispatch($export, $temporaryFile, $writerType);
+        return new PendingDispatch(
+            (new QueueExport($export, $temporaryFile, $writerType))->chain([
+                new StoreQueuedExport($temporaryFile, $filePath, $disk, $diskOptions),
+            ])
+        );
     }
 }

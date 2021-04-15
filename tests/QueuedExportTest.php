@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Queue;
 use Nikazooz\Simplesheet\Files\RemoteTemporaryFile;
 use Nikazooz\Simplesheet\Jobs\QueueExport;
 use Nikazooz\Simplesheet\Simplesheet;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\AfterQueueExportJob;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\EloquentCollectionWithMappingExport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\QueuedExport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\QueuedExportWithFailedHook;
@@ -20,10 +21,11 @@ class QueuedExportTest extends TestCase
      */
     public function can_queue_an_export()
     {
-        $this->expectQueuedExport(function () {
-            $export = new QueuedExport();
-            $export->queue('queued-export.xlsx');
-        }, __DIR__.'/Data/Disks/Local/queued-export.xlsx');
+        $export = new QueuedExport();
+
+        $export->queue('queued-export.xlsx')->chain([
+            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Local/queued-export.xlsx'),
+        ]);
     }
 
     /**
@@ -31,10 +33,11 @@ class QueuedExportTest extends TestCase
      */
     public function can_queue_an_export_and_store_on_different_disk()
     {
-        $this->expectQueuedExport(function () {
-            $export = new QueuedExport();
-            $export->queue('queued-export.xlsx', 'test');
-        }, __DIR__.'/Data/Disks/Test/queued-export.xlsx');
+        $export = new QueuedExport();
+
+        $export->queue('queued-export.xlsx', 'test')->chain([
+            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Test/queued-export.xlsx'),
+        ]);
     }
 
     /**
@@ -65,14 +68,14 @@ class QueuedExportTest extends TestCase
             }
         });
 
-        $this->expectQueuedExport(function () {
-            $export = new QueuedExport();
-            $export->queue('queued-export.xlsx');
+        $export = new QueuedExport();
 
-            $array = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-export.xlsx', Simplesheet::XLSX);
+        $export->queue('queued-export.xlsx')->chain([
+            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Local/queued-export.xlsx'),
+        ]);
 
-            $this->assertCount(100, $array);
-        }, __DIR__.'/Data/Disks/Local/queued-export.xlsx');
+        $array = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-export.xlsx', Simplesheet::XLSX);
+        $this->assertCount(100, $array);
     }
 
     /**
@@ -80,10 +83,11 @@ class QueuedExportTest extends TestCase
      */
     public function can_implicitly_queue_an_export()
     {
-        $this->expectQueuedExport(function () {
-            $export = new ShouldQueueExport();
-            $export->store('queued-export.xlsx', 'test');
-        }, __DIR__.'/Data/Disks/Test/queued-export.xlsx');
+        $export = new ShouldQueueExport();
+
+        $export->store('queued-export.xlsx', 'test')->chain([
+            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Test/queued-export.xlsx'),
+        ]);
     }
 
     /**
@@ -91,16 +95,17 @@ class QueuedExportTest extends TestCase
      */
     public function can_queue_export_with_mapping_on_eloquent_models()
     {
-        $this->expectQueuedExport(function () {
-            $export = new EloquentCollectionWithMappingExport();
-            $export->queue('queued-export.xlsx');
+        $export = new EloquentCollectionWithMappingExport();
 
-            $actual = $this->readAsArray(__DIR__.'/Data/Disks/Local/queued-export.xlsx', 'xlsx');
+        $export->queue('queued-export.xlsx')->chain([
+            new AfterQueueExportJob(__DIR__ . '/Data/Disks/Local/queued-export.xlsx'),
+        ]);
 
-            $this->assertEquals([
-                ['John', 'Doe'],
-            ], $actual);
-        }, __DIR__.'/Data/Disks/Local/queued-export.xlsx');
+        $actual = $this->readAsArray(__DIR__ . '/Data/Disks/Local/queued-export.xlsx', 'xlsx');
+
+        $this->assertEquals([
+            ['John', 'Doe'],
+        ], $actual);
     }
 
     /**

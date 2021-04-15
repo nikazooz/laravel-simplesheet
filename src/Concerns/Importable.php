@@ -68,7 +68,7 @@ trait Importable
      * @param  \Symfony\Component\HttpFoundation\File\UploadedFile|string|null  $filePath
      * @param  string|null  $disk
      * @param  string|null  $readerType
-     * @return mixed
+     * @return \Illuminate\Foundation\Bus\PendingDispatch
      *
      * @throws \InvalidArgumentException
      * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException

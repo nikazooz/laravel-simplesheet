@@ -33,7 +33,7 @@ trait Exportable
      * @param  string|null  $filePath
      * @param  string|null  $disk
      * @param  string|null  $writerType
-     * @return bool
+     * @return \Illuminate\Foundation\Bus\PendingDispatch
      *
      * @throws \Nikazooz\Simplesheet\Exceptions\NoFilePathGivenException
      */

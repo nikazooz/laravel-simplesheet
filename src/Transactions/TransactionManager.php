@@ -32,7 +32,7 @@ class TransactionManager extends Manager
         );
     }
 
-    protected function getContainer()
+    public function getContainer()
     {
         if (isset($this->container)) {
             return $this->container;

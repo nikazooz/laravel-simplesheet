@@ -4,6 +4,7 @@ namespace Nikazooz\Simplesheet\Writers;
 
 use Box\Spout\Common\Entity\Cell;
 use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 use Box\Spout\Writer\WriterInterface;
 use Box\Spout\Writer\WriterMultiSheetsAbstract;
 use Illuminate\Contracts\Support\Arrayable;
@@ -12,6 +13,7 @@ use Nikazooz\Simplesheet\Concerns\FromArray;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
 use Nikazooz\Simplesheet\Concerns\FromIterator;
 use Nikazooz\Simplesheet\Concerns\FromQuery;
+use Nikazooz\Simplesheet\Concerns\WithColumnFormatting;
 use Nikazooz\Simplesheet\Concerns\WithCustomChunkSize;
 use Nikazooz\Simplesheet\Concerns\WithEvents;
 use Nikazooz\Simplesheet\Concerns\WithHeadings;
@@ -151,6 +153,11 @@ class Sheet
      */
     public function appendRows($rows, $sheetExport)
     {
+        $columnFormats = null;
+        if ($sheetExport instanceof WithColumnFormatting) {
+            $columnFormats = $sheetExport->columnFormats();
+        }
+
         Collection::make($rows)->flatMap(function ($row) use ($sheetExport) {
             if ($sheetExport instanceof WithMapping) {
                 $row = $sheetExport->map($row);
@@ -159,8 +166,8 @@ class Sheet
             return ArrayHelper::ensureMultipleRows(
                 static::mapArraybleRow($row)
             );
-        })->each(function ($row) {
-            $this->appendRow($row);
+        })->each(function ($row) use ($columnFormats) {
+            $this->appendRow($row, $columnFormats);
         });
     }
 
@@ -194,13 +201,32 @@ class Sheet
      * @param  array  $row
      * @return void
      */
-    public function appendRow($row)
+    public function appendRow($row, $columnFormats = null)
     {
         $cells = array_map(function ($value) {
             return new Cell($value);
         }, $row);
 
+        if ($columnFormats) {
+            foreach ($columnFormats as $columnKey => $columnFormat) {
+                $escapedFormat = str_replace('"', '/"', $columnFormat);
+                $style = (new StyleBuilder())->setFormat($escapedFormat)->build();
+                $columnIndex = $this->alpha2num($columnKey);
+                $cells[$columnIndex]->setStyle($style);
+            }
+        }
+
         $this->spoutWriter->addRow(new Row($cells, null));
+    }
+
+    protected function alpha2num($column)
+    {
+        $number = 0;
+        foreach (str_split($column) as $letter) {
+            $number = ($number * 26) + (ord(strtolower($letter)) - 96);
+        }
+
+        return $number - 1;
     }
 
     /**

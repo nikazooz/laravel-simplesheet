@@ -4,8 +4,8 @@ namespace Nikazooz\Simplesheet\Tests;
 
 use Nikazooz\Simplesheet\Tests\Data\Stubs\AfterQueueExportJob;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\Database\User;
-use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryWithCustomQuerySizeExport;
 use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryExportWithMappingAndCustomQuerySize;
+use Nikazooz\Simplesheet\Tests\Data\Stubs\FromUsersQueryWithCustomQuerySizeExport;
 
 class QueuedQueryExportWithCustomQuerySizeTest extends TestCase
 {

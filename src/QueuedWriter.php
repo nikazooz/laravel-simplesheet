@@ -2,21 +2,21 @@
 
 namespace Nikazooz\Simplesheet;
 
-use Illuminate\Support\Collection;
-use Nikazooz\Simplesheet\Jobs\CloseSheet;
-use Nikazooz\Simplesheet\Concerns\FromQuery;
-use Nikazooz\Simplesheet\Files\TemporaryFile;
 use Illuminate\Foundation\Bus\PendingDispatch;
-use Nikazooz\Simplesheet\Jobs\AppendDataToSheet;
+use Illuminate\Support\Collection;
 use Nikazooz\Simplesheet\Concerns\FromCollection;
-use Nikazooz\Simplesheet\Jobs\AppendQueryToSheet;
+use Nikazooz\Simplesheet\Concerns\FromQuery;
+use Nikazooz\Simplesheet\Concerns\WithCustomChunkSize;
+use Nikazooz\Simplesheet\Concerns\WithCustomQuerySize;
+use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
+use Nikazooz\Simplesheet\Files\TemporaryFile;
 use Nikazooz\Simplesheet\Files\TemporaryFileFactory;
+use Nikazooz\Simplesheet\Jobs\AppendDataToSheet;
+use Nikazooz\Simplesheet\Jobs\AppendQueryToSheet;
+use Nikazooz\Simplesheet\Jobs\CloseSheet;
 use Nikazooz\Simplesheet\Jobs\QueueExport;
 use Nikazooz\Simplesheet\Jobs\StoreQueuedExport;
-use Nikazooz\Simplesheet\Concerns\WithMultipleSheets;
-use Nikazooz\Simplesheet\Concerns\WithCustomChunkSize;
 use Traversable;
-use Nikazooz\Simplesheet\Concerns\WithCustomQuerySize;
 
 class QueuedWriter
 {
@@ -36,7 +36,7 @@ class QueuedWriter
      */
     public function __construct(TemporaryFileFactory $temporaryFileFactory)
     {
-        $this->chunkSize            = config('excel.exports.chunk_size', 1000);
+        $this->chunkSize = config('excel.exports.chunk_size', 1000);
         $this->temporaryFileFactory = $temporaryFileFactory;
     }
 
@@ -96,10 +96,10 @@ class QueuedWriter
     }
 
     /**
-     * @param FromCollection $export
-     * @param TemporaryFile  $temporaryFile
-     * @param string         $writerType
-     * @param int            $sheetIndex
+     * @param  FromCollection  $export
+     * @param  TemporaryFile  $temporaryFile
+     * @param  string  $writerType
+     * @param  int  $sheetIndex
      *
      * @return Collection
      */
@@ -128,10 +128,10 @@ class QueuedWriter
     }
 
     /**
-     * @param FromQuery     $export
-     * @param TemporaryFile $temporaryFile
-     * @param string        $writerType
-     * @param int           $sheetIndex
+     * @param  FromQuery  $export
+     * @param  TemporaryFile  $temporaryFile
+     * @param  string  $writerType
+     * @param  int  $sheetIndex
      *
      * @return Collection
      */
@@ -163,7 +163,7 @@ class QueuedWriter
     }
 
     /**
-     * @param object|WithCustomChunkSize $export
+     * @param  object|WithCustomChunkSize  $export
      *
      * @return int
      */

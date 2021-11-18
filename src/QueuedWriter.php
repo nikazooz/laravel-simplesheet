@@ -68,10 +68,9 @@ class QueuedWriter
     }
 
     /**
-     * @param object        $export
-     * @param TemporaryFile $temporaryFile
-     * @param string        $writerType
-     *
+     * @param  object  $export
+     * @param  TemporaryFile  $temporaryFile
+     * @param  string  $writerType
      * @return Collection
      */
     private function buildExportJobs($export, TemporaryFile $temporaryFile, string $writerType): Collection
@@ -100,7 +99,6 @@ class QueuedWriter
      * @param  TemporaryFile  $temporaryFile
      * @param  string  $writerType
      * @param  int  $sheetIndex
-     *
      * @return Collection
      */
     private function exportCollection(
@@ -132,7 +130,6 @@ class QueuedWriter
      * @param  TemporaryFile  $temporaryFile
      * @param  string  $writerType
      * @param  int  $sheetIndex
-     *
      * @return Collection
      */
     private function exportQuery(
@@ -164,7 +161,6 @@ class QueuedWriter
 
     /**
      * @param  object|WithCustomChunkSize  $export
-     *
      * @return int
      */
     private function getChunkSize($export): int

@@ -1,3 +1,5 @@
+**THIS PACKAGE HAS BEEN ABANDONED**
+
 # Laravel Simplesheet
 
 Wrapper around [Box Spout](http://opensource.box.com/spout/) with the goal of simplifying exports and imports in [Laravel](https://laravel.com).
@@ -51,5 +53,5 @@ Versions will be supported for a limited amount of time.
 
 | Version | Laravel Version | Php Version | Box Spout | Support                |
 | ------- | --------------- | ----------- | --------- | ---------------------- |
-| 1.*     | 5.5 - 8.*       | ^7.1        | ^2.7      | Bug and security fixes |
-| 2.*     | 5.5 - 8.*       | >=7.2       | ^3.2      | New features           |
+| 1.*     | 5.5 - 8.*       | ^7.1        | ^2.7      | No further support     |
+| 2.*     | 5.5 - 8.*       | >=7.2       | ^3.2      | No further support     |
